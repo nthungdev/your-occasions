@@ -29,7 +29,7 @@ class BaseController {
     await connection.open();
   }
 
-  void disconnect() async {
+  Future<void> disconnect() async {
     await connection.close();
   }
 

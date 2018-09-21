@@ -6,22 +6,8 @@ final String databaseName = "dfchidtpalcucu";
 final String username = "ejubwoptcfhmle";
 final String password = "0caba2030cf2ee29a8fc9ce693fbd05c10bb3efe1492d60124bf329b248b534a";
 
-void main() async {
-  var connection = new PostgreSQLConnection(host, port, databaseName, username: username, password: password, useSSL: true);
-  await connection.open();
-
-  print("test");
-
-  List<List<dynamic>> results = await connection.query("SELECT * FROM users");
-
-  print(results);
-  // for (int i = 0 ; i < results.length ; ++i){
-  //   print(i);
-  // }
-}
-
 class User {
-  // Properties
+  // PROPERTIES //
   int _id;
   String _name;
   String _email;
@@ -31,7 +17,7 @@ class User {
   bool _isUsed;
   DateTime _creationDate;
 
-  // Constructors
+  // CONSTRUCTORS //
   User(this._name, this._email, this._password, this._birthday);
   User.create();
   User.createFromMap(Iterable<Map<String, dynamic>> map){
@@ -47,7 +33,7 @@ class User {
     });
   }
 
-  // Getters
+  // GETTERS //
   int get id => _id;
   String get name => _name;
   String get email => _email;
@@ -57,7 +43,7 @@ class User {
   bool get isUsed => _isUsed;
   DateTime get creationDate => _creationDate;
 
-  // Setters
+  // SETTERS //
   set id(int id) => _id = id;
   set name(String name) => _name = name;
   set email(String email) => _email = email;
@@ -67,7 +53,7 @@ class User {
   set isUsed(bool isUsed) => _isUsed = isUsed;
   set creationDate(DateTime creationDate) => _creationDate = creationDate;
 
-  // Methods
+  // METHODS //
   void printInfo() {
     String info = """
     ID: ${id.toString()}
@@ -81,6 +67,21 @@ class User {
     """;
 
     print(info);
+  }
+
+  /// Return a Map<String, dynamic> with keys are the properties of User, values are the properties' values.
+  Map<String, dynamic> getProperties() {
+    Map<String, dynamic> map = {};
+    map['id'] = id;
+    map['name'] = name;
+    map['email'] = email;
+    map['password'] = password;
+    map['birthday'] = birthday;
+    map['picture'] = picture;
+    map['isUsed'] = isUsed;
+    map['creationDate'] = creationDate;
+
+    return map;
   }
 
 }
