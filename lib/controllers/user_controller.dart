@@ -48,21 +48,23 @@ class UserController extends BaseController {
     List<User> alist = [];
 
     for (var item in result3){
-
       // print("item is " + item.toString());
       // print(item.values);
-      
       
       // print(item);
       var map = item.values;
       // print(map);
 
-
       map.forEach((item) {
         User newUser = User.create();
-        newUser.id = int.parse(item['id']);
+        newUser.id = item['id'];
         newUser.name = item['name'];
         newUser.email = item['email'];
+        newUser.password = item['password'];
+        newUser.birthday = item['birthday'];
+        newUser.picture = item['picture'];
+        newUser.isUsed = item['is_used'];
+        newUser.creationDate = item['creation_date'];
         
         newUser.printInfo();
       });
