@@ -21,6 +21,7 @@ void main() async {
 }
 
 class User {
+  // Properties
   int _id;
   String _name;
   String _email;
@@ -30,9 +31,12 @@ class User {
   bool _isUsed;
   DateTime _creationDate;
 
-  User(this._name, this._email, this._password, this._birthday){
-  }
+  // Constructors
+  User.create();
+  User(this._name, this._email, this._password, this._birthday);
+  // TODO make a constructor that accept a Map to parse User's property
 
+  // Getters
   int get id => _id;
   String get name => _name;
   String get email => _email;
@@ -41,4 +45,31 @@ class User {
   String get picture => _picture;
   bool get isUsed => _isUsed;
   DateTime get creationDate => _creationDate;
+
+  // Setters
+  set id(int id) => _id = id;
+  set name(String name) => _name = name;
+  set email(String email) => _email = email;
+  set password(String password) => _password = password;
+  set birthday(DateTime birthday) => _birthday = birthday;
+  set picture(String picture) => _picture = picture;
+  set isUsed(bool isUsed) => _isUsed = isUsed;
+  set creationDate(DateTime creationDate) => _creationDate = creationDate;
+
+  // Methods
+  void printInfo() {
+    String info = """
+    ID: ${id.toString()}
+    Name: $name
+    Email: $email
+    Password: $password
+    Birthday: $birthday
+    Picture: $picture
+    IsUsed: $isUsed
+    Creation Date: $creationDate
+    """;
+
+    print(info);
+  }
+
 }

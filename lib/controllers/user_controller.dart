@@ -24,13 +24,50 @@ class UserController extends BaseController {
     await connect();
     
     print("1");
-    List<List<dynamic>> result = await connection.query("""INSERT INTO users (name) VALUES ('Hung')""");
+
+    // List<List<dynamic>> result = await connection.query("INSERT INTO users (name) VALUES (@name)", 
+      // substitutionValues: {"name": "Hung",});
+
+    
+    List<List<dynamic>> result2 = await connection.query("select * from users");
+
+
+    List<Map<String, Map<String, dynamic>>> result3 = await connection.mappedResultsQuery("select * from users");
+
 
     print("2");
     disconnect();
 
     print("3");
-    print(result);
+    // print(result);
+
+    print(result2);
+
+    // print("result 3: \n $result3");
+
+    List<User> alist = [];
+
+    for (var item in result3){
+
+      // print("item is " + item.toString());
+      // print(item.values);
+      
+      
+      // print(item);
+      var map = item.values;
+      // print(map);
+
+
+      map.forEach((item) {
+        User newUser = User.create();
+        newUser.id = int.parse(item['id']);
+        newUser.name = item['name'];
+        newUser.email = item['email'];
+        
+        newUser.printInfo();
+      });
+
+    }
 
   }
 }
