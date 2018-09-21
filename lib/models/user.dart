@@ -32,9 +32,20 @@ class User {
   DateTime _creationDate;
 
   // Constructors
-  User.create();
   User(this._name, this._email, this._password, this._birthday);
-  // TODO make a constructor that accept a Map to parse User's property
+  User.create();
+  User.createFromMap(Iterable<Map<String, dynamic>> map){
+    map.forEach((item) {
+      id = item['id'];
+      name = item['name'];
+      email = item['email'];
+      password = item['password'];
+      birthday = item['birthday'];
+      picture = item['picture'];
+      isUsed = item['is_used'];
+      creationDate = item['creation_date'];
+    });
+  }
 
   // Getters
   int get id => _id;

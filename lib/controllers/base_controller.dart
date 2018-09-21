@@ -16,13 +16,13 @@ class BaseController {
   String _password;
   PostgreSQLConnection connection;
 
-  BaseController(){
+  BaseController() {
     this._host = host;
     this._port = port;
     this._databaseName = databaseName;
     this._username = username;
     this._password = password;
-    connection = PostgreSQLConnection(host, port, databaseName, username: username, password: password);
+    connection = PostgreSQLConnection(host, port, databaseName, username: username, password: password, useSSL: true);
   }
 
   Future<void> connect() async {
