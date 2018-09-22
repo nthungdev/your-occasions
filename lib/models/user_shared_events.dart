@@ -1,4 +1,4 @@
-class GuestLists {
+class UserSharedEvents {
   // PROPERTIES //
   int _id;
   int _userId;
@@ -8,9 +8,14 @@ class GuestLists {
   
 
   // CONSTRUCTORS //
-  GuestLists(this._id, this._userId, this._eventId);
-  GuestLists.create();
-  GuestLists.createFromMap(Iterable<Map<int, dynamic>> map){
+  UserSharedEvents.create();
+  UserSharedEvents({int userId, int eventId, int sharerId, DateTime creationDate}){
+    _userId = userId;
+    _eventId = eventId;
+    _sharerId = sharerId;
+    _creationDate = creationDate;
+  }
+  UserSharedEvents.createFromMap(Iterable<Map<int, dynamic>> map){
     map.forEach((item) {
       id = item['id'];
       userId = item['userID'];

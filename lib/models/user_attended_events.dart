@@ -8,7 +8,7 @@ class UserAttendedEvents {
 
   // CONSTRUCTORS //
   UserAttendedEvents.create();
-  UserRating({int userId, int eventId, DateTime creationDate}){
+  UserAttendedEvents({int userId, int eventId, DateTime creationDate}){
     _userId = userId;
     _eventId = eventId;
     _creationDate = creationDate;
