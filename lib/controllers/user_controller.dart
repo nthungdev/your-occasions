@@ -50,11 +50,11 @@ class UserController extends BaseController {
 
       String query = "UPDATE users SET ";
       if(name != null) { query += "name = '$name' "; }
-      if(email != null) { query += "email = '$email "; }
-      if(password != null) { query += "password = '$password'"; }
-      if(birthday != null) { query += "birthday = '$birthday'"; }
-      if(picture != null) { query += "picture = '$picture'"; }
-      if(isUsed != null) { query += "is_used = '$isUsed'"; }
+      if(email != null) { query += "email = '$email' "; }
+      if(password != null) { query += "password = '$password' "; }
+      if(birthday != null) { query += "birthday = '$birthday' "; }
+      if(picture != null) { query += "picture = '$picture' "; }
+      if(isUsed != null) { query += "is_used = '$isUsed' "; }
 
       query += " WHERE id = '$id'";
 
@@ -84,15 +84,40 @@ class UserController extends BaseController {
     return result;
   }
 
+  Future<List<User>> getUser({String email, String name, int id}) async{
+    await connect();
+
+    List<User> result = [];
+
+
+    String query = "SELECT * from users where ";
+    if(name != null) { query += "name = '$name' "; }
+    if(email != null) { query += "email = '$email' "; }
+    if(id != null) { query += "id = $id ";}
+
+    var queryResult = await connection.mappedResultsQuery(query);
+
+    for (var item in queryResult) {
+      result.add(User.createFromMap(item.values));
+    }
+
+    await disconnect();
+
+    return result;
+  }
+
   void test() async {
     // update(9);
-    await getAllUsers('name');
-    print(allUsers);
+    List<User> result = await getUser(id: 5);
+    print(result);
 
   }
 }
 
+  
+
 void main() {
   UserController test = UserController();
   test.test();
+
 }
