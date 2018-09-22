@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:youroccasions/controllers/base_controller.dart';
-import 'package:youroccasions/Models/user.dart';
+import 'package:youroccasions/models/user.dart';
 import 'package:youroccasions/exceptions/UpdateQueryException.dart';
 
 class UserController extends BaseController {
@@ -50,11 +50,11 @@ class UserController extends BaseController {
 
       String query = "UPDATE users SET ";
       if(name != null) { query += "name = '$name' "; }
-      if(email != null) { query += "email = '$email "; }
-      if(password != null) { query += "password = '$password'"; }
-      if(birthday != null) { query += "birthday = '$birthday'"; }
-      if(picture != null) { query += "picture = '$picture'"; }
-      if(isUsed != null) { query += "is_used = '$isUsed'"; }
+      if(email != null) { query += "email = '$email' "; }
+      if(password != null) { query += "password = '$password' "; }
+      if(birthday != null) { query += "birthday = '$birthday' "; }
+      if(picture != null) { query += "picture = '$picture' "; }
+      if(isUsed != null) { query += "is_used = '$isUsed' "; }
 
       query += " WHERE id = '$id'";
 
@@ -66,33 +66,50 @@ class UserController extends BaseController {
     
   }
 
-  /// Select all rows from users table and return a list of User objects.
-  Future<List<User>> getAllUsers([String orderBy, bool asc = true]) async {
+  /// Select rows from users table and return a list of User objects.
+  Future<List<User>> getUser({String email, String name, int id}) async{
     await connect();
 
     List<User> result = [];
-    var queryResult = await connection.mappedResultsQuery("""SELECT * FROM users ORDER BY $orderBy ${asc ? 'ASC' : 'DESC'}""");
+
+
+    String query = "SELECT * from users ";
+
+    if(email == null && name == null && id == null) {
+
+    }
+    else {
+      query += "where ";
+      
+      if(name != null) { query += "name = '$name' "; }
+      else if(email != null) { query += "email = '$email' "; }
+      else if(id != null) { query += "id = $id ";}
+    }
+
+
+    var queryResult = await connection.mappedResultsQuery(query);
+
     for (var item in queryResult) {
       result.add(User.createFromMap(item.values));
     }
 
     await disconnect();
 
-    _count = result.length;
-    _allUsers = result;
-
     return result;
   }
 
   void test() async {
     // update(9);
-    await getAllUsers('name');
-    print(allUsers);
+    List<User> result = await getUser(id: 5);
+    print(result);
 
   }
 }
 
+  
+
 void main() {
   UserController test = UserController();
   test.test();
+
 }
