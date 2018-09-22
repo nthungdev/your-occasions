@@ -1,11 +1,7 @@
 import 'dart:async';
 
 import 'package:youroccasions/controllers/base_controller.dart';
-<<<<<<< HEAD
-import 'package:youroccasions/models/event.dart';
-=======
 import 'package:youroccasions/models/Event.dart';
->>>>>>> 7ccbea979e333b21fb4d2b88c8bd47d5ecafd6ab
 import 'package:youroccasions/exceptions/UpdateQueryException.dart';
 
 class EventController extends BaseController {
@@ -28,7 +24,7 @@ class EventController extends BaseController {
   Future<void> insert(Event model) async {
     await connect();
 
-    await connection.query("""INSERT INTO events (host_id, name, description, location_name, start_time, endtime,
+    await connection.query("""INSERT INTO events (host_id, name, description, location_name, start_time, end_time,
     age, price, category, is_used, creation_date)
       VALUES (@hostId, @name, @description, @locationName, @startTime, @endTime,
       @age, @price, @category, @isUsed, @creationDate)""",
@@ -107,8 +103,18 @@ class EventController extends BaseController {
   }
   void test() async {
     // update(9);
-    await getEvent();
-    print(allEvents);
-
+    // await getEvent();
+    // print(allEvents);
+    Event e = Event(hostId: 3, name: 'test data 3', description: "buasbudabuad");
+    await insert(e);
+    var item = await getEvent();
+    print(item);
   }
+}
+
+void main () {
+  EventController e = EventController();
+  e.test();
+
+
 }
