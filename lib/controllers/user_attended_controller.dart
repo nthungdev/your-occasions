@@ -17,7 +17,7 @@ class EvenRatingController extends BaseController{
 
   // METHODS //
   /// Insert a new row into event_ratings table.
-  Future<void> insert(UserAttenedEvents model) async {
+  Future<void> insert(UserAttendedEvents model) async {
     await connect();
 
     await connection.query("""INSERT INTO event_ratings (user_id, event_id, creation)_date)
@@ -57,10 +57,10 @@ class EvenRatingController extends BaseController{
     }
   }
 
-  Future<List<UserAttenedEvents>> getUserAttenedEvents({int userId, int eventId , int id}) async{
+  Future<List<UserAttendedEvents>> getUserAttendedEvents({int userId, int eventId , int id}) async{
     await connect();
 
-    List<UserAttenedEvents> result = [];
+    List<UserAttendedEvents> result = [];
 
 
     String query = "SELECT * from event_ratings ";
@@ -80,7 +80,7 @@ class EvenRatingController extends BaseController{
     var queryResult = await connection.mappedResultsQuery(query);
 
     for (var item in queryResult) {
-      result.add(UserAttenedEvents.createFromMap(item.values));
+      result.add(UserAttendedEvents.createFromMap(item.values));
     }
 
     await disconnect();
