@@ -1,7 +1,11 @@
 import 'dart:async';
 
 import 'package:youroccasions/controllers/base_controller.dart';
+<<<<<<< HEAD
+import 'package:youroccasions/models/event.dart';
+=======
 import 'package:youroccasions/models/Event.dart';
+>>>>>>> 7ccbea979e333b21fb4d2b88c8bd47d5ecafd6ab
 import 'package:youroccasions/exceptions/UpdateQueryException.dart';
 
 class EventController extends BaseController {
@@ -43,7 +47,7 @@ class EventController extends BaseController {
   }
 
   /// Update an existing row from Events table based on id.
-  Future<void> update(int id, {String hostId, String name, String description, String locationName, DateTime startTime, DateTime endTime,
+  Future<void> update(int id, {int hostId, String name, String description, String locationName, DateTime startTime, DateTime endTime,
   int age, int price, String category, bool isUsed, DateTime creationDate}) async {
     if(hostId == null && name == null && description == null && locationName == null && startTime == null && endTime == null
     && age == null && price == null && category == null && isUsed == null && creationDate == null) {
@@ -52,7 +56,7 @@ class EventController extends BaseController {
     else {
       await connect();
 
-      String query = "UPDATE Events SET ";
+      String query = "UPDATE events SET ";
       if(hostId != null) { query += "host_id = '$hostId' "; }
       if(name != null) { query += "name = '$name' "; }
       if(description != null) { query += "email = '$description "; }
@@ -67,31 +71,43 @@ class EventController extends BaseController {
 
       await disconnect();
     }
-    
-    
   }
 
-  /// Select all rows from Events table and return a list of Event objects.
-  Future<List<Event>> getAllEvents([String orderBy, bool asc = true]) async {
+  /// Select rows from users table and return a list of User objects.
+  Future<List<Event>> getEvent({int id, int hostId, String name, String category, DateTime startTime, DateTime endTime}) async{
     await connect();
 
     List<Event> result = [];
-    var queryResult = await connection.mappedResultsQuery("""SELECT * FROM Events ORDER BY $orderBy ${asc ? 'ASC' : 'DESC'}""");
+
+
+    String query = "SELECT * FROM events ";
+
+    if(hostId == null && name == null && id == null) {
+
+    }
+    else {
+      query += "WHERE ";
+      if (name != null) { query += "name = '$name' "; }
+      else if (hostId != null) { query += "host_id = '$hostId' "; }
+      else if (id != null) { query += "id = $id "; }
+      else if (category != null) { query += "category = '$category' "; }
+      else if (startTime != null) { query += "start_time = '$startTime' "; }
+      else if (endTime != null) { query += "end_time = '$endTime' "; }
+    }
+
+    var queryResult = await connection.mappedResultsQuery(query);
+
     for (var item in queryResult) {
       result.add(Event.createFromMap(item.values));
     }
 
     await disconnect();
 
-    _count = result.length;
-    _allEvents = result;
-
     return result;
   }
-
   void test() async {
     // update(9);
-    await getAllEvents('name');
+    await getEvent();
     print(allEvents);
 
   }
