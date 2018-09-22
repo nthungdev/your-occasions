@@ -91,4 +91,18 @@ class EventRatingController extends BaseController{
     return result;
   }
 
+  void test() async {
+    // update(9);
+    // EventRating a = EventRating(eventId:1, one: 2, two :3, three:4, four:10, five:1, rating: 2.2);
+    // await insert(a);
+    List<EventRating> result = await getEventRating();
+    print(result);
+
+  }
+
+}
+
+void main(){
+  EventRatingController test = EventRatingController();
+  test.test();
 }

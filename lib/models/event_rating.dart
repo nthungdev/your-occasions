@@ -7,11 +7,11 @@ class EventRating {
   int _three;
   int _four;
   int _five;
-  double _rating;
+  num _rating;
 
   // CONSTRUCTORS //
   EventRating.create();
-  EventRating({int eventId, int one, int two, int three, int four, int five, double rating}){
+  EventRating({int eventId, int one, int two, int three, int four, int five, num rating}){
     _eventId = eventId;
     _one = one;
     _two = two;
@@ -40,7 +40,7 @@ class EventRating {
   int get three => _three;
   int get four => _four;
   int get five => _five;
-  double  get rating => _rating;
+  num get rating => _rating;
 
   // SETTERs //
   set id(int id) => _id = id;
@@ -50,10 +50,10 @@ class EventRating {
   set three(int three) => _three = three;
   set four(int four) => _four = four;
   set five(int five) => _five = five;
-  set rating(double rating) => _rating = rating;
+  set rating(num rating) => _rating = rating;
 
   // METHODS //
-  
+
   /// Return a Map<String, dynamic> with keys are the properties of EventRating, values are the properties' values.
   Map<String, dynamic> getProperties() {
     Map<String, dynamic> map = {};
