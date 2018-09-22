@@ -5,7 +5,7 @@ import 'package:youroccasions/controllers/base_controller.dart';
 import 'package:youroccasions/models/guest_list.dart';
 import 'package:youroccasions/exceptions/UpdateQueryException.dart';
 
-class EvenRatingController extends BaseController{
+class GuestListController extends BaseController{
   // PROPERTIES //
 
   // CONSTRUCTORS //
@@ -18,7 +18,7 @@ class EvenRatingController extends BaseController{
 
   // METHODS //
   /// Insert a new row into event_ratings table.
-  Future<void> insert(GuestLists model) async {
+  Future<void> insert(GuestList model) async {
     await connect();
 
     await connection.query("""INSERT INTO event_ratings (user_id, event_id, creation)_date)
@@ -58,10 +58,10 @@ class EvenRatingController extends BaseController{
     }
   }
 
-  Future<List<GuestLists>> getGuestLists({int userId, int eventId , int id}) async{
+  Future<List<GuestList>> getGuestList({int userId, int eventId , int id}) async{
     await connect();
 
-    List<GuestLists> result = [];
+    List<GuestList> result = [];
 
 
     String query = "SELECT * from event_ratings ";
@@ -81,7 +81,7 @@ class EvenRatingController extends BaseController{
     var queryResult = await connection.mappedResultsQuery(query);
 
     for (var item in queryResult) {
-      result.add(GuestLists.createFromMap(item.values));
+      result.add(GuestList.createFromMap(item.values));
     }
 
     await disconnect();

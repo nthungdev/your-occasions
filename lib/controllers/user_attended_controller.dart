@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:youroccasions/controllers/base_controller.dart';
-import 'package:youroccasions/models/user_attended_events.dart';
+import 'package:youroccasions/models/user_attended_event.dart';
 import 'package:youroccasions/exceptions/UpdateQueryException.dart';
 
-class EvenRatingController extends BaseController{
+class UserAttendedController extends BaseController{
   // PROPERTIES //
 
   // CONSTRUCTORS //
@@ -17,7 +17,7 @@ class EvenRatingController extends BaseController{
 
   // METHODS //
   /// Insert a new row into event_ratings table.
-  Future<void> insert(UserAttendedEvents model) async {
+  Future<void> insert(UserAttendedEvent model) async {
     await connect();
 
     await connection.query("""INSERT INTO event_ratings (user_id, event_id, creation)_date)
@@ -57,10 +57,10 @@ class EvenRatingController extends BaseController{
     }
   }
 
-  Future<List<UserAttendedEvents>> getUserAttendedEvents({int userId, int eventId , int id}) async{
+  Future<List<UserAttendedEvent>> getUserAttendedEvent({int userId, int eventId , int id}) async{
     await connect();
 
-    List<UserAttendedEvents> result = [];
+    List<UserAttendedEvent> result = [];
 
 
     String query = "SELECT * from event_ratings ";
@@ -80,7 +80,7 @@ class EvenRatingController extends BaseController{
     var queryResult = await connection.mappedResultsQuery(query);
 
     for (var item in queryResult) {
-      result.add(UserAttendedEvents.createFromMap(item.values));
+      result.add(UserAttendedEvent.createFromMap(item.values));
     }
 
     await disconnect();

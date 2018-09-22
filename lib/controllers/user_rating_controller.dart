@@ -4,7 +4,7 @@ import 'package:youroccasions/controllers/base_controller.dart';
 import 'package:youroccasions/models/user_rating.dart';
 import 'package:youroccasions/exceptions/UpdateQueryException.dart';
 
-class EvenRatingController extends BaseController{
+class UserRatingController extends BaseController{
   // PROPERTIES //
 
   // CONSTRUCTORS //

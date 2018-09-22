@@ -1,4 +1,4 @@
-class UserAttendedEvents {
+class UserAttendedEvent {
   // PROPERTIES //
   int _id;
   int _userId;
@@ -7,13 +7,13 @@ class UserAttendedEvents {
   
 
   // CONSTRUCTORS //
-  UserAttendedEvents.create();
-  UserAttendedEvents({int userId, int eventId, DateTime creationDate}){
+  UserAttendedEvent.create();
+  UserAttendedEvent({int userId, int eventId, DateTime creationDate}){
     _userId = userId;
     _eventId = eventId;
     _creationDate = creationDate;
   }
-  UserAttendedEvents.createFromMap(Iterable<Map<String, dynamic>> map){
+  UserAttendedEvent.createFromMap(Iterable<Map<String, dynamic>> map){
     map.forEach((item) {
       id = item['id'];
       userId = item['userID'];
@@ -36,7 +36,7 @@ class UserAttendedEvents {
 
   // METHODS //
 
-  /// Return a Map<int, dynamic> with keys are the properties of UserAttendedEvents, values are the properties' values.
+  /// Return a Map<int, dynamic> with keys are the properties of UserAttendedEvent, values are the properties' values.
   Map<String, dynamic> getProperties() {
     Map<String, dynamic> map = {};
     map['id'] = id;
