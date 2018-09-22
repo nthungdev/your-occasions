@@ -3,7 +3,7 @@ class UserInterestedEvents {
   int _id;
   int _userId;
   int _eventId;
-  DateTime _creationdate;
+  DateTime _creationDate;
   
 
   // CONSTRUCTORS //
@@ -33,8 +33,8 @@ class UserInterestedEvents {
   // METHODS //
 
   /// Return a Map<int, dynamic> with keys are the properties of GuesstLists, values are the properties' values.
-  Map<int, dynamic> getProperties() {
-    Map<int, dynamic> map = {};
+  Map<String, dynamic> getProperties() {
+    Map<String, dynamic> map = {};
     map['id'] = id;
     map['userId'] = userId;
     map['eventId'] = eventId;

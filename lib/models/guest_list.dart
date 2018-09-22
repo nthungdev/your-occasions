@@ -33,8 +33,8 @@ class GuestLists {
   // METHODS //
 
   /// Return a Map<int, dynamic> with keys are the properties of GuesstLists, values are the properties' values.
-  Map<StringBuffer, dynamic> getProperties() {
-    Map<int, dynamic> map = {};
+  Map<String, dynamic> getProperties() {
+    Map<String, dynamic> map = {};
     map['id'] = id;
     map['userId'] = userId;
     map['eventId'] = eventId;
