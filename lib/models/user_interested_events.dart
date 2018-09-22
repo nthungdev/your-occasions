@@ -8,7 +8,7 @@ class UserInterestedEvents {
 
   // CONSTRUCTORS //
   UserInterestedEvents.create();
-  UserInterestedEvents({ int _id,int userId, int eventId, DateTime creationDate}){
+  UserInterestedEvents({int userId, int eventId, DateTime creationDate}){
     _id= id;
     _userId = userId;
     _eventId = eventId;
