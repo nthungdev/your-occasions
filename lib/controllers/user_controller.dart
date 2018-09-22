@@ -1,24 +1,26 @@
 import 'dart:async';
 
-import 'package:postgres/postgres.dart';
-import 'base_controller.dart';
-import '../models/user.dart';
+import 'package:youroccasions/controllers/base_controller.dart';
+import 'package:youroccasions/Models/user.dart';
+import 'package:youroccasions/exceptions/UpdateQueryException.dart';
 
 class UserController extends BaseController {
   // PROPERTIES //
-  List<User> _allModel;
+  int _count;
+  List<User> _allUsers;
 
   // CONSTRUCTORS //
   UserController() : super();
 
   // GETTERS //
-
+  List<User> get allUsers => _allUsers;
+  int get count => _count;
 
   // SETTERS //
   
 
   // METHODS //
-  /// Insert a new row into database.
+  /// Insert a new row into users table.
   Future<void> insert(User model) async {
     await connect();
 
@@ -29,49 +31,63 @@ class UserController extends BaseController {
     await disconnect();
   }
 
-  void test() async {
-    print("1");
+  /// Delete an existing row from users table.
+  Future<void> delete(int id) async {
+    await connect();
 
-    // List<List<dynamic>> result = await connection.query("INSERT INTO users (name) VALUES (@name)", 
-      // substitutionValues: {"name": "Hung",});
+    await connection.query("""DELETE FROM users WHERE id = @id""", substitutionValues: { 'id': id, });  
 
+    await disconnect();
+  }
+
+  /// Update an existing row from users table.
+  Future<void> update(int id, {String name, String email, String password, DateTime birthday, String picture, bool isUsed}) async {
+    if(name == null && email == null && password == null && birthday == null && picture == null && isUsed == null) {
+      throw UpdateQueryException(); //
+    }
+    else {
+      await connect();
+
+      String query = "UPDATE users SET ";
+      if(name != null) { query += "name = '$name' "; }
+      if(email != null) { query += "email = '$email "; }
+      if(password != null) { query += "password = '$password'"; }
+      if(birthday != null) { query += "birthday = '$birthday'"; }
+      if(picture != null) { query += "picture = '$picture'"; }
+      if(isUsed != null) { query += "is_used = '$isUsed'"; }
+
+      query += " WHERE id = '$id'";
+
+      await connection.query(query);  
+
+      await disconnect();
+    }
     
-    // // List<List<dynamic>> result2 = await connection.query("select * from users");
+    
+  }
 
+  /// Select all rows from users table and return a list of User objects.
+  Future<List<User>> getAllUsers([String orderBy, bool asc = true]) async {
+    await connect();
 
-    // List<Map<String, Map<String, dynamic>>> result3 = await connection.mappedResultsQuery("select * from users");
+    List<User> result = [];
+    var queryResult = await connection.mappedResultsQuery("""SELECT * FROM users ORDER BY $orderBy ${asc ? 'ASC' : 'DESC'}""");
+    for (var item in queryResult) {
+      result.add(User.createFromMap(item.values));
+    }
 
+    await disconnect();
 
-    // print("2");
-    // disconnect();
+    _count = result.length;
+    _allUsers = result;
 
-    // print("3");
-    // // print(result);
+    return result;
+  }
 
-    // // print(result2);
-
-    // // print("result 3: \n $result3");
-
-    // List<User> alist = [];
-
-    // for (var item in result3){
-    //   // print("item is " + item.toString());
-    //   // print(item.values);
-      
-    //   // print(item);
-    //   var map = item.values;
-      
-    //   User auser = User.createFromMap(map);
-    //   auser.printInfo();
-    // }
-
-    var auser = User.create();
-    auser.name = 'Hunger';
-    auser.email = 'nthungdev@gmail.com';
-    auser.birthday = DateTime(1998, 7, 5);
-    auser.creationDate = DateTime.now();
-
-    insert(auser);
+  void test() async {
+    // update(9);
+    await getAllUsers('name');
+    print(allUsers);
 
   }
 }

@@ -1,11 +1,3 @@
-import 'package:postgres/postgres.dart';
-
-final String host = "ec2-54-83-50-145.compute-1.amazonaws.com";
-final int port = 5432;
-final String databaseName = "dfchidtpalcucu";
-final String username = "ejubwoptcfhmle";
-final String password = "0caba2030cf2ee29a8fc9ce693fbd05c10bb3efe1492d60124bf329b248b534a";
-
 class User {
   // PROPERTIES //
   int _id;
@@ -83,5 +75,7 @@ class User {
 
     return map;
   }
+
+  String toString() => "An instance of User id=$id, name=$name";
 
 }

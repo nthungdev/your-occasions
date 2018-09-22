@@ -1,5 +1,4 @@
 
-
 class Event {
   // PROPERTIES //
   int _id;
