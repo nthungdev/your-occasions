@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:youroccasions/controllers/base_controller.dart';
-import 'package:youroccasions/Models/user.dart';
+import 'package:youroccasions/models/user.dart';
 import 'package:youroccasions/exceptions/UpdateQueryException.dart';
 
 class UserController extends BaseController {
@@ -66,34 +66,26 @@ class UserController extends BaseController {
     
   }
 
-  /// Select all rows from users table and return a list of User objects.
-  Future<List<User>> getAllUsers([String orderBy, bool asc = true]) async {
-    await connect();
-
-    List<User> result = [];
-    var queryResult = await connection.mappedResultsQuery("""SELECT * FROM users ORDER BY $orderBy ${asc ? 'ASC' : 'DESC'}""");
-    for (var item in queryResult) {
-      result.add(User.createFromMap(item.values));
-    }
-
-    await disconnect();
-
-    _count = result.length;
-    _allUsers = result;
-
-    return result;
-  }
-
+  /// Select rows from users table and return a list of User objects.
   Future<List<User>> getUser({String email, String name, int id}) async{
     await connect();
 
     List<User> result = [];
 
 
-    String query = "SELECT * from users where ";
-    if(name != null) { query += "name = '$name' "; }
-    if(email != null) { query += "email = '$email' "; }
-    if(id != null) { query += "id = $id ";}
+    String query = "SELECT * from users ";
+
+    if(email == null && name == null && id == null) {
+
+    }
+    else {
+      query += "where ";
+      
+      if(name != null) { query += "name = '$name' "; }
+      else if(email != null) { query += "email = '$email' "; }
+      else if(id != null) { query += "id = $id ";}
+    }
+
 
     var queryResult = await connection.mappedResultsQuery(query);
 
