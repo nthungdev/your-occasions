@@ -1,4 +1,4 @@
-class FriendLists {
+class FriendList {
   // PROPERTIES //
   int _id;
   int _userId;
@@ -8,9 +8,14 @@ class FriendLists {
   
 
   // CONSTRUCTORS //
-  FriendLists(this._id, this._userId, this._eventId, this._friendId);
-  FriendLists.create();
-  FriendLists.createFromMap(Iterable<Map<int, dynamic>> map){
+  FriendList.create();
+  FriendList({int userId, int eventId, int friendId, DateTime creationDate}){
+    _userId = userId;
+    _eventId = eventId;
+    _friendId = friendId;
+    _creationDate = creationDate;
+  }
+  FriendList.createFromMap(Iterable<Map<String, dynamic>> map){
     map.forEach((item) {
       id = item['id'];
       userId = item['userID'];

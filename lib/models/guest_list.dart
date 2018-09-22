@@ -1,4 +1,4 @@
-class GuestLists {
+class GuestList {
   // PROPERTIES //
   int _id;
   int _userId;
@@ -7,9 +7,13 @@ class GuestLists {
   
 
   // CONSTRUCTORS //
-  GuestLists(this._id, this._userId, this._eventId);
-  GuestLists.create();
-  GuestLists.createFromMap(Iterable<Map<int, dynamic>> map){
+  GuestList.create();
+  GuestList({int userId, int eventId, DateTime creationDate}){
+    _userId = userId;
+    _eventId = eventId;
+    _creationDate = creationDate;
+  }
+  GuestList.createFromMap(Iterable<Map<String, dynamic>> map){
     map.forEach((item) {
       id = item['id'];
       userId = item['userID'];
@@ -32,7 +36,7 @@ class GuestLists {
 
   // METHODS //
 
-  /// Return a Map<int, dynamic> with keys are the properties of GuesstLists, values are the properties' values.
+  /// Return a Map<int, dynamic> with keys are the properties of GuestList, values are the properties' values.
   Map<String, dynamic> getProperties() {
     Map<String, dynamic> map = {};
     map['id'] = id;

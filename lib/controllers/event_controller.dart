@@ -1,7 +1,11 @@
 import 'dart:async';
 
 import 'package:youroccasions/controllers/base_controller.dart';
+<<<<<<< HEAD
 import 'package:youroccasions/models/event.dart';
+=======
+import 'package:youroccasions/models/Event.dart';
+>>>>>>> 7ccbea979e333b21fb4d2b88c8bd47d5ecafd6ab
 import 'package:youroccasions/exceptions/UpdateQueryException.dart';
 
 class EventController extends BaseController {
