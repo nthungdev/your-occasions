@@ -10,8 +10,16 @@ class User {
   DateTime _creationDate;
 
   // CONSTRUCTORS //
-  User(this._name, this._email, this._password, this._birthday);
   User.create();
+  User({String name, String email, String password, DateTime birthday, String picture, bool isUsed}) {
+    name = name;
+    email = email;
+    password = password;
+    birthday = birthday;
+    picture = picture;
+    isUsed = isUsed;
+    creationDate = DateTime.now();
+  }
   User.createFromMap(Iterable<Map<String, dynamic>> map){
     map.forEach((item) {
       id = item['id'];

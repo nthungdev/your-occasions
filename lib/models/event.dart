@@ -1,4 +1,3 @@
-
 class Event {
   // PROPERTIES //
   int _id;
@@ -16,6 +15,20 @@ class Event {
 
   // CONSTRUCTORS //
   Event.create();
+  Event({int hostId, String name, String description, String locationName, DateTime startTime, DateTime endTime, 
+  int age,int price, String category, bool isUsed}) {
+    hostId = hostId;
+    name = name;
+    description = description;
+    locationName = locationName;
+    startTime = startTime;
+    endTime = endTime;
+    age = age;
+    price = price;
+    category = category;
+    isUsed = isUsed;
+    creationDate = DateTime.now();
+  }
   Event.createFromMap(Iterable<Map<String, dynamic>> map){
     map.forEach((item) {
       id = item['id'];
@@ -62,5 +75,25 @@ class Event {
   set creationDate(DateTime creationDate) => _creationDate = creationDate;
 
   // METHODS //
+  /// Return a Map<String, dynamic> with keys are the properties of User, values are the properties' values.
+  Map<String, dynamic> getProperties() {
+    Map<String, dynamic> map = {};
+    map['id'] = id;
+    map['hostId'] = hostId;
+    map['name'] = name;
+    map['description'] = description;
+    map['locationName'] = locationName;
+    map['startTime'] = startTime;
+    map['endTime'] = endTime;
+    map['age'] = age;
+    map['price'] = price;
+    map['category'] = category;
+    map['isUsed'] = isUsed;
+    map['creationDate'] = creationDate;
+
+    return map;
+  }
+
+  String toString() => "An instance of Event id=$id, name=$name";
 
 }
