@@ -4,7 +4,7 @@ class GuestLists {
   int _userId;
   int _eventId;
   int _sharerId;
-  DateTime _creationdate;
+  DateTime _creationDate;
   
 
   // CONSTRUCTORS //
@@ -15,7 +15,7 @@ class GuestLists {
       id = item['id'];
       userId = item['userID'];
       eventId= item['eventId'];
-      sharerId = item['sharerId']
+      sharerId = item['sharerId'];
       creationDate = item['creation_date'];
     });
   }
@@ -37,8 +37,8 @@ class GuestLists {
   // METHODS //
 
   /// Return a Map<int, dynamic> with keys are the properties of GuesstLists, values are the properties' values.
-  Map<int, dynamic> getProperties() {
-    Map<int, dynamic> map = {};
+  Map<String, dynamic> getProperties() {
+    Map<String, dynamic> map = {};
     map['id'] = id;
     map['userId'] = userId;
     map['eventId'] = eventId;
