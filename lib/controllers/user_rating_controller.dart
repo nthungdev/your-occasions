@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:youroccasions/controllers/base_controller.dart';
-import 'package:youroccasions/models/event_rating.dart';
+import 'package:youroccasions/models/user_rating.dart';
 import 'package:youroccasions/exceptions/UpdateQueryException.dart';
 
 class EvenRatingController extends BaseController{
@@ -16,36 +16,36 @@ class EvenRatingController extends BaseController{
   
 
   // METHODS //
-  /// Insert a new row into event_ratings table.
-  Future<void> insert(EventRating model) async {
+  /// Insert a new row into user_ratings table.
+  Future<void> insert(UserRating model) async {
     await connect();
 
-    await connection.query("""INSERT INTO event_ratings (event_id, one, two, three, four, five, rating)
-      VALUES (@eventId, @one, @two, @three, @four, @five, @rating)""",
+    await connection.query("""INSERT INTO user_ratings (user_id, one, two, three, four, five, rating)
+      VALUES (@userId, @one, @two, @three, @four, @five, @rating)""",
       substitutionValues: model.getProperties());
 
     await disconnect();
   }
 
-  /// Delete an existing row from event_ratings table.
+  /// Delete an existing row from user_ratings table.
   Future<void> delete(int id) async {
     await connect();
 
-    await connection.query("""DELETE FROM event_ratings WHERE id = @id""", substitutionValues: { 'id': id, });  
+    await connection.query("""DELETE FROM user_ratings WHERE id = @id""", substitutionValues: { 'id': id, });  
 
     await disconnect();
   }
 
-  /// Update an existing row from event_ratings table.
-  Future<void> update(int id, {int eventId, int one, int two, int three, int four, int five, double rating}) async {
-    if(eventId == null && one == null && two == null && three == null && four == null && five == null && rating == null) {
+  /// Update an existing row from user_ratings table.
+  Future<void> update(int id, {int userId, int one, int two, int three, int four, int five, double rating}) async {
+    if(userId == null && one == null && two == null && three == null && four == null && five == null && rating == null) {
       throw UpdateQueryException(); //
     }
     else {
       await connect();
 
-      String query = "UPDATE event_ratings SET ";
-      if(eventId != null) { query += "event_id = $eventId "; }
+      String query = "UPDATE user_ratings SET ";
+      if(userId != null) { query += "user_id = $userId "; }
       if(one != null) { query += "one = $one "; }
       if(two != null) { query += "two = $two "; }
       if(three != null) { query += "three = $three "; }
@@ -61,21 +61,21 @@ class EvenRatingController extends BaseController{
     }
   }
 
-  Future<List<EventRating>> getEventRating({int eventId , int id}) async{
+  Future<List<UserRating>> getUserRating({int userId , int id}) async{
     await connect();
 
-    List<EventRating> result = [];
+    List<UserRating> result = [];
 
 
-    String query = "SELECT * from event_ratings ";
+    String query = "SELECT * from user_ratings ";
 
-    if(eventId == null && id == null) {
+    if(userId == null && id == null) {
 
     }
     else {
       query += "where ";
       
-      if(eventId != null) { query += "event_id = $eventId ";}
+      if(userId != null) { query += "user_id = $userId ";}
       else if(id != null) { query += "id = $id ";}
     }
 
@@ -83,7 +83,7 @@ class EvenRatingController extends BaseController{
     var queryResult = await connection.mappedResultsQuery(query);
 
     for (var item in queryResult) {
-      result.add(EventRating.createFromMap(item.values));
+      result.add(UserRating.createFromMap(item.values));
     }
 
     await disconnect();
