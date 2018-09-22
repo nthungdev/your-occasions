@@ -14,7 +14,7 @@ class UserInterestedEvents {
     _eventId = eventId;
     _creationDate = creationDate;
   }
-  UserInterestedEvents.createFromMap(Iterable<Map<int, dynamic>> map){
+  UserInterestedEvents.createFromMap(Iterable<Map<String, dynamic>> map){
     map.forEach((item) {
       id = item['id'];
       userId = item['userID'];

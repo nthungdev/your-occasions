@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:youroccasions/controllers/base_controller.dart';
-import 'package:youroccasions/Models/Event.dart';
+import 'package:youroccasions/models/Event.dart';
 import 'package:youroccasions/exceptions/UpdateQueryException.dart';
 
 class EventController extends BaseController {
@@ -96,5 +96,3 @@ class EventController extends BaseController {
 
   }
 }
-
-void main() {

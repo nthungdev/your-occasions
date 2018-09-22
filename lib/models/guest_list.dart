@@ -13,7 +13,7 @@ class GuestLists {
     _eventId = eventId;
     _creationDate = creationDate;
   }
-  GuestLists.createFromMap(Iterable<Map<int, dynamic>> map){
+  GuestLists.createFromMap(Iterable<Map<String, dynamic>> map){
     map.forEach((item) {
       id = item['id'];
       userId = item['userID'];

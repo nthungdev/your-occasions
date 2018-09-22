@@ -15,7 +15,7 @@ class FriendLists {
     _friendId = friendId;
     _creationDate = creationDate;
   }
-  FriendLists.createFromMap(Iterable<Map<int, dynamic>> map){
+  FriendLists.createFromMap(Iterable<Map<String, dynamic>> map){
     map.forEach((item) {
       id = item['id'];
       userId = item['userID'];
