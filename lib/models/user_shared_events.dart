@@ -1,21 +1,20 @@
-class UserSharedEvents {
+class UserSharedEvent {
   // PROPERTIES //
   int _id;
   int _userId;
   int _eventId;
   int _sharerId;
   DateTime _creationDate;
-  
 
   // CONSTRUCTORS //
-  UserSharedEvents.create();
-  UserSharedEvents({int userId, int eventId, int sharerId, DateTime creationDate}){
+  UserSharedEvent.create();
+  UserSharedEvent({int userId, int eventId, int sharerId, DateTime creationDate}){
     _userId = userId;
     _eventId = eventId;
     _sharerId = sharerId;
     _creationDate = creationDate;
   }
-  UserSharedEvents.createFromMap(Iterable<Map<String, dynamic>> map){
+  UserSharedEvent.createFromMap(Iterable<Map<String, dynamic>> map){
     map.forEach((item) {
       id = item['id'];
       userId = item['userID'];
@@ -41,15 +40,14 @@ class UserSharedEvents {
 
   // METHODS //
 
-  /// Return a Map<int, dynamic> with keys are the properties of GuesstLists, values are the properties' values.
+  /// Return a Map<int, dynamic> with keys are the properties of UserSharedEvent, values are the properties' values.
   Map<String, dynamic> getProperties() {
     Map<String, dynamic> map = {};
     map['id'] = id;
     map['userId'] = userId;
     map['eventId'] = eventId;
+    map['sharerId'] = sharerId;
     map['creationDate'] = creationDate;
-    map ['sharerId'] = sharerId;
-
     return map;
   }
 

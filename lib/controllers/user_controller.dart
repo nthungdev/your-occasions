@@ -62,8 +62,6 @@ class UserController extends BaseController {
 
       await disconnect();
     }
-    
-    
   }
 
   /// Select rows from users table and return a list of User objects.
@@ -71,7 +69,6 @@ class UserController extends BaseController {
     await connect();
 
     List<User> result = [];
-
 
     String query = "SELECT * from users ";
 
@@ -85,7 +82,6 @@ class UserController extends BaseController {
       else if(email != null) { query += "email = '$email' "; }
       else if(id != null) { query += "id = $id ";}
     }
-
 
     var queryResult = await connection.mappedResultsQuery(query);
 
@@ -102,14 +98,10 @@ class UserController extends BaseController {
     // update(9);
     List<User> result = await getUser(id: 5);
     print(result);
-
   }
 }
-
-  
 
 void main() {
   UserController test = UserController();
   test.test();
-
 }
