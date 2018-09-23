@@ -24,12 +24,12 @@ class BaseController {
     this._databaseName = databaseName;
     this._username = username;
     this._password = password;
-    connection = PostgreSQLConnection(host, port, databaseName, username: username, password: password, useSSL: true);
   }
 
   // METHODS //
-  /// Open an connection to the server.
+  /// Create and open a connection to the server.
   Future<void> connect() async {
+    connection = PostgreSQLConnection(host, port, databaseName, username: username, password: password, useSSL: true);
     await connection.open();
   }
 

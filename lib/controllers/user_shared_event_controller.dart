@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:youroccasions/controllers/base_controller.dart';
-import 'package:youroccasions/models/user_shared_events.dart';
+import 'package:youroccasions/models/user_shared_event.dart';
 import 'package:youroccasions/exceptions/UpdateQueryException.dart';
 
 class UserSharedEventController extends BaseController{

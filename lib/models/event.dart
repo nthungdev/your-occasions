@@ -16,7 +16,7 @@ class Event {
   // CONSTRUCTORS //
   Event.create();
   Event({int hostId, String name, String description, String locationName, DateTime startTime, DateTime endTime, 
-  int age,int price, String category, bool isUsed}) {
+  int age,int price, String category, bool isUsed=true}) {
     hostId = hostId;
     name = name;
     description = description;

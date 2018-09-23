@@ -17,7 +17,7 @@ class UserSharedEvent {
   UserSharedEvent.createFromMap(Iterable<Map<String, dynamic>> map){
     map.forEach((item) {
       id = item['id'];
-      userId = item['userID'];
+      userId = item['userId'];
       eventId= item['eventId'];
       sharerId = item['sharerId'];
       creationDate = item['creation_date'];

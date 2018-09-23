@@ -5,7 +5,6 @@ class UserInterestedEvents {
   int _eventId;
   DateTime _creationDate;
   
-
   // CONSTRUCTORS //
   UserInterestedEvents.create();
   UserInterestedEvents({int userId, int eventId, DateTime creationDate}){
@@ -17,7 +16,7 @@ class UserInterestedEvents {
   UserInterestedEvents.createFromMap(Iterable<Map<String, dynamic>> map){
     map.forEach((item) {
       id = item['id'];
-      userId = item['userID'];
+      userId = item['userId'];
       eventId= item['eventId'];
       creationDate = item['creation_date'];
     });

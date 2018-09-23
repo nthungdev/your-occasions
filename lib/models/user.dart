@@ -11,14 +11,15 @@ class User {
 
   // CONSTRUCTORS //
   User.create();
-  User({String name, String email, String password, DateTime birthday, String picture, bool isUsed}) {
-    name = name;
-    email = email;
-    password = password;
-    birthday = birthday;
-    picture = picture;
-    isUsed = isUsed;
-    creationDate = DateTime.now();
+  User({String name, String email, String password, DateTime birthday, String picture, bool isUsed=true}) {
+    print("name is $name");
+    this._name = name;
+    this._email = email;
+    this._password = password;
+    this._birthday = birthday;
+    this._picture = picture;
+    this._isUsed = isUsed;
+    this._creationDate = DateTime.now();
   }
   User.createFromMap(Iterable<Map<String, dynamic>> map){
     map.forEach((item) {
