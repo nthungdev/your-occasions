@@ -15,10 +15,10 @@ class GuestList {
   }
   GuestList.createFromMap(Iterable<Map<String, dynamic>> map){
     map.forEach((item) {
-      id = item['id'];
-      userId = item['userID'];
-      eventId= item['eventId'];
-      creationDate = item['creation_date'];
+      _id = item['id'];
+      _userId = item['userID'];
+      _eventId= item['eventId'];
+      _creationDate = item['creation_date'];
     });
   }
 

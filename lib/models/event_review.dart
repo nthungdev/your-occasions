@@ -21,13 +21,13 @@ class EventReview {
   }
   EventReview.createFromMap(Iterable<Map<String, dynamic>> map){
     map.forEach((item) {
-      id = item['id'];
-      eventId = item['eventId'];
-      reviewerId = item['reviewId'];
-      hostId = item['host_id'];
-      description = item['description'];
-      isUsed = item['is_used'];
-      creationDate = item['creation_date'];
+      _id = item['id'];
+      _eventId = item['eventId'];
+      _reviewerId = item['reviewId'];
+      _hostId = item['host_id'];
+      _description = item['description'];
+      _isUsed = item['is_used'];
+      _creationDate = item['creation_date'];
     });
   }
 

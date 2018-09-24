@@ -36,20 +36,20 @@ class User {
   }
   User.createFromMap(Iterable<Map<String, dynamic>> map){
     map.forEach((item) {
-      id = item['id'];
-      name = item['name'];
-      email = item['email'];
-      password = item['password'];
-      birthday = item['birthday'];
-      picture = item['picture'];
-      one = item['one'];
-      two = item['two'];
-      three = item['three'];
-      four = item['four'];
-      five = item['five'];
-      rating = item['rating'];
-      isUsed = item['is_used'];
-      creationDate = item['creation_date'];
+      _id = item['id'];
+      _name = item['name'];
+      _email = item['email'];
+      _password = item['password'];
+      _birthday = item['birthday'];
+      _picture = item['picture'];
+      _one = item['one'];
+      _two = item['two'];
+      _three = item['three'];
+      _four = item['four'];
+      _five = item['five'];
+      _rating = item['rating'];
+      _isUsed = item['is_used'];
+      _creationDate = item['creation_date'];
     });
   }
 
