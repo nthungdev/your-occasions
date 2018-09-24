@@ -10,13 +10,19 @@ class Event {
   int _age;
   int _price;
   String _category;
+  int _one;
+  int _two;
+  int _three;
+  int _four;
+  int _five;
+  num _rating;
   bool _isUsed;
   DateTime _creationDate;
 
   // CONSTRUCTORS //
   Event.create();
   Event({int hostId, String name, String description, String locationName, DateTime startTime, DateTime endTime, 
-  int age,int price, String category, bool isUsed=true}) {
+  int age,int price, String category, int one, int two, int three, int four, int five, num rating, bool isUsed=true}) {
     hostId = hostId;
     name = name;
     description = description;
@@ -26,23 +32,35 @@ class Event {
     age = age;
     price = price;
     category = category;
+    one = one;
+    two = two;
+    three = three;
+    four = four;
+    five = five;
+    rating = rating;
     isUsed = isUsed;
     creationDate = DateTime.now();
   }
   Event.createFromMap(Iterable<Map<String, dynamic>> map){
     map.forEach((item) {
-      id = item['id'];
-      hostId = item['host_id'];
-      name = item['name'];
-      description = item['description'];
-      locationName = item['location_name'];
-      startTime= item['start_time'];
-      endTime = item['end_time'];
-      age = item['age'];
-      price = item['price'];
-      category = item['category'];
-      isUsed = item['is_used'];
-      creationDate = item['creation_date'];
+      this._id = item['id'];
+      this._hostId = item['host_id'];
+      this._name = item['name'];
+      this._description = item['description'];
+      this._locationName = item['location_name'];
+      this._startTime= item['start_time'];
+      this._endTime = item['end_time'];
+      this._age = item['age'];
+      this._price = item['price'];
+      this._category = item['category'];
+      this._one = item['one'];
+      this._two = item['two'];
+      this._three = item['three'];
+      this._four = item['four'];
+      this._five = item['five'];
+      this._rating = item['rating'];
+      this._isUsed = item['is_used'];
+      this._creationDate = item['creation_date'];
     });
   }
 
@@ -57,6 +75,12 @@ class Event {
   int get age => _age;
   int get price => _price;
   String get category => _category;
+  int get one => _one;
+  int get two => _two;
+  int get three => _three;
+  int get four => _four;
+  int get five => _five;
+  num get rating => _rating;
   bool get isUsed => _isUsed;
   DateTime get creationDate => _creationDate;
 
@@ -71,6 +95,12 @@ class Event {
   set age(int age) => _age = age;
   set price(int price) => _price = price;
   set category(String category) => _category = category;
+  set one(int one) => _one = one;
+  set two(int two) => _two = two;
+  set three(int three) => _three = three;
+  set four(int four) => _four = four;
+  set five(int five) => _five = five;
+  set rating(num rating) => _rating = rating;
   set isUsed(bool isUsed) => _isUsed = isUsed;
   set creationDate(DateTime creationDate) => _creationDate = creationDate;
 
@@ -88,6 +118,12 @@ class Event {
     map['age'] = age;
     map['price'] = price;
     map['category'] = category;
+    map['one'] = one;
+    map['two'] = two;
+    map['three'] = three;
+    map['four'] = four;
+    map['five'] = five;
+    map['rating'] = rating;
     map['isUsed'] = isUsed;
     map['creationDate'] = creationDate;
 

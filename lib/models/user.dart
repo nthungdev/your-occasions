@@ -6,18 +6,31 @@ class User {
   String _password;
   DateTime _birthday;
   String _picture;
+  int _one;
+  int _two;
+  int _three;
+  int _four;
+  int _five;
+  double _rating;
   bool _isUsed;
   DateTime _creationDate;
 
   // CONSTRUCTORS //
   User.create();
-  User({String name, String email, String password, DateTime birthday, String picture, bool isUsed=true}) {
+  User({String name, String email, String password, DateTime birthday, String picture, 
+  int one, int two, int three, int four, int five, double rating, bool isUsed=true}) {
     print("name is $name");
     this._name = name;
     this._email = email;
     this._password = password;
     this._birthday = birthday;
     this._picture = picture;
+    this._one = one;
+    this._two = two;
+    this._three = three;
+    this._four = four;
+    this._five = five;
+    this._rating = rating;
     this._isUsed = isUsed;
     this._creationDate = DateTime.now();
   }
@@ -29,6 +42,12 @@ class User {
       password = item['password'];
       birthday = item['birthday'];
       picture = item['picture'];
+      one = item['one'];
+      two = item['two'];
+      three = item['three'];
+      four = item['four'];
+      five = item['five'];
+      rating = item['rating'];
       isUsed = item['is_used'];
       creationDate = item['creation_date'];
     });
@@ -41,6 +60,12 @@ class User {
   String get password => _password;
   DateTime get birthday => _birthday;
   String get picture => _picture;
+  int get one => _one;
+  int get two => _two;
+  int get three => _three;
+  int get four => _four;
+  int get five => _five;
+  double  get rating => _rating;
   bool get isUsed => _isUsed;
   DateTime get creationDate => _creationDate;
 
@@ -51,6 +76,12 @@ class User {
   set password(String password) => _password = password;
   set birthday(DateTime birthday) => _birthday = birthday;
   set picture(String picture) => _picture = picture;
+  set one(int one) => _one = one;
+  set two(int two) => _two = two;
+  set three(int three) => _three = three;
+  set four(int four) => _four = four;
+  set five(int five) => _five = five;
+  set rating(double rating) => _rating = rating;
   set isUsed(bool isUsed) => _isUsed = isUsed;
   set creationDate(DateTime creationDate) => _creationDate = creationDate;
 
@@ -79,9 +110,14 @@ class User {
     map['password'] = password;
     map['birthday'] = birthday;
     map['picture'] = picture;
+    map['one'] = one;
+    map['two'] = two;
+    map['three'] = three;
+    map['four'] = four;
+    map['five'] = five;
+    map['rating'] = rating;
     map['isUsed'] = isUsed;
     map['creationDate'] = creationDate;
-
     return map;
   }
 

@@ -24,7 +24,7 @@ class UserController extends BaseController {
   Future<void> insert(User model) async {
     await connect();
     await connection.query("""INSERT INTO users (name, email, password, birthday, is_used, creation_date)
-      VALUES (@name, @email, @password, @birthday, @isUsed, @creationDate)""",
+      VALUES (@name, @email, @password, @birthday, @one, @two, @three, @four, @five, @rating, @isUsed, @creationDate)""",
       substitutionValues: model.getProperties());
     await disconnect();
   }
@@ -37,8 +37,10 @@ class UserController extends BaseController {
   }
 
   /// Update an existing row from users table.
-  Future<void> update(int id, {String name, String email, String password, DateTime birthday, String picture, bool isUsed}) async {
-    if(name == null && email == null && password == null && birthday == null && picture == null && isUsed == null) {
+  Future<void> update(int id, {String name, String email, String password, DateTime birthday, String picture, 
+  int one, int two, int three, int four, int five, double rating, bool isUsed}) async {
+    if(name == null && email == null && password == null && birthday == null && picture == null 
+    && one == null && two == null && three == null && four == null && five == null && rating == null && isUsed == null) {
       throw UpdateQueryException(); //
     }
     else {
@@ -49,6 +51,12 @@ class UserController extends BaseController {
       if(password != null) { query += "password = '$password' "; }
       if(birthday != null) { query += "birthday = '$birthday' "; }
       if(picture != null) { query += "picture = '$picture' "; }
+      if(one != null) { query += "one = $one "; }
+      if(two != null) { query += "two = $two "; }
+      if(three != null) { query += "three = $three "; }
+      if(four != null) { query += "four = $four "; }
+      if(five != null) { query += "five = $five "; }
+      if(rating != null) { query += "rating = $rating "; }
       if(isUsed != null) { query += "is_used = '$isUsed' "; }
 
       query += " WHERE id = '$id'";

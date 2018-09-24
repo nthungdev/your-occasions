@@ -27,7 +27,7 @@ class EventController extends BaseController {
     await connection.query("""INSERT INTO events (host_id, name, description, location_name, start_time, end_time,
     age, price, category, is_used, creation_date)
       VALUES (@hostId, @name, @description, @locationName, @startTime, @endTime,
-      @age, @price, @category, @isUsed, @creationDate)""",
+      @age, @price, @category, @one, @two, @three, @four, @five, @rating, @isUsed, @creationDate)""",
       substitutionValues: model.getProperties());
 
     await disconnect();
@@ -44,9 +44,10 @@ class EventController extends BaseController {
 
   /// Update an existing row from Events table based on id.
   Future<void> update(int id, {int hostId, String name, String description, String locationName, DateTime startTime, DateTime endTime,
-  int age, int price, String category, bool isUsed, DateTime creationDate}) async {
+  int age, int price, String category, int one, int two, int three, int four, int five, double rating, bool isUsed, DateTime creationDate}) async {
     if(hostId == null && name == null && description == null && locationName == null && startTime == null && endTime == null
-    && age == null && price == null && category == null && isUsed == null && creationDate == null) {
+    && age == null && price == null && category == null && one == null && two == null && three == null && four == null && five == null && rating == null 
+    && isUsed == null && creationDate == null) {
       throw UpdateQueryException(); //
     }
     else {
@@ -60,10 +61,16 @@ class EventController extends BaseController {
       if(startTime != null) { query += "birthday = '$startTime'"; }
       if(endTime != null) { query += "picture = '$endTime'"; }
       if(age != null) { query += "is_used = '$age'"; }
+      if(one != null) { query += "one = $one "; }
+      if(two != null) { query += "two = $two "; }
+      if(three != null) { query += "three = $three "; }
+      if(four != null) { query += "four = $four "; }
+      if(five != null) { query += "five = $five "; }
+      if(rating != null) { query += "rating = $rating "; }
 
       query += " WHERE id = '$id'";
 
-      await connection.query(query);  
+      await connection.query(query);
 
       await disconnect();
     }
