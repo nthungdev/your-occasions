@@ -1,10 +1,43 @@
 import 'dart:io';
 import 'dart:async';
+import 'package:flutter/material.dart';
 
 import 'package:youroccasions/models/user.dart';
 import 'package:youroccasions/controllers/user_controller.dart';
 
 final UserController _userController = UserController();
+
+class LoginWithEmailScreen extends StatelessWidget {
+
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      appBar: AppBar(
+        title: Text("Login"),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text("Email"),
+          
+          ]
+        ),
+      )
+    );
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
 
 void signup() {
   print("What is your full name?");
