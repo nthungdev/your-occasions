@@ -16,7 +16,7 @@ class UserInterestedController extends BaseController{
   
 
   // METHODS //
-  /// Insert a new row into user_interested_events table.
+  /// Insert a new row into ded_events table.
   Future<void> insert(UserInterestedEvent model) async {
     await connect();
 
