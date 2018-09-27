@@ -19,8 +19,20 @@ class LoginWithEmailScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text("Email"),
-          
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.red,
+                )
+              ),
+              child: Text("Type your Email")
+            ),
+            Container(
+              width: 100.0,
+              color: const Color(0xFF00FF00),
+              child: TextField(
+              )
+            )
           ]
         ),
       )

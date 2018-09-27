@@ -18,7 +18,7 @@ class FriendList {
       id = item['id'];
       _userId = item['userID'];
       _friendId= item ['friendId'];
-      _creationDate = item['creation_date'];
+      _creationDate = item['creationDate'];
     });
   }
 

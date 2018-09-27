@@ -27,7 +27,7 @@ class EventReview {
       _hostId = item['host_id'];
       _description = item['description'];
       _isUsed = item['is_used'];
-      _creationDate = item['creation_date'];
+      _creationDate = item['creationDate'];
     });
   }
 

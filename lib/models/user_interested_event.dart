@@ -17,7 +17,7 @@ class UserInterestedEvent {
       _id = item['id'];
       _userId = item['userId'];
       _eventId= item['eventId'];
-      _creationDate = item['creation_date'];
+      _creationDate = item['creationDate'];
     });
   }
 

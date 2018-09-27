@@ -20,7 +20,7 @@ class UserSharedEvent {
       _userId = item['userId'];
       _eventId= item['eventId'];
       _sharerId = item['sharerId'];
-      _creationDate = item['creation_date'];
+      _creationDate = item['creationDate'];
     });
   }
 
