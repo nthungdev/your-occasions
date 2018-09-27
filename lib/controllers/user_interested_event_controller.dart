@@ -16,11 +16,11 @@ class UserInterestedController extends BaseController{
   
 
   // METHODS //
-  /// Insert a new row into ded_events table.
+  /// Insert a new row into user_interesteded_events table.
   Future<void> insert(UserInterestedEvent model) async {
     await connect();
 
-    await connection.query("""INSERT INTO user_interested_events (user_id, event_id, creation)_date)
+    await connection.query("""INSERT INTO user_interested_events (user_id, event_id, creation_date)
       VALUES (@userId, @eventId, @creationDate)""",
       substitutionValues: model.getProperties());
 
