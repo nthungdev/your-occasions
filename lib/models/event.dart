@@ -47,9 +47,9 @@ class Event {
       this._hostId = item['host_id'];
       this._name = item['name'];
       this._description = item['description'];
-      this._locationName = item['location_name'];
-      this._startTime= item['start_time'];
-      this._endTime = item['end_time'];
+      this._locationName = item['locationName'];
+      this._startTime= item['startTime'];
+      this._endTime = item['endTime'];
       this._age = item['age'];
       this._price = item['price'];
       this._category = item['category'];
@@ -59,8 +59,8 @@ class Event {
       this._four = item['four'];
       this._five = item['five'];
       this._rating = item['rating'];
-      this._isUsed = item['is_used'];
-      this._creationDate = item['creation_date'];
+      this._isUsed = item['isUsed'];
+      this._creationDate = item['creationDate'];
     });
   }
 

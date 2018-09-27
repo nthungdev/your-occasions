@@ -48,8 +48,8 @@ class User {
       _four = item['four'];
       _five = item['five'];
       _rating = item['rating'];
-      _isUsed = item['is_used'];
-      _creationDate = item['creation_date'];
+      _isUsed = item['isUsed'];
+      _creationDate = item['creationDate'];
     });
   }
 
