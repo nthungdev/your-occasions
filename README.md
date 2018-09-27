@@ -1,6 +1,6 @@
 # Your Occasions
 
-One Paragraph of project description goes here
+Our app Your Occasions will offer people easy access to events near them, where they are able to see available events in the area. 
 
 ## Getting Started
 
@@ -32,31 +32,26 @@ until finished
 
 End with an example of getting some data out of the system or using it for a little demo
 
-
-
 ## Deployment
 
 Add additional notes about how to deploy this on a live system
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+* [Flutter](https://flutter.io/) - Mobile application development SDK to build beautiful UI.
+* [Dart](https://www.dartlang.org/) - Programming language.
+* [Heroku](https://www.heroku.com/) - Cloud platform for database hosting.
+* [PostgreSQL](https://www.postgresql.org/) - DBRMS.
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+* **Hung Nguyen** - *Initial work* - [nthungdev](https://github.com/nthungdev)
+* **Ibrahim Diallo** - *Initial work* - [lifeofib](https://github.com/lifeofib)
+* **Jake Le** - *Initial work* - [duongle99](https://github.com/duongle98)
 
 ## License
 
