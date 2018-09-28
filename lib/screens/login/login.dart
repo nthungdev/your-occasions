@@ -7,7 +7,28 @@ import 'package:youroccasions/controllers/user_controller.dart';
 
 final UserController _userController = UserController();
 
-class LoginWithEmailScreen extends StatelessWidget {
+class LoginWithEmailScreen extends StatefulWidget {
+  @override
+  _LoginWithEmailScreen createState() => _LoginWithEmailScreen();
+  
+}
+
+class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
+
+  // Create a text controller. We will use it to retrieve the current value
+  // of the TextField!
+  static final passwordController = new TextEditingController();
+  static final emailController = new TextEditingController();
+
+
+  
+  @override
+  void dispose() {
+    // Clean up the controller when the Widget is removed from the Widget tree
+    passwordController.dispose();
+    emailController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,19 +48,116 @@ class LoginWithEmailScreen extends StatelessWidget {
               ),
               child: Text("Type your Email")
             ),
+            emailInput,
             Container(
-              width: 100.0,
-              color: const Color(0xFF00FF00),
-              child: TextField(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.red,
+                )
+              ),
+              child: Text("Type your password")
+            ),
+            passwordInput,
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 16.0),
+              child: Material(
+                borderRadius: BorderRadius.circular(30.0),
+                shadowColor: Colors.lightBlueAccent.shade100,
+                elevation: 5.0,
+                child: MaterialButton(
+                  minWidth: 200.0,
+                  height: 42.0,
+                  onPressed: () async {
+                    bool result = await login();
+                    if(result) {
+                      // print("success");
+                    }
+                    else{
+                      // print("login unsuccessful");
+                    }
+                  },
+                  // color: Colors.lightBlueAccent,
+                  child: Text('Log In', style: TextStyle(color: Colors.black)),
+                ),
               )
-            )
+            ),
           ]
         ),
       )
     );
   }
+
+  final emailInput = Container(
+    margin: const EdgeInsets.all(10.0),
+    width: 250.0,
+    color: const Color(0xFF00FF00),
+    child: TextFormField(
+      keyboardType: TextInputType.emailAddress,
+      autofocus: false,
+      // initialValue: 'dsds',
+      controller: emailController,
+      decoration: InputDecoration(
+        hintText: 'Email',
+        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
+      ),
+    )
+  );
+
+  final passwordInput = Container(
+    margin: const EdgeInsets.all(10.0),
+    width: 250.0,
+    color: const Color(0xFF00FF00),
+    child: TextFormField(
+      controller: passwordController,
+      autofocus: false,
+      // initialValue: 'dsd',
+      obscureText: true,
+      decoration: InputDecoration(
+        hintText: 'Password',
+        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
+      )
+    ),
+  );
+
+  final loginButton = Padding(
+    padding: EdgeInsets.symmetric(vertical: 16.0),
+    child: Material(
+      borderRadius: BorderRadius.circular(30.0),
+      shadowColor: Colors.lightBlueAccent.shade100,
+      elevation: 5.0,
+      child: MaterialButton(
+        minWidth: 200.0,
+        height: 42.0,
+        onPressed: () { 
+        } ,
+        // color: Colors.lightBlueAccent,
+        child: Text('Log In', style: TextStyle(color: Colors.black)),
+      ),
+    )
+  );
+
+  Future<bool> login() async {
+    String email = emailController.text;
+    print("DEBUG  email text : ${emailController.text}");
+    String password = passwordController.text;
+    User loginUser = await _userController.loginWithEmail(email, password);
+    if(loginUser != null) {
+      print("Login sucessfully!");
+      return true;
+    }
+    else {
+      print("\nEither your email or password is not correct!\nPlease retype your email and/or password!");
+      return false;
+    }
+  
 }
 
+
+
+
+}
 
 
 
