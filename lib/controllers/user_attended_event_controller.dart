@@ -20,7 +20,7 @@ class UserAttendedController extends BaseController{
   Future<void> insert(UserAttendedEvent model) async {
     await connect();
 
-    await connection.query("""INSERT INTO user_attended_events (user_id, event_id, creation)_date)
+    await connection.query("""INSERT INTO user_attended_events (user_id, event_id, creation_date)
       VALUES (@userId, @eventId, @creationDate)""",
       substitutionValues: model.getProperties());
 

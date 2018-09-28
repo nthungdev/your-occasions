@@ -21,7 +21,7 @@ class GuestListController extends BaseController{
   Future<void> insert(GuestList model) async {
     await connect();
 
-    await connection.query("""INSERT INTO guestlists (user_id, event_id, creation)_date)
+    await connection.query("""INSERT INTO guestlists (user_id, event_id, creation_date)
       VALUES (@userId, @eventId, @creationDate)""",
       substitutionValues: model.getProperties());
 
@@ -58,7 +58,7 @@ class GuestListController extends BaseController{
     }
   }
 
-  Future<List<GuestList>> getGuestList({int userId, int eventId , int id}) async{
+  Future<List<GuestList>> getGuestList({int userId, int eventId, int id}) async{
     await connect();
 
     List<GuestList> result = [];
