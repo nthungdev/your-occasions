@@ -8,7 +8,7 @@ bool isDate(String str) {
 }
 
 bool isPassword(String pw) {
-  return pw.length >= 8 and pw.length <= 30;
+  return pw.length >= 6 && pw.length <= 30;
 }
 
 bool isEmail(String email) {

@@ -24,7 +24,7 @@ class UserController extends BaseController {
   Future<void> insert(User model) async {
     await connect();
     await connection.query("""INSERT INTO users (name, email, password, birthday, is_used, creation_date)
-      VALUES (@name, @email, @password, @birthday, @one, @two, @three, @four, @five, @rating, @isUsed, @creationDate)""",
+      VALUES (@name, @email, @password, @birthday, @isUsed, @creationDate)""",
       substitutionValues: model.getProperties());
     await disconnect();
   }
