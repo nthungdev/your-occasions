@@ -8,7 +8,7 @@ bool isDate(String str) {
 }
 
 bool isPassword(String pw) {
-  return pw.length >= 8;
+  return pw.length >= 8 or pw.length <= 30;
 }
 
 bool isEmail(String email) {
@@ -18,4 +18,9 @@ bool isEmail(String email) {
   RegExp regExp = new RegExp(p);
 
   return regExp.hasMatch(email);
+}
+
+bool isName(String name){
+  RegExp _alpha = new RegExp(r'^[a-zA-Z]+$');
+  return _alpha.hasMatch(name);
 }
