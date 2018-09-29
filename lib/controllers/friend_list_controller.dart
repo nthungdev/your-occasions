@@ -2,7 +2,7 @@
 import 'dart:async';
 
 import 'package:youroccasions/controllers/base_controller.dart';
-import 'package:youroccasions/models/guest_list.dart';
+import 'package:youroccasions/models/friend_list.dart';
 import 'package:youroccasions/exceptions/UpdateQueryException.dart';
 
 class FriendListController extends BaseController{
