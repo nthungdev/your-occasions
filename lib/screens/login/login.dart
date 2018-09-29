@@ -2,10 +2,13 @@ import 'dart:io';
 import 'dart:async';
 import 'package:flutter/material.dart';
 
+import 'package:youroccasions/screens/home/home.dart';
 import 'package:youroccasions/models/user.dart';
 import 'package:youroccasions/controllers/user_controller.dart';
+import 'package:youroccasions/utilities/config.dart';
 
 final UserController _userController = UserController();
+bool _isLogging = false;
 
 class LoginWithEmailScreen extends StatefulWidget {
   @override
@@ -20,15 +23,13 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
   static final passwordController = new TextEditingController();
   static final emailController = new TextEditingController();
 
-
-  
-  @override
-  void dispose() {
-    // Clean up the controller when the Widget is removed from the Widget tree
-    passwordController.dispose();
-    emailController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   // Clean up the controller when the Widget is removed from the Widget tree
+  //   passwordController.dispose();
+  //   emailController.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -37,135 +38,151 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
         title: Text("Login"),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.red,
-                )
-              ),
-              child: Text("Type your Email")
-            ),
-            emailInput,
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.red,
-                )
-              ),
-              child: Text("Type your password")
-            ),
-            passwordInput,
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
-              child: Material(
-                borderRadius: BorderRadius.circular(30.0),
-                shadowColor: Colors.lightBlueAccent.shade100,
-                elevation: 5.0,
-                child: MaterialButton(
-                  minWidth: 200.0,
-                  height: 42.0,
-                  onPressed: () async {
-                    bool result = await login();
-                    if(result) {
-                      // print("success");
-                    }
-                    else{
-                      // print("login unsuccessful");
-                    }
-                  },
-                  // color: Colors.lightBlueAccent,
-                  child: Text('Log In', style: TextStyle(color: Colors.black)),
+        child: Form(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.red,
+                  )
                 ),
-              )
-            ),
-          ]
+                child: Text("Type your Email")
+              ),
+              emailInput(),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.red,
+                  )
+                ),
+                child: Text("Type your password")
+              ),
+              passwordInput(),
+              loginButton(),
+              switchPageButton()
+            ]
+          ),
+        )
+      )
+    );
+  }
+
+  Widget switchPageButton() {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 16.0),
+      child: Material(
+        borderRadius: BorderRadius.circular(30.0),
+        shadowColor: Colors.lightBlueAccent.shade100,
+        elevation: 5.0,
+        child: MaterialButton(
+          minWidth: 200.0,
+          height: 42.0,
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => HomeScreen()),
+            );
+          },
+          // color: Colors.lightBlueAccent,
+          child: Text('Go to Home', style: TextStyle(color: Colors.black)),
         ),
       )
     );
   }
 
-  final emailInput = Container(
-    margin: const EdgeInsets.all(10.0),
-    width: 250.0,
-    color: const Color(0xFF00FF00),
-    child: TextFormField(
-      keyboardType: TextInputType.emailAddress,
-      autofocus: false,
-      // initialValue: 'dsds',
-      controller: emailController,
-      decoration: InputDecoration(
-        hintText: 'Email',
-        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
-      ),
-    )
-  );
 
-  final passwordInput = Container(
-    margin: const EdgeInsets.all(10.0),
-    width: 250.0,
-    color: const Color(0xFF00FF00),
-    child: TextFormField(
-      controller: passwordController,
-      autofocus: false,
-      // initialValue: 'dsd',
-      obscureText: true,
-      decoration: InputDecoration(
-        hintText: 'Password',
-        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
+  Widget loginButton() {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 16.0),
+      child: Material(
+        borderRadius: BorderRadius.circular(30.0),
+        shadowColor: Colors.lightBlueAccent.shade100,
+        elevation: 5.0,
+        child: MaterialButton(
+          minWidth: 200.0,
+          height: 42.0,
+          onPressed: () async {
+            bool result = await login();
+            if(result) {
+              // print("success");
+            }
+            else{
+              // print("login unsuccessful");
+            }
+          },
+          // color: Colors.lightBlueAccent,
+          child: Text('Log In', style: TextStyle(color: Colors.black)),
+        ),
       )
-    ),
-  );
+    );
+  }
 
-  final loginButton = Padding(
-    padding: EdgeInsets.symmetric(vertical: 16.0),
-    child: Material(
-      borderRadius: BorderRadius.circular(30.0),
-      shadowColor: Colors.lightBlueAccent.shade100,
-      elevation: 5.0,
-      child: MaterialButton(
-        minWidth: 200.0,
-        height: 42.0,
-        onPressed: () { 
-        } ,
-        // color: Colors.lightBlueAccent,
-        child: Text('Log In', style: TextStyle(color: Colors.black)),
+  Widget emailInput() { 
+    return Container(
+      margin: const EdgeInsets.all(10.0),
+      width: 250.0,
+      // color: const Color(0xFF00FF00),
+      child: TextFormField(
+        controller: emailController,
+        keyboardType: TextInputType.emailAddress,
+        autofocus: false,
+        decoration: InputDecoration(
+          hintText: 'Email',
+          contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
+        ),
+      )
+    );
+  }
+
+  Widget passwordInput(){
+    return Container(
+      margin: const EdgeInsets.all(10.0),
+      width: 250.0,
+      // color: const Color(0xFF00FF00),
+      child: TextFormField(
+        controller: passwordController,
+        autofocus: false,
+        keyboardType: TextInputType.text,
+        // initialValue: 'dsd',
+        obscureText: true,
+        decoration: InputDecoration(
+          hintText: 'Password',
+          contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
+        )
       ),
-    )
-  );
+    );
+  }
+
 
   Future<bool> login() async {
-    String email = emailController.text;
-    print("DEBUG  email text : ${emailController.text}");
-    String password = passwordController.text;
-    User loginUser = await _userController.loginWithEmail(email, password);
-    if(loginUser != null) {
-      print("Login sucessfully!");
-      return true;
+    if(!_isLogging) {
+      _isLogging = true;
+      String email = emailController.text;
+      String password = passwordController.text;
+      // print("DEBUG email text : ${emailController.text}");
+      User loginUser = await _userController.loginWithEmail(email, password);
+      if(loginUser != null) {
+        print("Login sucessfully!");
+        // Saved user's id and email on device
+        setIsLogin(true);
+        setUserId(loginUser.id);
+        setUserEmail(loginUser.email);
+        return true;
+      }
+      else {
+        print("\nEither your email or password is not correct!\nPlease retype your email and/or password!");
+        return false;
+      }
+
     }
-    else {
-      print("\nEither your email or password is not correct!\nPlease retype your email and/or password!");
-      return false;
-    }
-  
-}
-
-
-
+    return false;
+  }
 
 }
-
-
-
-
-
-
-
-
 
 
 

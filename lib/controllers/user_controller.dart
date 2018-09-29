@@ -79,9 +79,9 @@ class UserController extends BaseController {
       else if(email != null) { query += "email = @email "; }
       else if(id != null) { query += "id = @id ";}
     }
-    print("DEBUG email is: $email");
+    // print("DEBUG email is: $email");
     // query += "AND is_used = @isUsed;";
-    print("DEBUG QUERY IS $query");
+    // print("DEBUG QUERY IS $query");
     var queryResult = await connection.mappedResultsQuery(query, 
     substitutionValues: { 
       'email' : email,
@@ -89,7 +89,7 @@ class UserController extends BaseController {
       'name' : name,
       'isUsed' : isUsed,
     });
-    print("DEBUG RESULT is : $queryResult");
+    // print("DEBUG RESULT is : $queryResult");
     for (var item in queryResult) {
       result.add(User.createFromMap(item.values));
     }
@@ -102,7 +102,7 @@ class UserController extends BaseController {
   /// Return User object if valid, null otherwise.
   Future<User> loginWithEmail(String email, String password) async {
     var result = await getUser(email: email);
-    print("DEBUG RESULT IS : $result");
+    // print("DEBUG RESULT IS : $result");
     if(result.length != 0) {
       User loginUser = result[0];
       if(loginUser.password == password) { return result[0]; }

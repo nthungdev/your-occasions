@@ -29,6 +29,7 @@ class BaseController {
   // METHODS //
   /// Create and open a connection to the server.
   Future<void> connect() async {
+    // if(connection.)
     connection = PostgreSQLConnection(host, port, databaseName, username: username, password: password, useSSL: true);
     await connection.open();
   }
