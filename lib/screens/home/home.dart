@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:youroccasions/screens/home/slidebar.dart';
+import 'package:youroccasions/screens/home/feed.dart';
+import 'package:youroccasions/screens/home/leaderboard.dart';
+import 'package:youroccasions/screens/home/social.dart';
+import 'package:youroccasions/screens/home/drawer.dart';
 import 'package:youroccasions/screens/event/create_event.dart';
 import 'package:youroccasions/utilities/config.dart';
 
@@ -18,36 +21,21 @@ class _HomeScreen extends State<HomeScreen> with SingleTickerProviderStateMixin 
 
 
   @override
-  void initState() async {
+  void initState() {
     super.initState();
-    _accountName = await getUserName();
-    _accountEmail = await getUserEmail();
+    getUserName().then((value) {
+      _accountName = value;
+    });
+    getUserEmail().then((value) {
+      _accountEmail = value;
+    });
     _tabController = new TabController(vsync: this, length: myTabs.length);
   }
 
   final List<Widget> myTabs = <Widget>[
-    Container(
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: ListView(
-          children: <Widget>[
-            Text("Nearby events", style: TextStyle(fontSize: 30.0, fontFamily: "Niramit")),
-          ],
-        ),
-      ),
-    ),
-    Container(
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Text("Search events page", style: TextStyle(fontSize: 30.0, fontFamily: "Niramit"),),
-      ),
-    ),
-    Container(
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Text("Leaderboard", style: TextStyle(fontSize: 30.0, fontFamily: "Niramit"),),
-      ),
-    ),
+    FeedTabView(),
+    SocialTabView(),
+    LeaderboardTabView(),
   ];
 
 

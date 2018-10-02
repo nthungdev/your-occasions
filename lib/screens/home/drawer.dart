@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
+//import 'dart:async';
 
 import 'package:youroccasions/screens/login/login.dart';
 import 'package:youroccasions/utilities/config.dart';
@@ -24,14 +24,15 @@ class HomeDrawer extends StatelessWidget {
               currentAccountPicture: CircleAvatar(),
             ),
             Container(
-                alignment: Alignment.center,
-                child:  MaterialButton(
-                  color: Colors.blue,
-                  onPressed: () {
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginWithEmailScreen()));
-                  },
-                  child: Text("Logout"),
-                )
+              alignment: Alignment.center,
+              child:  MaterialButton(
+                color: Colors.blue,
+                onPressed: () async {
+                  await setIsLogin(false);
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginWithEmailScreen()));
+                },
+                child: Text("Logout"),
+              )
             ),
           ],
         ),

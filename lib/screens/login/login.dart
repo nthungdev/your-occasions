@@ -22,13 +22,13 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
   static final passwordController = new TextEditingController();
   static final emailController = new TextEditingController();
 
-  // @override
-  // void dispose() {
-  //   // Clean up the controller when the Widget is removed from the Widget tree
-  //   passwordController.dispose();
-  //   emailController.dispose();
-  //   super.dispose();
-  // }
+   @override
+   void dispose() {
+     // Clean up the controller when the Widget is removed from the Widget tree
+     passwordController.dispose();
+     emailController.dispose();
+     super.dispose();
+   }
 
   @override
   Widget build(BuildContext context) {
