@@ -219,7 +219,7 @@ class _SignUpWithEmailScreen extends State<SignUpWithEmailScreen> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(
-        title: Text("Login"),
+        title: Text("Sign Up"),
       ),
       body: Center(
         child: Form(
@@ -244,39 +244,6 @@ class _SignUpWithEmailScreen extends State<SignUpWithEmailScreen> {
       )
     );
   }
-}
-
-void signup() {
-  print("What is your full name?");
-  String name = stdin.readLineSync();
-  print("DEBUG input name is: $name");
-  print("What is your email?");
-  String email = stdin.readLineSync();
-  print("DEBUG input email is: $email");
-  String password;
-  while (true) {
-    print("What is your password?");
-    password = stdin.readLineSync();
-    print("Please retype your password");
-    String passwordRetype = stdin.readLineSync();
-    if (isPasswordMatched(password, passwordRetype)) {
-      break;
-    }
-    print("Your passwords are not matched!");
-  }
-  print("What is your date of birth (yyyy-mm-dd)");
-  DateTime birthday = DateTime.parse(stdin.readLineSync());
-  print("DEBUG : name = $name | email = $email | password = $password");
-  User newUser =
-      User(name: name, email: email, password: password, birthday: birthday);
-  print("DEBUG new user is : $newUser");
-  _userController.insert(newUser)
-    ..then((value) {
-      print("DEBUG name is : ${newUser.name}");
-      print("Your account is created successfully!");
-    }, onError: (e) {
-      print("Sign up failed");
-    });
 }
 
 bool isPasswordMatched(String password, String passwordRetype) {

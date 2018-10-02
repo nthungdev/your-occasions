@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// How preference's names are stored on the phone.
 const String USER_ID = "userId";
 const String USER_EMAIL = "userEmail";
+const String USER_NAME = "userName";
 const String USER_PASSWORD = "userPassword";
 const String IS_LOGIN = "isLogin";
 
@@ -41,4 +42,20 @@ Future<String> getUserEmail() async {
 setUserEmail(String userEmail) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.setString(USER_EMAIL, userEmail);
+}
+
+Future<String> getUserName() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String name = (prefs.getString(USER_NAME) ?? "");
+  return name;
+}
+
+
+setUserName(String userName) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setString(USER_NAME, userName);
+}
+
+void logout() async {
+  await setIsLogin(false);
 }

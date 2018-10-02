@@ -39,6 +39,14 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  fonts:
+    - family: Niramit
+      fonts:
+        - asset: fonts/Niramit-Regular.ttf
+        - asset: fonts/Niramit-Medium.ttf
+        - asset: fonts/Niramit-Bold.ttf
+        - asset: fonts/Niramit-Italic.ttf
+
   # To add assets to your application, add an assets section, like this:
   # assets:
   #  - images/a_dot_burr.jpeg

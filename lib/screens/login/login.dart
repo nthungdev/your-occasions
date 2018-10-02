@@ -195,10 +195,10 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
         setIsLogin(true);
         setUserId(loginUser.id);
         setUserEmail(loginUser.email);
+        _isLogging = false;
         return true;
       } else {
-        print(
-            "\nEither your email or password is not correct!\nPlease retype your email and/or password!");
+        print("\nEither your email or password is not correct!\nPlease retype your email and/or password!");
         return false;
       }
     }
