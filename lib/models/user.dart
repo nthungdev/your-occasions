@@ -19,7 +19,7 @@ class User {
   User.create();
   User({String name, String email, String password, DateTime birthday, String picture, 
   int one, int two, int three, int four, int five, double rating, bool isUsed=true}) {
-    print("name is $name");
+    // print("name is $name");
     this._name = name;
     this._email = email;
     this._password = password;
