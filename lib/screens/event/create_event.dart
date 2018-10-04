@@ -23,6 +23,66 @@ class _CreateEventScreen extends State<CreateEventScreen> {
   static final descriptionController = new TextEditingController();
   static final startController = new TextEditingController();
   static final endController = new TextEditingController();
+  DateTime startDate = new DateTime.now();
+  DateTime endDate = new DateTime.now();
+  TimeOfDay startTime = new TimeOfDay.now();
+  TimeOfDay endTime = new TimeOfDay.now();
+
+  Future<Null> selectStartDate(BuildContext context) async{
+    final DateTime picked = await showDatePicker(
+      context: context,
+      initialDate: startDate,
+      firstDate: startDate,
+      lastDate: new DateTime(2020)
+    );
+    
+    if(picked != null){
+      setState(() {
+        startDate = picked;
+      });
+    }
+  }
+
+  Future<Null> selectEndDate(BuildContext context) async{
+    final DateTime picked = await showDatePicker(
+      context: context,
+      initialDate: endDate,
+      firstDate: endDate,
+      lastDate: new DateTime(2020)
+    );
+    
+    if(picked != null){
+      setState(() {
+        endDate = picked;
+      });
+    }
+  }
+
+  Future<Null> selectStartTime(BuildContext context) async{
+    final TimeOfDay picked = await showTimePicker(
+      context: context,
+      initialTime: startTime
+    );
+    
+    if(picked != null){
+      setState(() {
+        startTime = picked;
+      });
+    }
+  }
+
+  Future<Null> selectEndTime(BuildContext context) async{
+    final TimeOfDay picked = await showTimePicker(
+      context: context,
+      initialTime: endTime
+    );
+    
+    if(picked != null){
+      setState(() {
+        endTime = picked;
+      });
+    }
+  }
 
   void _submit() async {
     final form = formKey.currentState;
@@ -133,10 +193,10 @@ class _CreateEventScreen extends State<CreateEventScreen> {
   Future<bool> create() async {
     if (!_isSigningUp) {
       _isSigningUp = true;
+      final start = new DateTime(startDate.year, startDate.month, startDate.day, startTime.hour, startTime.minute);
+      DateTime end = new DateTime(endDate.year, endDate.month, endDate.day, endTime.hour, endTime.minute);
       String name = nameController.text;
       String description = descriptionController.text;
-      DateTime start = DateTime.parse(startController.text);
-      DateTime end = DateTime.parse(endController.text);
       int hostId = await getUserId();
       String location = "Plattsburgh";
       Event newEvent = Event(hostId: hostId, name: name, description: description, startTime: start, endTime: end, locationName: location);
@@ -169,15 +229,33 @@ class _CreateEventScreen extends State<CreateEventScreen> {
             children: <Widget>[
               nameForm(),
               descriptionForm(),
-              startForm(),
-              endForm(),
+              new Text('Start Date Selected: ${startDate.toString()}'),
+              new RaisedButton(
+                child: new Text('Select Date'),
+                onPressed: (){selectStartDate(context);}
+              ),
+              new Text('Start Time Selected: ${startTime.toString()}'),
+              new RaisedButton(
+                child: new Text('Select Time'),
+                onPressed: (){selectStartTime(context);}
+              ),
+              new Text('End Date Selected: ${endDate.toString()}'),
+              new RaisedButton(
+                child: new Text('Select Date'),
+                onPressed: (){selectEndDate(context);}
+              ),
+              new Text('End Time Selected: ${endTime.toString()}'),
+              new RaisedButton(
+                child: new Text('Select Time'),
+                onPressed: (){selectEndTime(context);}
+              ),
               createButton(),
               MaterialButton(
               color: Colors.blue,
               onPressed: () {
                 Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SignUpWithEmailScreen()));
               },
-              child: Text("Logout"),
+              // child: Text("Logout"),
               )
             ]
           ),
