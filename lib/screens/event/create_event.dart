@@ -120,7 +120,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
           autofocus: false,
           keyboardType: TextInputType.text,
           validator: (password) => !isDate(password) ? "Invalid date" : null,
-          obscureText: true,
+          // obscureText: true,
           decoration: InputDecoration(
             hintText: 'End Time',
             contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
