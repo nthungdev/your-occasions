@@ -6,7 +6,7 @@ import 'package:youroccasions/models/event.dart';
 import 'package:youroccasions/controllers/event_controller.dart';
 import 'package:youroccasions/utilities/config.dart';
 import 'package:youroccasions/utilities/validator..dart';
-import 'package:youroccasions/screens/login/signup.dart';
+import 'package:youroccasions/screens/home/home.dart';
 
 final EventController _eventController = EventController();
 bool _isSigningUp = false;
@@ -253,7 +253,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
               MaterialButton(
               color: Colors.blue,
               onPressed: () {
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SignUpWithEmailScreen()));
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
               },
               // child: Text("Logout"),
               )
