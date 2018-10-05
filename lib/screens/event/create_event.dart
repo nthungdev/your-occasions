@@ -24,9 +24,9 @@ class _CreateEventScreen extends State<CreateEventScreen> {
   static final startController = new TextEditingController();
   static final endController = new TextEditingController();
   DateTime startDate = new DateTime.now();
-  DateTime endDate = new DateTime.now();
   TimeOfDay startTime = new TimeOfDay.now();
-  TimeOfDay endTime = new TimeOfDay.now();
+  DateTime endDate;
+  TimeOfDay endTime;
 
   Future<Null> selectStartDate(BuildContext context) async{
     final DateTime picked = await showDatePicker(
@@ -43,21 +43,6 @@ class _CreateEventScreen extends State<CreateEventScreen> {
     }
   }
 
-  Future<Null> selectEndDate(BuildContext context) async{
-    final DateTime picked = await showDatePicker(
-      context: context,
-      initialDate: endDate,
-      firstDate: endDate,
-      lastDate: new DateTime(2020)
-    );
-    
-    if(picked != null){
-      setState(() {
-        endDate = picked;
-      });
-    }
-  }
-
   Future<Null> selectStartTime(BuildContext context) async{
     final TimeOfDay picked = await showTimePicker(
       context: context,
@@ -70,11 +55,26 @@ class _CreateEventScreen extends State<CreateEventScreen> {
       });
     }
   }
+  
+  Future<Null> selectEndDate(BuildContext context) async{
+    final DateTime picked = await showDatePicker(
+      context: context,
+      initialDate: endDate,
+      firstDate: new DateTime.now(),
+      lastDate: new DateTime(2020)
+    );
+    
+    if(picked != null){
+      setState(() {
+        endDate = picked;
+      });
+    }
+  }
 
   Future<Null> selectEndTime(BuildContext context) async{
     final TimeOfDay picked = await showTimePicker(
       context: context,
-      initialTime: endTime
+      initialTime: new TimeOfDay.now()
     );
     
     if(picked != null){
@@ -250,13 +250,13 @@ class _CreateEventScreen extends State<CreateEventScreen> {
                 onPressed: (){selectEndTime(context);}
               ),
               createButton(),
-              MaterialButton(
-              color: Colors.blue,
-              onPressed: () {
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
-              },
+              // MaterialButton(
+              // color: Colors.blue,
+              // onPressed: () {
+              //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+              // },
               // child: Text("Logout"),
-              )
+              // )
             ]
           ),
         )
