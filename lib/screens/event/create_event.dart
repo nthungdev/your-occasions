@@ -6,7 +6,6 @@ import 'package:youroccasions/models/event.dart';
 import 'package:youroccasions/controllers/event_controller.dart';
 import 'package:youroccasions/utilities/config.dart';
 import 'package:youroccasions/utilities/validator..dart';
-import 'package:youroccasions/screens/home/home.dart';
 
 final EventController _eventController = EventController();
 bool _isSigningUp = false;
@@ -21,8 +20,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
   final formKey = new GlobalKey<FormState>();
   static final nameController = new TextEditingController();
   static final descriptionController = new TextEditingController();
-  static final startController = new TextEditingController();
-  static final endController = new TextEditingController();
+  static final categoryController = new TextEditingController();
   DateTime startDate = new DateTime.now();
   TimeOfDay startTime = new TimeOfDay.now();
   DateTime endDate;
@@ -152,18 +150,18 @@ class _CreateEventScreen extends State<CreateEventScreen> {
         ));
   }
 
-  Widget startForm() {
+  Widget categoryForm() {
     return Container(
         margin: const EdgeInsets.all(10.0),
         width: 260.0,
         // color: const Color(0xFF00FF00),
         child: TextFormField(
-          controller: startController,
+          controller: categoryController,
           keyboardType: TextInputType.emailAddress,
-          validator: (password) => !isDate(password) ? "Invalid date" : null,
+          validator: (password) => !isName(password) ? "Invalid!" : null,
           autofocus: false,
           decoration: InputDecoration(
-            hintText: 'Start Time',
+            hintText: 'Category',
             contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
             border:
                 OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
@@ -171,35 +169,21 @@ class _CreateEventScreen extends State<CreateEventScreen> {
         ));
   }
 
-  Widget endForm() {
-    return Container(
-      margin: const EdgeInsets.all(10.0),
-      width: 260.0,
-      child: TextFormField(
-          controller: endController,
-          autofocus: false,
-          keyboardType: TextInputType.text,
-          validator: (password) => !isDate(password) ? "Invalid date" : null,
-          // obscureText: true,
-          decoration: InputDecoration(
-            hintText: 'End Time',
-            contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-            border:
-                OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
-          )),
-    );
-  }
+
 
   Future<bool> create() async {
     if (!_isSigningUp) {
       _isSigningUp = true;
       final start = new DateTime(startDate.year, startDate.month, startDate.day, startTime.hour, startTime.minute);
-      DateTime end = new DateTime(endDate.year, endDate.month, endDate.day, endTime.hour, endTime.minute);
+      if (endDate != null){
+        endDate = new DateTime(endDate.year, endDate.month, endDate.day, endTime.hour, endTime.minute);
+      }
       String name = nameController.text;
       String description = descriptionController.text;
+      String category = categoryController.text;
       int hostId = await getUserId();
-      String location = "Plattsburgh";
-      Event newEvent = Event(hostId: hostId, name: name, description: description, startTime: start, endTime: end, locationName: location);
+      // String location = "Plattsburgh";
+      Event newEvent = Event(hostId: hostId, name: name, description: description, category: category, startTime: start, endTime: endDate);
       print("DEBUG new event is : $newEvent");
        _eventController.insert(newEvent)
         ..then((value) {
@@ -229,6 +213,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
             children: <Widget>[
               nameForm(),
               descriptionForm(),
+              categoryForm(),
               new Text('Start Date Selected: ${startDate.toString()}'),
               new RaisedButton(
                 child: new Text('Select Date'),

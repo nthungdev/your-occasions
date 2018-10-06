@@ -22,24 +22,24 @@ class Event {
   // CONSTRUCTORS //
   Event.create();
   Event({int hostId, String name, String description, String locationName, DateTime startTime, DateTime endTime, 
-  int age,int price, String category, int one, int two, int three, int four, int five, num rating, bool isUsed=true}) {
-    hostId = hostId;
-    name = name;
-    description = description;
-    locationName = locationName;
-    startTime = startTime;
-    endTime = endTime;
-    age = age;
-    price = price;
-    category = category;
-    one = one;
-    two = two;
-    three = three;
-    four = four;
-    five = five;
-    rating = rating;
-    isUsed = isUsed;
-    creationDate = DateTime.now();
+  int age, int price, String category, int one, int two, int three, int four, int five, num rating, bool isUsed=true}) {
+    this._hostId = hostId;
+    this._name = name;
+    this._description = description;
+    this._locationName = locationName;
+    this._startTime = startTime;
+    this._endTime = endTime;
+    this._age = age;
+    this._price = price;
+    this._category = category;
+    this._one = one;
+    this._two = two;
+    this._three = three;
+    this._four = four;
+    this._five = five;
+    this._rating = rating;
+    this._isUsed = isUsed;
+    this._creationDate = DateTime.now();
   }
   Event.createFromMap(Iterable<Map<String, dynamic>> map){
     map.forEach((item) {
