@@ -6,6 +6,7 @@ import 'package:youroccasions/models/event.dart';
 import 'package:youroccasions/controllers/event_controller.dart';
 import 'package:youroccasions/utilities/config.dart';
 import 'package:youroccasions/utilities/validator..dart';
+import 'package:youroccasions/screens/event/event_detail.dart';
 
 final EventController _eventController = EventController();
 bool _isSigningUp = false;
@@ -25,6 +26,8 @@ class _CreateEventScreen extends State<CreateEventScreen> {
   TimeOfDay startTime = new TimeOfDay.now();
   DateTime endDate;
   TimeOfDay endTime;
+  String start;
+  String end;
 
   Future<Null> selectStartDate(BuildContext context) async{
     final DateTime picked = await showDatePicker(
@@ -37,6 +40,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
     if(picked != null){
       setState(() {
         startDate = picked;
+        start = picked.month.toString() +'/'+ picked.day.toString() +'/'+ picked.year.toString();
       });
     }
   }
@@ -57,14 +61,15 @@ class _CreateEventScreen extends State<CreateEventScreen> {
   Future<Null> selectEndDate(BuildContext context) async{
     final DateTime picked = await showDatePicker(
       context: context,
-      initialDate: endDate,
-      firstDate: new DateTime.now(),
+      initialDate: startDate,
+      firstDate: startDate,
       lastDate: new DateTime(2020)
     );
     
-    if(picked != null){
+    if(picked != null && picked != DateTime.now()){
       setState(() {
         endDate = picked;
+        end = picked.month.toString() +'/'+ picked.day.toString() +'/'+ picked.year.toString();
       });
     }
   }
@@ -89,9 +94,9 @@ class _CreateEventScreen extends State<CreateEventScreen> {
       form.save();
       bool result = await create();
       print(result);
-      if(result) {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
-      }
+      // if(result) {
+      //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => EventDetailScreen()));
+      // }
     }
   }
   
@@ -169,8 +174,6 @@ class _CreateEventScreen extends State<CreateEventScreen> {
         ));
   }
 
-
-
   Future<bool> create() async {
     if (!_isSigningUp) {
       _isSigningUp = true;
@@ -194,6 +197,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
           print(e);
         });
       _isSigningUp = false;
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => EventDetailScreen(newEvent)));
       return true;
     }
     return false;
@@ -214,17 +218,17 @@ class _CreateEventScreen extends State<CreateEventScreen> {
               nameForm(),
               descriptionForm(),
               categoryForm(),
-              new Text('Start Date Selected: ${startDate.toString()}'),
+              new Text('Start Date Selected: $start'),
               new RaisedButton(
                 child: new Text('Select Date'),
                 onPressed: (){selectStartDate(context);}
               ),
-              new Text('Start Time Selected: ${startTime.toString()}'),
+              new Text('Start Time Selected: ${startTime.toString().substring(10,15)}'),
               new RaisedButton(
                 child: new Text('Select Time'),
                 onPressed: (){selectStartTime(context);}
               ),
-              new Text('End Date Selected: ${endDate.toString()}'),
+              new Text('End Date Selected: $end'),
               new RaisedButton(
                 child: new Text('Select Date'),
                 onPressed: (){selectEndDate(context);}
