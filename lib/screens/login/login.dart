@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:youroccasions/screens/home/home.dart';
+import 'package:youroccasions/screens/login/signup.dart';
 import 'package:youroccasions/models/user.dart';
 import 'package:youroccasions/controllers/user_controller.dart';
 import 'package:youroccasions/utilities/config.dart';
@@ -19,16 +20,22 @@ class LoginWithEmailScreen extends StatefulWidget {
 class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
   // Create a text controller. We will use it to retrieve the current value
   // of the TextField!
-  static final passwordController = new TextEditingController();
-  static final emailController = new TextEditingController();
+  TextEditingController passwordController = new TextEditingController();
+  TextEditingController emailController = new TextEditingController();
 
-//   @override
-//   void dispose() {
-//     // Clean up the controller when the Widget is removed from the Widget tree
-//     passwordController.dispose();
-//     emailController.dispose();
-//     super.dispose();
-//   }
+  @override
+  void initState() {
+    super.initState();
+    passwordController = TextEditingController();
+    emailController = TextEditingController();
+  }
+
+  @override
+  void dispose(){
+    super.dispose();
+    passwordController.dispose();
+    emailController.dispose();
+  }
 
 
   @override
@@ -57,7 +64,7 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
                   child: Text("Type your password")),
               passwordInput(),
               loginButton(),
-              switchPageButton()
+              goToSignUpScreen()
             ]
           ),
         )
@@ -93,7 +100,7 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
     );
   }
 
-  Widget switchPageButton() {
+  Widget goToSignUpScreen() {
     return Padding(
         padding: EdgeInsets.symmetric(vertical: 16.0),
         child: Material(
@@ -104,13 +111,13 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
             minWidth: 200.0,
             height: 42.0,
             onPressed: () {
-              Navigator.pushReplacement(
+              Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => HomeScreen()),
+                MaterialPageRoute(builder: (context) => SignUpWithEmailScreen()),
               );
             },
             // color: Colors.lightBlueAccent,
-            child: Text('Go to Home', style: TextStyle(color: Colors.black)),
+            child: Text('Sign Up', style: TextStyle(color: Colors.black)),
           ),
         ));
   }

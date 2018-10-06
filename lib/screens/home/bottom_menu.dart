@@ -45,11 +45,11 @@ class _BottomMenu extends State<BottomMenu> {
           title: Text("Home"),
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.search),
-          title: Text("Search"),
+          icon: Icon(Icons.people),
+          title: Text("Social"),
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.star),
+          icon: Icon(Icons.equalizer),
           title: Text("Leaderboard"),
         ),
       ],

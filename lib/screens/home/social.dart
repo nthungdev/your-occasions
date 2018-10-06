@@ -12,7 +12,7 @@ class _SocialTabView extends State<SocialTabView> {
     return new Container(
       child: Padding(
         padding: const EdgeInsets.all(15.0),
-        child: Text("Search events page", style: TextStyle(fontSize: 30.0, fontFamily: "Niramit"),),
+        child: Text("Social page", style: TextStyle(fontSize: 30.0, fontFamily: "Niramit"),),
       ),
     );
   }

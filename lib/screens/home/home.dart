@@ -6,6 +6,7 @@ import 'package:youroccasions/screens/home/social.dart';
 import 'package:youroccasions/screens/home/drawer.dart';
 import 'package:youroccasions/screens/home/bottom_menu.dart';
 import 'package:youroccasions/screens/event/create_event.dart';
+import 'package:youroccasions/screens/search/search.dart';
 import 'package:youroccasions/utilities/config.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -50,6 +51,14 @@ class _HomeScreen extends State<HomeScreen> with SingleTickerProviderStateMixin 
     return Scaffold(
       appBar: AppBar(
         title: Text("Home Page"),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => SearchScreen()));
+            } ,
+          )
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
