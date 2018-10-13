@@ -4,7 +4,7 @@ import 'package:youroccasions/controllers/base_controller.dart';
 import 'package:youroccasions/models/user_interested_event.dart';
 import 'package:youroccasions/exceptions/UpdateQueryException.dart';
 
-class UserInterestedController extends BaseController{
+class UserInterestedEventController extends BaseController{
   // PROPERTIES //
 
   // CONSTRUCTORS //

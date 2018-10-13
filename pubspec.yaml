@@ -22,6 +22,8 @@ dependencies:
   path_provider: ^0.4.1
   shared_preferences: ^0.4.2
   postgres: ^1.0.0
+  intl: ^0.15.7
+
 
 dev_dependencies:
   flutter_test:

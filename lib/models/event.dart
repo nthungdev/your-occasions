@@ -10,6 +10,7 @@ class Event {
   int _age;
   int _price;
   String _category;
+  String _picture;
   int _one;
   int _two;
   int _three;
@@ -22,7 +23,7 @@ class Event {
   // CONSTRUCTORS //
   Event.create();
   Event({int hostId, String name, String description, String locationName, DateTime startTime, DateTime endTime, 
-  int age, int price, String category, int one, int two, int three, int four, int five, num rating, bool isUsed=true}) {
+  int age, int price, String category, String picture, int one, int two, int three, int four, int five, num rating, bool isUsed=true}) {
     this._hostId = hostId;
     this._name = name;
     this._description = description;
@@ -32,6 +33,7 @@ class Event {
     this._age = age;
     this._price = price;
     this._category = category;
+    this._picture = picture;
     this._one = one;
     this._two = two;
     this._three = three;
@@ -47,11 +49,12 @@ class Event {
       this._hostId = item['host_id'];
       this._name = item['name'];
       this._description = item['description'];
-      this._locationName = item['locationName'];
-      this._startTime= item['startTime'];
-      this._endTime = item['endTime'];
+      this._locationName = item['location_name'];
+      this._startTime= item['start_time'];
+      this._endTime = item['end_time'];
       this._age = item['age'];
       this._price = item['price'];
+      this._picture = item['picture'];
       this._category = item['category'];
       this._one = item['one'];
       this._two = item['two'];
@@ -60,7 +63,7 @@ class Event {
       this._five = item['five'];
       this._rating = item['rating'];
       this._isUsed = item['isUsed'];
-      this._creationDate = item['creationDate'];
+      this._creationDate = item['creation_date'];
     });
   }
 
@@ -75,6 +78,7 @@ class Event {
   int get age => _age;
   int get price => _price;
   String get category => _category;
+  String get picture => _picture;
   int get one => _one;
   int get two => _two;
   int get three => _three;
@@ -95,6 +99,7 @@ class Event {
   set age(int age) => _age = age;
   set price(int price) => _price = price;
   set category(String category) => _category = category;
+  set picture(String picture) => _picture = picture;
   set one(int one) => _one = one;
   set two(int two) => _two = two;
   set three(int three) => _three = three;
@@ -118,6 +123,7 @@ class Event {
     map['age'] = age;
     map['price'] = price;
     map['category'] = category;
+    map['picture'] = picture;
     map['one'] = one;
     map['two'] = two;
     map['three'] = three;

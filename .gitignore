@@ -7,14 +7,16 @@
 build/
 .flutter-plugins
 
-/.idea/misc.xml
-/.idea/vcs.xml
-/.idea/workspace.xml
-/.idea/codeStyles/Project.xml
-/.idea/libraries/Dart_SDK.xml
-/.idea/libraries/Flutter_Plugins.xml
-/.idea/libraries/Flutter_for_Android.xml
-/.vscode/launch.json
-
 .idea/
+.idea/misc.xml
+.idea/vcs.xml
+.idea/workspace.xml
+.idea/codeStyles/Project.xml
+.idea/libraries/Dart_SDK.xml
+.idea/libraries/Flutter_Plugins.xml
+.idea/libraries/Flutter_for_Android.xml
+.vscode/launch.json
+
 .idea/libraries/
+
+.vs/

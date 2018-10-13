@@ -25,9 +25,9 @@ class EventController extends BaseController {
     await connect();
 
     await connection.query("""INSERT INTO events (host_id, name, description, location_name, start_time, end_time,
-    age, price, category, is_used, creation_date)
+    age, price, category, picture, is_used, creation_date)
       VALUES (@hostId, @name, @description, @locationName, @startTime, @endTime,
-      @age, @price, @category, @isUsed, @creationDate)""",
+      @age, @price, @category, picture, @isUsed, @creationDate)""",
       substitutionValues: model.getProperties());
 
     await disconnect();
@@ -108,7 +108,8 @@ class EventController extends BaseController {
 
     return result;
   }
-  void test() async {
+  
+  Future<void> test() async {
     // update(9);
     // await getEvent();
     // print(allEvents);
