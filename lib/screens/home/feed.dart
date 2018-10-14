@@ -39,7 +39,9 @@ class _FeedTabView extends State<FeedTabView> {
     return Material(
       child: new Container(
         // color: Colors.red,
-        child: _nearbyEventList == null ? const Center(child: const CircularProgressIndicator()) : ListView(
+        child: _nearbyEventList == null 
+        ? const Center(child: const CircularProgressIndicator()) 
+        : ListView(
           addAutomaticKeepAlives: false, // Force to kill the Card
           children: _buildListView(),
         ),

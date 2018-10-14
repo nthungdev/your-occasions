@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'dart:async';
 
 import 'package:youroccasions/models/event.dart';
 import 'package:youroccasions/models/user_interested_event.dart';
@@ -21,11 +22,11 @@ class SmallEventCard extends StatefulWidget {
 }
 
 class _SmallEventCardState extends State<SmallEventCard> {
+  UserInterestedEventController _controller;
   bool _isInterested;
   String _time;
-  UserInterestedEventController _controller;
   bool _gotData;
-  bool _isInserting;
+  Timer _queryTimer;
 
   @override
   void initState() {
@@ -34,7 +35,6 @@ class _SmallEventCardState extends State<SmallEventCard> {
     _controller = UserInterestedEventController();
     _isInterested = false;
     _time = _formatDate(widget.time.toLocal());
-    _isInserting = false;
     getData();
   }
 
@@ -42,6 +42,7 @@ class _SmallEventCardState extends State<SmallEventCard> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    _controller = null;
   }
 
   void getData() async {
@@ -125,8 +126,10 @@ class _SmallEventCardState extends State<SmallEventCard> {
                     if (this.mounted) {
                       setState(() {
                         _isInterested = !_isInterested;
-                        if(_isInterested) _addInterestEvent();
-                        else _deleteInterestEvent();
+
+                        if(_queryTimer == null) {
+                          _queryTimer = Timer(Duration(seconds: 1), _handleTimer);
+                        }
                       });
                     }
                   },
@@ -138,23 +141,28 @@ class _SmallEventCardState extends State<SmallEventCard> {
       ),
     );
   }
+
+  void _handleTimer() {
+    if(_isInterested) {
+      _addInterestEvent();
+    }
+    else{
+      _deleteInterestEvent();
+    }
+    _queryTimer = null;
+  }
   
   void _addInterestEvent() async {
-    // Prevent inserting twice when pressing quickly by checking _isInserting
-    if(!_isInserting) {
-      _isInserting = true;
-      var userId = await getUserId();
-      UserInterestedEvent newModel = UserInterestedEvent(userId: userId, eventId: widget.event.id);
-      await _controller.insert(newModel);
-      _isInserting = false;
-    }
+    var userId = await getUserId();
+    UserInterestedEvent newModel = UserInterestedEvent(userId: userId, eventId: widget.event.id);
+    var result = await _controller.getUserInterestedEvent(eventId: widget.event.id, userId: userId);
+    if (result.isEmpty) _controller.insert(newModel);
   }
 
   void _deleteInterestEvent() async {
     var userId = await getUserId();
     var interestedEvent = await _controller.getUserInterestedEvent(userId: userId, eventId: widget.event.id);
-    if(interestedEvent.isEmpty) return;
-    await _controller.delete(interestedEvent[0].id);
+    if(!(interestedEvent.isEmpty)) _controller.delete(interestedEvent[0].id);
   }
 
   String _formatDate(DateTime d) {
