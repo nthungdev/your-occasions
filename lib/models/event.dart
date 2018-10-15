@@ -7,6 +7,7 @@ class Event {
   String _locationName;
   DateTime _startTime;
   DateTime _endTime;
+  int _views;
   int _age;
   int _price;
   String _category;
@@ -23,13 +24,14 @@ class Event {
   // CONSTRUCTORS //
   Event.create();
   Event({int hostId, String name, String description, String locationName, DateTime startTime, DateTime endTime, 
-  int age, int price, String category, String picture, int one, int two, int three, int four, int five, num rating, bool isUsed=true}) {
+  int views, int age, int price, String category, String picture, int one, int two, int three, int four, int five, num rating, bool isUsed=true}) {
     this._hostId = hostId;
     this._name = name;
     this._description = description;
     this._locationName = locationName;
     this._startTime = startTime;
     this._endTime = endTime;
+    this._views = views;
     this._age = age;
     this._price = price;
     this._category = category;
@@ -52,6 +54,7 @@ class Event {
       this._locationName = item['location_name'];
       this._startTime= item['start_time'];
       this._endTime = item['end_time'];
+      this._views = item['views'];
       this._age = item['age'];
       this._price = item['price'];
       this._picture = item['picture'];
@@ -62,7 +65,7 @@ class Event {
       this._four = item['four'];
       this._five = item['five'];
       this._rating = item['rating'];
-      this._isUsed = item['isUsed'];
+      this._isUsed = item['is_used'];
       this._creationDate = item['creation_date'];
     });
   }
@@ -75,6 +78,7 @@ class Event {
   String get locationName => _locationName;
   DateTime get startTime => _startTime;
   DateTime get endTime => _endTime;
+  int get views => _views;
   int get age => _age;
   int get price => _price;
   String get category => _category;
@@ -96,6 +100,7 @@ class Event {
   set locationName(String locationName) => _locationName = locationName;
   set startTime(DateTime startTime) => _startTime = startTime;
   set endTime(DateTime endTime) => _endTime = endTime;
+  set views(int views) => _views = views;
   set age(int age) => _age = age;
   set price(int price) => _price = price;
   set category(String category) => _category = category;
@@ -120,6 +125,7 @@ class Event {
     map['locationName'] = locationName;
     map['startTime'] = startTime;
     map['endTime'] = endTime;
+    map['views'] = views;
     map['age'] = age;
     map['price'] = price;
     map['category'] = category;

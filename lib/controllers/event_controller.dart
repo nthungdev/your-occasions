@@ -25,8 +25,8 @@ class EventController extends BaseController {
     await connect();
 
     await connection.query("""INSERT INTO events (host_id, name, description, location_name, start_time, end_time,
-    age, price, category, picture, is_used, creation_date)
-      VALUES (@hostId, @name, @description, @locationName, @startTime, @endTime,
+    views, age, price, category, picture, is_used, creation_date)
+      VALUES (@hostId, @name, @description, @locationName, @startTime, @endTime, @views
       @age, @price, @category, picture, @isUsed, @creationDate)""",
       substitutionValues: model.getProperties());
 
@@ -44,9 +44,10 @@ class EventController extends BaseController {
 
   /// Update an existing row from Events table based on id.
   Future<void> update(int id, {int hostId, String name, String description, String locationName, DateTime startTime, DateTime endTime,
-  int age, int price, String category, int one, int two, int three, int four, int five, double rating, bool isUsed, DateTime creationDate}) async {
+  int views, int age, int price, String category, int one, int two, int three, int four, int five, double rating, bool isUsed, DateTime creationDate}) async {
+    
     if(hostId == null && name == null && description == null && locationName == null && startTime == null && endTime == null
-    && age == null && price == null && category == null && one == null && two == null && three == null && four == null && five == null && rating == null 
+    && views == null && age == null && price == null && category == null && one == null && two == null && three == null && four == null && five == null && rating == null 
     && isUsed == null && creationDate == null) {
       throw UpdateQueryException(); //
     }
@@ -60,13 +61,15 @@ class EventController extends BaseController {
       if(locationName != null) { query += "password = '$locationName'"; }
       if(startTime != null) { query += "birthday = '$startTime'"; }
       if(endTime != null) { query += "picture = '$endTime'"; }
-      if(age != null) { query += "is_used = '$age'"; }
+      if(views != null) { query += "views = '$views'"; }
+      if(age != null) { query += "age = '$age'"; }
       if(one != null) { query += "one = $one "; }
       if(two != null) { query += "two = $two "; }
       if(three != null) { query += "three = $three "; }
       if(four != null) { query += "four = $four "; }
       if(five != null) { query += "five = $five "; }
       if(rating != null) { query += "rating = $rating "; }
+      if(isUsed != null) { query += "is_used = $isUsed "; }
 
       query += " WHERE id = '$id'";
 
@@ -81,7 +84,6 @@ class EventController extends BaseController {
     await connect();
 
     List<Event> result = [];
-
 
     String query = "SELECT * FROM events ";
 

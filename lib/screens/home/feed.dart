@@ -3,6 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:youroccasions/models/event.dart';
 import 'package:youroccasions/screens/home/event_card.dart';
 import 'package:youroccasions/controllers/event_controller.dart';
+import 'package:youroccasions/controllers/category_controller.dart';
+import 'package:youroccasions/controllers/event_category_controller.dart';
+
+const String MUSIC_CATEGORYNAME = "Music";
+
 
 class FeedTabView extends StatefulWidget {
   @override
@@ -10,13 +15,16 @@ class FeedTabView extends StatefulWidget {
 }
 
 class _FeedTabView extends State<FeedTabView> {
-  List<Event> _nearbyEventList;
+  List<Event> _eventList;
+  List<Event> _trendingEventList;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getNearbyEventList();
+    _eventList = List<Event>();
+    _trendingEventList = List<Event>();
   }
 
 
@@ -24,13 +32,16 @@ class _FeedTabView extends State<FeedTabView> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    _eventList = null;
+    _trendingEventList = null;
   }
 
   getNearbyEventList() async {
     EventController _eventController = EventController();
     var data = await _eventController.getEvent();
+    if(!this.mounted){ return; }
     setState(() {
-      _nearbyEventList = data;
+      _eventList = data;
     });
   }
 
@@ -39,20 +50,34 @@ class _FeedTabView extends State<FeedTabView> {
     return Material(
       child: new Container(
         // color: Colors.red,
-        child: _nearbyEventList == null 
+        // padding: EdgeInsets.symmetric(horizontal: 10.0),
+        // color: Colors.red,
+        child: _eventList == null 
         ? const Center(child: const CircularProgressIndicator()) 
         : ListView(
-          addAutomaticKeepAlives: false, // Force to kill the Card
-          children: _buildListView(),
-        ),
+            padding: EdgeInsets.symmetric(horizontal: 10.0),
+            addAutomaticKeepAlives: false, // Force to kill the Card
+            children: _buildListViewChildren(),
+          ),
       ),
     );
   }
 
-  List<Widget> _buildNearbyEventsCardList(int count) {
+  List<Widget> _buildRecentEventsCardList(int count) {
     List<Widget> cards = List<Widget>();
+    int counter = 0;
 
-    _nearbyEventList.forEach((Event currentEvent) {
+    Widget e = Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+      child: Text("Recent events", style: TextStyle(fontSize: 30.0, fontFamily: "Niramit")),
+    );
+
+    cards.add(e);
+
+    _eventList.sort((a,b) => a.startTime.compareTo(b.startTime));
+    _eventList.forEach((Event currentEvent) {
+      counter++;
+      if(counter > count) return cards;
       // print("DEBUG ${currentEvent.name} picture is ${currentEvent.picture}");
       // print("DEBUG ${currentEvent.name} description is ${currentEvent.description}");
       // print("DEBUG ${currentEvent.name} category is ${currentEvent.category}");
@@ -72,14 +97,84 @@ class _FeedTabView extends State<FeedTabView> {
     return cards;
   }
 
-  List<Widget> _buildListView() {
-    List<Widget> alist = List<Widget>();
+  void _getTrendingMusicData() async {
+    // TODO don't get past event
+    EventController _ec = EventController();
+    EventCategoryController _ecc = EventCategoryController();
+    List<Event> temp = List<Event>();
+
+    print("DEBUG is getting trending music");
+
+    var eventCategoryList = await _ecc.getEventCategory(categoryName: MUSIC_CATEGORYNAME);
+    print(eventCategoryList);
+
+    for(int i = 0 ; i < eventCategoryList.length ; i++ ) {
+      var event = (await _ec.getEvent(id: eventCategoryList[i].id))[0];
+      temp.add(event);
+    }
+
+    temp.sort((a,b) => a.views.compareTo(b.views));
+
+    if(this.mounted) {
+      setState(() {
+        _trendingEventList = temp;
+      });
+    }
+  }
+
+  List<Widget> _buildTrendingMusicEventsCardList(int count) {
+    List<Widget> cards = List<Widget>();
+
+    int counter = 0;
+
     Widget e = Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15.0),
-      child: Text("Nearby events", style: TextStyle(fontSize: 30.0, fontFamily: "Niramit")),
+      padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+      child: Text("Trending in Music", style: TextStyle(fontSize: 30.0, fontFamily: "Niramit")),
     );
-    alist.add(e);
-    alist.addAll(_buildNearbyEventsCardList(5));
+
+    print("DEBUG trending count : ${_trendingEventList.length}");
+
+    if(_trendingEventList.length == 0) {
+      print("DEBUG inside the if statement");
+      _getTrendingMusicData();
+    }
+
+    cards.add(e);
+
+    if(_trendingEventList.length == 0) {
+      cards.add(Center(child: CircularProgressIndicator()));
+      return cards;
+    }
+
+    _trendingEventList.forEach((Event currentEvent) {
+      counter++;
+      if(counter > count) return cards;
+      
+      // print("DEBUG ${currentEvent.name} picture is ${currentEvent.picture}");
+      // print("DEBUG ${currentEvent.name} description is ${currentEvent.description}");
+      // print("DEBUG ${currentEvent.name} category is ${currentEvent.category}");
+      // print("DEBUG ${currentEvent.name} location is ${currentEvent.locationName}");
+      cards.add(Padding(
+        padding: const EdgeInsets.only(bottom: 8.0),
+        child: SmallEventCard(
+          event: currentEvent,
+          imageURL: currentEvent.picture ?? "https://img.cutenesscdn.com/640/cme/cuteness_data/s3fs-public/diy_blog/Information-on-the-Corgi-Dog-Breed.jpg",
+          place: currentEvent.locationName ?? "Unname location",
+          time: currentEvent.startTime ?? DateTime.now(),
+          title: currentEvent.name ?? "Untitled event" ,
+        ),
+      ));
+    });
+
+    return cards;
+  }
+
+  List<Widget> _buildListViewChildren() {
+    // TO DO duplicate cards don't sync favorite status. 
+    List<Widget> alist = List<Widget>();
+
+    alist.addAll(_buildRecentEventsCardList(5));
+    alist.addAll(_buildTrendingMusicEventsCardList(5));
 
     return alist;
   }

@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
 
+import 'package:youroccasions/screens/event/event_detail.dart';
 import 'package:youroccasions/models/event.dart';
 import 'package:youroccasions/models/user_interested_event.dart';
+import 'package:youroccasions/controllers/event_controller.dart';
 import 'package:youroccasions/controllers/user_interested_event_controller.dart';
 import 'package:youroccasions/utilities/config.dart';
+
+const Color _favoriteColor = Colors.red;
 
 class SmallEventCard extends StatefulWidget {
   final Event event;
@@ -22,7 +26,8 @@ class SmallEventCard extends StatefulWidget {
 }
 
 class _SmallEventCardState extends State<SmallEventCard> {
-  UserInterestedEventController _controller;
+  UserInterestedEventController _interestedEventController;
+  EventController _eventController;
   bool _isInterested;
   String _time;
   bool _gotData;
@@ -32,7 +37,7 @@ class _SmallEventCardState extends State<SmallEventCard> {
   void initState() {
     super.initState();
     _gotData = false;
-    _controller = UserInterestedEventController();
+    _interestedEventController = UserInterestedEventController();
     _isInterested = false;
     _time = _formatDate(widget.time.toLocal());
     getData();
@@ -42,12 +47,12 @@ class _SmallEventCardState extends State<SmallEventCard> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    _controller = null;
+    _interestedEventController = null;
   }
 
   void getData() async {
     var userId = await getUserId();
-    var result = await _controller.getUserInterestedEvent(eventId: widget.event.id, userId: userId);
+    var result = await _interestedEventController.getUserInterestedEvent(eventId: widget.event.id, userId: userId);
 
     _gotData = true;
 
@@ -60,30 +65,15 @@ class _SmallEventCardState extends State<SmallEventCard> {
 
   @override
   Widget build(BuildContext context) {
+    if (!_gotData) {
+      return _buildLoadingCard();
+    }
+    return _buildCard();
+  }
+
+  Widget _buildLoadingCard() {
     final screen = MediaQuery.of(context).size;
 
-    if (!_gotData) {
-      return Material(
-        child: SizedBox(
-          height: screen.height / 7,
-          child: Card(
-            clipBehavior: Clip.antiAlias,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-            child: Row(
-              children: <Widget>[
-                AspectRatio(
-                  aspectRatio: 4 / 3,
-                  child: Container(
-                    color: Colors.grey,
-                  )
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
-    
     return Material(
       child: SizedBox(
         height: screen.height / 7,
@@ -94,52 +84,107 @@ class _SmallEventCardState extends State<SmallEventCard> {
             children: <Widget>[
               AspectRatio(
                 aspectRatio: 4 / 3,
-                child: Image.network(widget.imageURL,
-                  fit: BoxFit.fitHeight,
-                ),
-              ),
-              SizedBox(
-                width: 10.0,
-              ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(widget.title, 
-                      style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold), maxLines: 2, overflow: TextOverflow.ellipsis,
-                    ),
-                    SizedBox(height: 5.0,),
-                    Text(_time,
-                      overflow: TextOverflow.clip,
-                    ),
-                    SizedBox(height: 5.0,),
-                    Text(widget.place,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                // width: 50.0,
-                child: IconButton(
-                  onPressed: () {
-                    if (this.mounted) {
-                      setState(() {
-                        _isInterested = !_isInterested;
-
-                        if(_queryTimer == null) {
-                          _queryTimer = Timer(Duration(seconds: 1), _handleTimer);
-                        }
-                      });
-                    }
-                  },
-                  icon: Icon(_isInterested ? Icons.favorite : Icons.favorite_border)),
+                child: Container(
+                  color: Colors.grey[200],
+                )
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Widget _buildCard() {
+    final screen = MediaQuery.of(context).size;
+
+    return Material(
+      child: SizedBox(
+        height: screen.height / 7,
+        child: Card(
+          clipBehavior: Clip.antiAlias,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          child: Material(
+            child: InkWell(
+              onTap: _onTap,
+              splashColor: Colors.red,
+              child: Row(
+                children: <Widget>[
+                  AspectRatio(
+                    aspectRatio: 4 / 3,
+                    child: Image.network(widget.imageURL,
+                      fit: BoxFit.fitHeight,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(widget.title, 
+                          style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold), maxLines: 2, overflow: TextOverflow.ellipsis,
+                        ),
+                        SizedBox(height: 5.0,),
+                        Text(_time,
+                          overflow: TextOverflow.clip,
+                        ),
+                        SizedBox(height: 5.0,),
+                        Text(widget.place,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    // width: 50.0,
+                    child: IconButton(
+                      onPressed: () {
+                        if (this.mounted) {
+                          setState(() {
+                            _isInterested = !_isInterested;
+
+                            if(_queryTimer == null) {
+                              _queryTimer = Timer(Duration(seconds: 1), _handleTimer);
+                            }
+                          });
+                        }
+                      },
+                      icon: _isInterested 
+                      ? Icon(Icons.favorite,
+                          color: _favoriteColor,
+                        )
+                      : Icon(Icons.favorite_border,
+                          color: Colors.black,
+                        ),
+                    ),
+                  ),
+                ],
+                ),
+              ),
+            ),
+          ),
+      ),
+    );
+  }
+
+  // Push EventDetailScreen to view.
+  void _onTap() {
+    _increaseView();
+    Navigator.push(context, MaterialPageRoute(builder: (context) => EventDetailScreen(widget.event)));
+  }
+
+  // Increase the number of view of the this event by 1.
+  void _increaseView() async {
+    try {
+      var thisEvent = (await _eventController.getEvent(id: widget.event.id))[0];
+      _eventController.update(widget.event.id, views: thisEvent.views++);
+    }
+    catch (e) {
+      print(e);
+      print("Can't get the event");
+    }
   }
 
   void _handleTimer() {
@@ -155,14 +200,14 @@ class _SmallEventCardState extends State<SmallEventCard> {
   void _addInterestEvent() async {
     var userId = await getUserId();
     UserInterestedEvent newModel = UserInterestedEvent(userId: userId, eventId: widget.event.id);
-    var result = await _controller.getUserInterestedEvent(eventId: widget.event.id, userId: userId);
-    if (result.isEmpty) _controller.insert(newModel);
+    var result = await _interestedEventController.getUserInterestedEvent(eventId: widget.event.id, userId: userId);
+    if (result.isEmpty) _interestedEventController.insert(newModel);
   }
 
   void _deleteInterestEvent() async {
     var userId = await getUserId();
-    var interestedEvent = await _controller.getUserInterestedEvent(userId: userId, eventId: widget.event.id);
-    if(!(interestedEvent.isEmpty)) _controller.delete(interestedEvent[0].id);
+    var interestedEvent = await _interestedEventController.getUserInterestedEvent(userId: userId, eventId: widget.event.id);
+    if(!(interestedEvent.isEmpty)) _interestedEventController.delete(interestedEvent[0].id);
   }
 
   String _formatDate(DateTime d) {
