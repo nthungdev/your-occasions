@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 //import 'dart:async';
+import './other_page.dart';
 
 import 'package:youroccasions/screens/login/login.dart';
 import 'package:youroccasions/utilities/config.dart';
@@ -19,14 +20,30 @@ class HomeDrawer extends StatelessWidget {
         child: ListView(
           children: <Widget>[
             UserAccountsDrawerHeader(
-              accountName: Text("Hung Nguyen"),
+              accountName: Text("Ib Nguyen"),
               accountEmail: Text("nthungdev@gmail.com"),
               currentAccountPicture: CircleAvatar(),
             ),
-            Container(
+            ListTile (
+              title: Text (" My Events"),
+              onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new OtherPage(" My Events"))),
+                ),
+              ListTile (
+                title: Text (" Shared Events"),
+                onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new OtherPage(" Shared Events"))),
+              ),   
+            ListTile (
+                title: Text (" Location"),
+                onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new OtherPage(" Location"))),
+              ),   
+              ListTile (
+                title: Text (" Settings"),
+                onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new OtherPage(" Settings"))),
+              ),   
+              Container(
               alignment: Alignment.center,
               child:  MaterialButton(
-                color: Colors.blue,
+                color: Colors.red,
                 onPressed: () async {
                   await setIsLogin(false);
                   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginWithEmailScreen()));
