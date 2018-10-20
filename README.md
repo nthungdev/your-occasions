@@ -51,7 +51,7 @@ Add additional notes about how to deploy this on a live system
 
 * **Hung Nguyen** - *Initial work* - [nthungdev](https://github.com/nthungdev)
 * **Ibrahim Diallo** - *Initial work* - [lifeofib](https://github.com/lifeofib)
-* **Jake Le** - *Initial work* - [duongle99](https://github.com/duongle98)
+* **Jake Le** - *Initial work* - [duongle98](https://github.com/duongle98)
 
 ## License
 
