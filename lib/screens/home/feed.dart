@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:youroccasions/models/event.dart';
 import 'package:youroccasions/screens/home/event_card.dart';
 import 'package:youroccasions/controllers/event_controller.dart';
-import 'package:youroccasions/controllers/category_controller.dart';
+// import 'package:youroccasions/controllers/category_controller.dart';
 import 'package:youroccasions/controllers/event_category_controller.dart';
 
 const String MUSIC_CATEGORYNAME = "Music";
@@ -15,12 +15,13 @@ class FeedTabView extends StatefulWidget {
 }
 
 class _FeedTabView extends State<FeedTabView> {
+  // TODO Fix duplicate card issue. If there is multiple cards of the same event,
+  // and 1 of them is interested, the other ones' interest status are not updated.
   List<Event> _eventList;
   List<Event> _trendingEventList;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getNearbyEventList();
     _eventList = List<Event>();
@@ -63,35 +64,33 @@ class _FeedTabView extends State<FeedTabView> {
     );
   }
 
-  List<Widget> _buildRecentEventsCardList(int count) {
+  List<Widget> _buildUpcomingEventsCardList(int count) {
     List<Widget> cards = List<Widget>();
     int counter = 0;
 
     Widget e = Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
-      child: Text("Recent events", style: TextStyle(fontSize: 30.0, fontFamily: "Niramit")),
+      child: Text("Upcoming events", style: TextStyle(fontSize: 30.0, fontFamily: "Niramit")),
     );
 
     cards.add(e);
 
-    _eventList.sort((a,b) => a.startTime.compareTo(b.startTime));
+    _eventList.sort((b,a) => a.startTime.compareTo(b.startTime));
     _eventList.forEach((Event currentEvent) {
       counter++;
       if(counter > count) return cards;
-      // print("DEBUG ${currentEvent.name} picture is ${currentEvent.picture}");
-      // print("DEBUG ${currentEvent.name} description is ${currentEvent.description}");
-      // print("DEBUG ${currentEvent.name} category is ${currentEvent.category}");
-      // print("DEBUG ${currentEvent.name} location is ${currentEvent.locationName}");
-      cards.add(Padding(
-        padding: const EdgeInsets.only(bottom: 8.0),
-        child: SmallEventCard(
-          event: currentEvent,
-          imageURL: currentEvent.picture ?? "https://img.cutenesscdn.com/640/cme/cuteness_data/s3fs-public/diy_blog/Information-on-the-Corgi-Dog-Breed.jpg",
-          place: currentEvent.locationName ?? "Unname location",
-          time: currentEvent.startTime ?? DateTime.now(),
-          title: currentEvent.name ?? "Untitled event" ,
-        ),
-      ));
+      if(currentEvent.startTime.compareTo(DateTime.now()) > 0) {
+        cards.insert(1, Padding(
+          padding: const EdgeInsets.only(bottom: 8.0),
+          child: SmallEventCard(
+            event: currentEvent,
+            imageURL: currentEvent.picture ?? "https://img.cutenesscdn.com/640/cme/cuteness_data/s3fs-public/diy_blog/Information-on-the-Corgi-Dog-Breed.jpg",
+            place: currentEvent.locationName ?? "Unname location",
+            time: currentEvent.startTime ?? DateTime.now(),
+            title: currentEvent.name ?? "Untitled event" ,
+          ),
+        ));
+      }
     });
 
     return cards;
@@ -173,7 +172,7 @@ class _FeedTabView extends State<FeedTabView> {
     // TO DO duplicate cards don't sync favorite status. 
     List<Widget> alist = List<Widget>();
 
-    alist.addAll(_buildRecentEventsCardList(5));
+    alist.addAll(_buildUpcomingEventsCardList(5));
     alist.addAll(_buildTrendingMusicEventsCardList(5));
 
     return alist;

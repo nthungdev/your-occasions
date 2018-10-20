@@ -126,7 +126,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
         child: TextFormField(
           controller: nameController,
           keyboardType: TextInputType.emailAddress,
-          validator: (name) => !isPassword(name) ? "Invalid name" : null,
+          // validator: (name) => !isName(name) ? "Invalid name" : null,
           autofocus: false,
           decoration: InputDecoration(
             hintText: 'Event Name',
@@ -144,7 +144,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
         child: TextFormField(
           controller: descriptionController,
           keyboardType: TextInputType.emailAddress,
-          validator: (name) => !isPassword(name) ? "Invalid description" : null,
+          // validator: (name) => !isPassword(name) ? "Invalid description" : null,
           autofocus: false,
           decoration: InputDecoration(
             hintText: 'Event Description',
@@ -186,7 +186,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
       String category = categoryController.text;
       int hostId = await getUserId();
       // String location = "Plattsburgh";
-      Event newEvent = Event(hostId: hostId, name: name, description: description, category: category, startTime: start, endTime: endDate);
+      Event newEvent = Event(hostId: hostId, name: name, description: description, category: category, startTime: start, endTime: endDate) ;
       print("DEBUG new event is : $newEvent");
        _eventController.insert(newEvent)
         ..then((value) {

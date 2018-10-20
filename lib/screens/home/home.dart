@@ -82,7 +82,6 @@ class _HomeScreen extends State<HomeScreen> with SingleTickerProviderStateMixin 
   }
 
   void navigationTapped(int page){
-
     // Animating to the page.
     // You can use whatever duration and curve you like
     _pageController.animateToPage(

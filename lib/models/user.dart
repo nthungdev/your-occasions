@@ -86,6 +86,10 @@ class User {
   set creationDate(DateTime creationDate) => _creationDate = creationDate;
 
   // METHODS //
+  User clone() {
+    return User.createFromMap(List.filled(1, this.getProperties()));
+  }
+
   void printInfo() {
     String info = """
     ID: ${id.toString()}
