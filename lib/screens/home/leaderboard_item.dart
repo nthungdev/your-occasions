@@ -157,7 +157,7 @@ class _LeaderboardItemState extends State<LeaderboardItem> {
               Expanded(
                 child: Align(
                   alignment: Alignment.centerRight,
-                  child: Text(widget.score.toString())
+                  child: Text("")
                 )
               )
             ],

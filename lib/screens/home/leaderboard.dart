@@ -14,15 +14,18 @@ class LeaderboardTabView extends StatefulWidget {
 class _LeaderboardTabView extends State<LeaderboardTabView> {
   EventController ec;
   List<User> topHost;
+  bool _hasData;
   
   @override
   void initState() {
     super.initState();
+    _hasData = false;
     ec = EventController();
     getTopHost()
       ..then((onValue) {
         if(this.mounted) {
           setState(() { 
+            _hasData = true;
             topHost = LeaderboardDataset.topHost.values;
           });
         }
@@ -53,34 +56,12 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
           children: <Widget>[
             Text("Leaderboard", style: TextStyle(fontSize: 30.0, fontFamily: "Niramit"),),
             Text("Top hosts", style: TextStyle(fontSize: 30.0, fontFamily: "Niramit"),),
-            Column(
-              children: <Widget>[
-                _row,
-                _row,
-                _row,
-                Text(topHost.toString()),
-                LeaderboardItem(
-                  rank: 1,
-                  imageUrl: "https://imgur.com/370VKD8.png",
-                  content: "Hung Nguyen",
-                  score: 100,
-                ),
-                LeaderboardItem(
-                  rank: 2,
-                  imageUrl: "https://imgur.com/370VKD8.png",
-                  content: "Hung Nguyen",
-                  score: 99,
-                ),
-                LeaderboardItem(
-                  rank: 3,
-                  imageUrl: "https://imgur.com/370VKD8.png",
-                  content: "Hung Nguyen",
-                  score: 98,
-                )
-              ],
-            )
+            (!_hasData) 
+              ? Center(child: CircularProgressIndicator()) 
+              : Column(
+                children: _buildTopHostsItem(),
+              )
           ] 
-          
         ),
       ),
     );
@@ -88,6 +69,17 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
 
   void getData() async {
     
+  }
+
+  List<Widget> _buildTopHostsItem() {
+    List<LeaderboardItem> result = List.generate(LeaderboardDataset.topHost.values.length, (index) {
+      return LeaderboardItem(
+        rank: index + 1,
+        content: (LeaderboardDataset.topHost.values[index]).name ?? "NoName",
+        imageUrl: "https://imgur.com/370VKD8.png",
+      );
+    });
+    return result;
   }
 
 
@@ -113,11 +105,6 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
     }));
 
     hostIds = topHostMap.keys.toList();
-    // result = List.generate(topHostMap.length, (index) {
-    //   return [hostIds[index], topHostMap[hostIds[index]]];
-    // });
-
-    // result.sort((a,b) => b[1] - a[1]);
 
     List<User> finalResult = List<User>();
     /**
@@ -148,7 +135,7 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
       return 0;
     });
 
-    // print(finalResult);
+    print(finalResult);
 
     LeaderboardDataset.topHost.values = finalResult;
   }
