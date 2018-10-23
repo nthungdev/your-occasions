@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-//import 'dart:async';
+import 'dart:async';
 import './other_page.dart';
 
 import 'package:youroccasions/screens/login/login.dart';
@@ -20,8 +20,8 @@ class HomeDrawer extends StatelessWidget {
         child: ListView(
           children: <Widget>[
             UserAccountsDrawerHeader(
-              accountName: Text("Ib Nguyen"),
-              accountEmail: Text("nthungdev@gmail.com"),
+              accountName: Text(accountName),
+              accountEmail: Text(accountEmail),
               currentAccountPicture: CircleAvatar(),
             ),
             ListTile (
