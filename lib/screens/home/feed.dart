@@ -102,10 +102,10 @@ class _FeedTabView extends State<FeedTabView> {
     EventCategoryController _ecc = EventCategoryController();
     List<Event> temp = List<Event>();
 
-    print("DEBUG is getting trending music");
+    // print("DEBUG is getting trending music");
 
     var eventCategoryList = await _ecc.getEventCategory(categoryName: MUSIC_CATEGORYNAME);
-    print(eventCategoryList);
+    // print(eventCategoryList);
 
     for(int i = 0 ; i < eventCategoryList.length ; i++ ) {
       var event = (await _ec.getEvent(id: eventCategoryList[i].id))[0];
@@ -131,10 +131,10 @@ class _FeedTabView extends State<FeedTabView> {
       child: Text("Trending in Music", style: TextStyle(fontSize: 30.0, fontFamily: "Niramit")),
     );
 
-    print("DEBUG trending count : ${_trendingEventList.length}");
+    // print("DEBUG trending count : ${_trendingEventList.length}");
 
     if(_trendingEventList.length == 0) {
-      print("DEBUG inside the if statement");
+      // print("DEBUG inside the if statement");
       _getTrendingMusicData();
     }
 
