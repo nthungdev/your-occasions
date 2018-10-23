@@ -11,6 +11,7 @@ class User {
   int _three;
   int _four;
   int _five;
+  int _followers;
   double _rating;
   bool _isUsed;
   DateTime _creationDate;
@@ -48,6 +49,7 @@ class User {
       _four = item['four'];
       _five = item['five'];
       _rating = item['rating'];
+      _followers = item['followers'];
       _isUsed = item['isUsed'];
       _creationDate = item['creationDate'];
     });
@@ -66,6 +68,7 @@ class User {
   int get four => _four;
   int get five => _five;
   double  get rating => _rating;
+  int get followers => _followers;
   bool get isUsed => _isUsed;
   DateTime get creationDate => _creationDate;
 
@@ -82,6 +85,7 @@ class User {
   set four(int four) => _four = four;
   set five(int five) => _five = five;
   set rating(double rating) => _rating = rating;
+  set followers(int followers) => _followers = followers;
   set isUsed(bool isUsed) => _isUsed = isUsed;
   set creationDate(DateTime creationDate) => _creationDate = creationDate;
 
@@ -120,6 +124,7 @@ class User {
     map['four'] = four;
     map['five'] = five;
     map['rating'] = rating;
+    map['followers'] = followers;
     map['isUsed'] = isUsed;
     map['creationDate'] = creationDate;
     return map;

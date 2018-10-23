@@ -51,15 +51,21 @@ class _SmallEventCardState extends State<SmallEventCard> {
   }
 
   void getData() async {
-    var userId = await getUserId();
-    var result = await _interestedEventController.getUserInterestedEvent(eventId: widget.event.id, userId: userId);
+    try {
+      var userId = await getUserId();
+      var result = await _interestedEventController.getUserInterestedEvent(eventId: widget.event.id, userId: userId);
 
-    _gotData = true;
+      _gotData = true;
 
-    if (this.mounted) {
-      setState(() {
-        _isInterested = !(result.isEmpty) ? true : false;
-      });
+      if (this.mounted) {
+        setState(() {
+          _isInterested = !(result.isEmpty) ? true : false;
+        });
+      }
+    } 
+    catch (e) {
+      print("An exception occurs");
+      print(e.toString());
     }
   }
 
