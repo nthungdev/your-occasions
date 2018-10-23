@@ -27,6 +27,7 @@ class Data<T> {
 
 class Dataset {
   // static List<Event> _allEvents;
+  static Data<User> currentUser = Data();
   static Data allEventCategories = Data();
   static Data<List<User>> allUsers = Data<List<User>>();
   static Data allUserInterestedEvents = Data();
