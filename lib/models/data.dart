@@ -34,6 +34,7 @@ class Dataset {
   
   static Data trendingEvents = Data();
   static Data allEvents = Data();
+  static Data userId = Data();
 }
 
 // void main() async {
