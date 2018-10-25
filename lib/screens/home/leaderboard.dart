@@ -1,150 +1,397 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'dart:async';
 
-import 'package:youroccasions/models/data.dart';
-import 'package:youroccasions/models/user.dart';
+import 'package:youroccasions/screens/event/event_detail.dart';
+import 'package:youroccasions/models/event.dart';
+import 'package:youroccasions/models/user_interested_event.dart';
 import 'package:youroccasions/controllers/event_controller.dart';
-import 'package:youroccasions/controllers/user_controller.dart';
-import 'package:youroccasions/screens/home/leaderboard_item.dart';
+import 'package:youroccasions/controllers/user_interested_event_controller.dart';
+import 'package:youroccasions/utilities/config.dart';
+import 'package:youroccasions/screens/user/user_profile.dart';
 
-class LeaderboardTabView extends StatefulWidget {
+const Color _favoriteColor = Colors.red;
+const double _itemFontSize = 20.0;
+
+class LeaderboardItem extends StatefulWidget {
+  final int rank;
+  final String imageUrl;
+  final String content;
+  final int score;
+
+  LeaderboardItem({this.rank, this.imageUrl, this.content, this.score});
+
   @override
-  _LeaderboardTabView createState() => _LeaderboardTabView();
+  _LeaderboardItemState createState() => _LeaderboardItemState();
+
 }
 
-class _LeaderboardTabView extends State<LeaderboardTabView> {
-  EventController ec;
-  List<User> topHost;
-  bool _hasData;
-  
+class _LeaderboardItemState extends State<LeaderboardItem> {
+  String _time;
+  bool _gotData;
+  Timer _queryTimer;
+
   @override
   void initState() {
     super.initState();
-    _hasData = false;
-    ec = EventController();
-    getTopHost()
-      ..then((onValue) {
-        if(this.mounted) {
-          setState(() { 
-            _hasData = true;
-            topHost = LeaderboardDataset.topHost.values;
-          });
-        }
-      });
+    _gotData = false;
+    getData();
   }
 
-  
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
   }
 
+  void getData() async {
 
-  Widget _row = Row(
-    children: <Widget>[
-      Icon(Icons.filter_1),
-      Text("Hung"),
-    ],
-  );
+    _gotData = true;
 
-  @override
-  Widget build(BuildContext context) {
+    if (this.mounted) {
+      setState(() {
+
+      });
+    }
+  }
+
+  void onTap() {
+
+  }
+
+
+  Widget _buildLoadingCard() {
+    final screen = MediaQuery.of(context).size;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
+      child: SizedBox(
+        height: 40.0,
+        child: Container(
+          color: Colors.white,
+          child: Row(
+            children: <Widget>[
+              Text(widget.rank.toString(),
+                style: TextStyle(
+                  fontSize: 20.0
+                ),
+              ),
+              SizedBox(
+                width: 10.0,
+              ),
+              SizedBox(
+                width: 40.0,
+                height: 40.0,
+                // color: Colors.red,
+                // padding: EdgeInsets.all(15.0),
+                child: Container(
+                  decoration: new BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: new DecorationImage(
+                      fit: BoxFit.fill,
+                      image: new NetworkImage(
+                        widget.imageUrl)
+                    )
+                  )
+                ),
+              ),
+              SizedBox(
+                width: 10.0,
+              ),
+              Text(widget.content,
+                style: TextStyle(
+                  fontSize: 20.0
+                ),
+              )
+            ],
+          ),
+        )
+      ),
+    );
+  }
+
+  Widget _buildCard() {
+    final screen = MediaQuery.of(context).size;
+
     return Material(
-      child: new Container(
-        child: ListView(
-          padding: const EdgeInsets.all(15.0),
-          children: <Widget>[
-            Text("Leaderboard", style: TextStyle(fontSize: 30.0, fontFamily: "Niramit"),),
-            Text("Top hosts", style: TextStyle(fontSize: 30.0, fontFamily: "Niramit"),),
-            (!_hasData) 
-              ? Center(child: CircularProgressIndicator()) 
-              : Leaderboard(
-                  children: _buildTopHostsItem(),
-                )
-          ] 
+      // borderRadius: BorderRadius.circular(10.0),
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(10.0),
+        highlightColor: Colors.blueAccent,
+        splashColor: Colors.blue,
+        onTap: onTap,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10.0)
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 5.0),
+            child: SizedBox(
+              height: 40.0,
+              child: Container(
+                // color: Colors.tealAccent,
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 2,
+                      child: Container(
+                        padding: EdgeInsets.all(0.0),
+                        // color: Colors.green,
+                        child: SizedBox(
+                          // width: 20.0,
+                          child: Text(widget.rank.toString(),
+                            overflow: TextOverflow.fade,
+                            style: TextStyle(
+                              fontSize: 20.0
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    ),
+                    // SizedBox(
+                    //   width: 10.0,
+                    // ),
+                    Expanded(
+                      flex: 6,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          SizedBox(
+                            width: 40.0,
+                            height: 40.0,
+                            // color: Colors.red,
+                            // padding: EdgeInsets.all(15.0),
+                            child: Container(
+                              decoration: new BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: new DecorationImage(
+                                  fit: BoxFit.fill,
+                                  image: new NetworkImage(
+                                    widget.imageUrl)
+                                )
+                              )
+                            ),
+                          ),
+                          SizedBox(width: screen.width / 30,),
+                          Expanded(
+                            child: Container(
+                              // color: Colors.red,
+                              // padding: EdgeInsets.only(right: 40.0 + screen.width / 30),
+                              child: Text(widget.content,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 20.0
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ),
+                        ] 
+                      ),
+                    ),
+                    // SizedBox(
+                    //   width: 10.0,
+                    // ),
+                    Expanded(
+                      flex: 3,
+                      child: SizedBox(
+                        child: Text(
+                          widget.score != null ? widget.score.toString() : "", 
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 20.0
+                          ),
+                        ),
+                      )
+                    )
+                  ],
+                ),
+              )
+            ),
+          ),
         ),
       ),
     );
   }
 
-  void getData() async {
-    
-  }
-
-  List<LeaderboardItem> _buildTopHostsItem() {
-    List<LeaderboardItem> result = List.generate(LeaderboardDataset.topHost.values.length, (index) {
-      return LeaderboardItem(
-        rank: index + 1,
-        content: (LeaderboardDataset.topHost.values[index]).name ?? "NoName",
-        imageUrl: "https://imgur.com/370VKD8.png",
-        // score: (LeaderboardDataset.topHost.values[index]).followers,
-      );
-    });
-    return result;
-  }
-
-  // get hosts with the highest views
-  Future<void> getTopHost() async {
-    /**
-     * Data is recently pulled 30 seconds ago. Wait until the 30 seconds span finish to get data again.
-     */
-    print("DEBUG lastModified topHost : ${LeaderboardDataset.topHost.lastModified}");
-    print("DEBUG current time : ${DateTime.now()}");
-    if (LeaderboardDataset.topHost.lastModified != null) {
-      print("DEBUG Diff in seconds ${(DateTime.now()).difference(LeaderboardDataset.topHost.lastModified).inSeconds}");
+  @override
+  Widget build(BuildContext context) {
+    if (!_gotData) {
+      return _buildLoadingCard();
     }
-    // print("DEBUG Diff in minutes ${LeaderboardDataset.topHost.lastModified.difference(DateTime.now()).inMinutes}");
-    if (LeaderboardDataset.topHost.lastModified != null && (DateTime.now()).difference(LeaderboardDataset.topHost.lastModified).inSeconds < 30) return;
+    return _buildCard();
+  }
+
+
+}
+
+
+class Leaderboard extends StatefulWidget {
+  final String title;
+  final List<LeaderboardItem> children;
+  final String leadingHeading;
+  final String contentHeading;
+  final String trailingHeading;
+
+  Leaderboard({@required this.title, this.leadingHeading, this.contentHeading, this.trailingHeading, @required this.children});
+
+  @override
+  _LeaderboardState createState() => _LeaderboardState();
+
+}
+
+class _LeaderboardState extends State<Leaderboard> {
+
+
+  @override
+  void initState() {
+    super.initState();
     
-    var temp = await ec.getEvent();
-    Map<int,int> topHostMap = Map();
-    var hostIds = List();
-    // List<List> result = List();
-    temp.forEach(((event) {
-      if(topHostMap.containsKey(event.hostId) && event.views != 0) {
-        print(topHostMap[event.hostId]);
-        topHostMap[event.hostId] = topHostMap[event.hostId] + event.views;
-      }
-      else {
-        topHostMap[event.hostId] = event.views;
-      }
-    }));
+  }
 
-    hostIds = topHostMap.keys.toList();
+  List<Widget> _buildChildrenList(){
+    return List<Widget>.of(widget.children);
+  }
 
-    List<User> finalResult = List<User>();
-    /**
-     * Users' data already saved in Dataset.
-     */
-    if (Dataset.allUsers.values != null) {
-      // Dataset.allUsers.values
-      Dataset.allUsers.values.forEach((user) {
-        if (hostIds.contains(user.id)) {
-          finalResult.add(user);
-        }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  void getData() async {
+
+
+    if (this.mounted) {
+      setState(() {
+
       });
     }
-    else {
-      UserController uc = UserController();
-      finalResult = await uc.getUser()
-        ..removeWhere((user) => !topHostMap.containsKey(user.id));
-    }
-    
-
-    finalResult.sort((a,b) {
-      if (topHostMap.containsKey(a.id) && topHostMap.containsKey(b.id)) {
-        return topHostMap[b.id].compareTo(topHostMap[a.id]);
-      }
-      return 0;
-    });
-
-    // only get the first 5
-    finalResult = finalResult.sublist(0, 5);
-
-    print(finalResult);
-
-    LeaderboardDataset.topHost.values = finalResult;
   }
+
+  @override
+  Widget build(BuildContext context) {
+  final screen = MediaQuery.of(context).size;
+
+    if(widget.leadingHeading != null && widget.contentHeading != null && widget.trailingHeading != null) {
+      return Container(
+        padding: EdgeInsets.all(0.0),
+        child: Column(
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.only(bottom: 10.0),
+              child: Text(
+                widget.title, 
+                style: TextStyle(fontSize: 30.0, fontFamily: "Niramit"), 
+                textAlign: TextAlign.center,
+              )
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 5.0),
+              decoration: BoxDecoration(
+                color: Colors.blueAccent,
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(10.0), topRight: Radius.circular(10.0))
+              ),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    flex: 2,
+                    child: Text(
+                      widget.leadingHeading, 
+                      style: TextStyle(fontSize: _itemFontSize, fontFamily: "Niramit", color: Colors.white), 
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  Expanded(
+                    flex: 6,
+                    child: Container(
+                      padding: EdgeInsets.only(left: 40.0 + (screen.width / 30)),
+                      child: Text(
+                        widget.contentHeading, 
+                        style: TextStyle(fontSize: _itemFontSize, fontFamily: "Niramit", color: Colors.white), 
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Container(
+                      // color: Colors.green,
+                      child: Text(
+                        widget.trailingHeading, 
+                        style: TextStyle(fontSize: _itemFontSize, fontFamily: "Niramit", color: Colors.white), 
+                        textAlign: TextAlign.center,
+                        // overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.all(0.0),
+              decoration: BoxDecoration(
+                color: Colors.amberAccent,
+                borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10.0), bottomRight: Radius.circular(10.0)),
+              ),
+              child: Column(
+                children: _buildChildrenList(),
+              ),
+            )
+          ] 
+        )
+      );
+    }
+
+    return Container(
+      padding: EdgeInsets.all(0.0),
+      // decoration: BoxDecoration(
+      //   shape: ,
+      //   boxShadow: [
+      //     BoxShadow(
+      //       color: Colors.black,
+      //       blurRadius: 150.0,
+      //       spreadRadius: 150.0,
+      //     )
+      //   ]
+      // ),
+      child: Column(
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.only(bottom: 10.0),
+            child: Text(
+              widget.title, 
+              style: TextStyle(fontSize: 30.0, fontFamily: "Niramit"), 
+              textAlign: TextAlign.center,
+            )
+          ),
+          Container(
+            padding: EdgeInsets.all(0.0),
+            decoration: BoxDecoration(
+              color: Colors.amberAccent,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black,
+                  blurRadius: 20.0,
+                  // offset: Offset.infinite
+                  spreadRadius: 20.0
+                )
+              ],
+              shape: BoxShape.rectangle,
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10.0), bottomRight: Radius.circular(10.0)),
+            ),
+            child: Column(
+              children: _buildChildrenList(),
+            ),
+          )
+        ] 
+      )
+    );
+  }
+
 
 
 }

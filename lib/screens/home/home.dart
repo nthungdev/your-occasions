@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:youroccasions/screens/home/feed.dart';
-import 'package:youroccasions/screens/home/leaderboard.dart';
+import 'package:youroccasions/screens/home/leaderboardtab.dart';
 import 'package:youroccasions/screens/home/social.dart';
 import 'package:youroccasions/screens/home/drawer.dart';
 import 'package:youroccasions/screens/home/bottom_menu.dart';

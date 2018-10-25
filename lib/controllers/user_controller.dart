@@ -4,6 +4,8 @@ import 'package:youroccasions/controllers/base_controller.dart';
 import 'package:youroccasions/models/user.dart';
 import 'package:youroccasions/exceptions/UpdateQueryException.dart';
 
+import 'package:postgres/postgres.dart';
+
 class UserController extends BaseController {
   // PROPERTIES //
   int _count;
@@ -96,6 +98,16 @@ class UserController extends BaseController {
     await disconnect();
     return result;
   }
+
+  Future<List<User>> getMostFollowedUsers() async {
+    await connect();
+    var query = "SELECT * FROM mostfollowedusers()";
+    var queryResult = await connection.mappedResultsQuery(query);
+    await disconnect();
+    return List<User>.generate(queryResult.length, (index) {
+      return User.createFromMap(queryResult[index].values);
+    });
+  }
   
   /// Check email and password is valid in the database or not.
   /// 
@@ -122,13 +134,27 @@ class UserController extends BaseController {
 
 }
 
-void main() {
+
+void main() async {
   UserController test = UserController();
-  test.test();
-  Future<User> loginResult = test.loginWithEmail('nthungdev@gmail.com', '1')
-    ..then((value) { print("VALUE is $value");} );
-  // print(loginResult);
+  // test.test();
+  // Future<User> loginResult = test.loginWithEmail('nthungdev@gmail.com', '1')
+  //   ..then((value) { print("VALUE is $value");} );
+  // // print(loginResult);
   
   // print(loginResult);
   // if(test.loginWithEmail("nthungdev@gmail.com", "1"))
+
+  // var connection = PostgreSQLConnection(host, port, databaseName, username: username, password: password, useSSL: true);
+  // await connection.open();
+  // String query = "select * from test(50)";
+  // var queryResult = await connection.mappedResultsQuery(query);
+  // print(queryResult);
+  // await connection.close();
+
+  print(await test.getMostFollowedUsers());
+
+
+
+
 }
