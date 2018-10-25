@@ -163,7 +163,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
         child: TextFormField(
           controller: categoryController,
           keyboardType: TextInputType.emailAddress,
-          validator: (password) => !isName(password) ? "Invalid!" : null,
+          // validator: (password) => !isName(password) ? "Invalid!" : null,
           autofocus: false,
           decoration: InputDecoration(
             hintText: 'Category',

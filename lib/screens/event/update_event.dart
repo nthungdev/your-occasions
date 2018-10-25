@@ -138,7 +138,7 @@ class _UpdateEventScreen extends State<UpdateEventScreen> {
         child: TextFormField(
           controller: nameController,
           keyboardType: TextInputType.emailAddress,
-          validator: (name) => !isPassword(name) ? "Invalid name" : null,
+          // validator: (name) => !isPassword(name) ? "Invalid name" : null,
           autofocus: false,
           decoration: InputDecoration(
             hintText: 'Event Name',
@@ -156,7 +156,7 @@ class _UpdateEventScreen extends State<UpdateEventScreen> {
         child: TextFormField(
           controller: descriptionController,
           keyboardType: TextInputType.emailAddress,
-          validator: (name) => !isPassword(name) ? "Invalid description" : null,
+          // validator: (name) => !isPassword(name) ? "Invalid description" : null,
           autofocus: false,
           decoration: InputDecoration(
             hintText: 'Event Description',
@@ -175,7 +175,7 @@ class _UpdateEventScreen extends State<UpdateEventScreen> {
         child: TextFormField(
           controller: categoryController,
           keyboardType: TextInputType.emailAddress,
-          validator: (password) => !isName(password) ? "Invalid!" : null,
+          // validator: (password) => !isName(password) ? "Invalid!" : null,
           autofocus: false,
           decoration: InputDecoration(
             hintText: 'Category',
