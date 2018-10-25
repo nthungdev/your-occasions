@@ -46,31 +46,33 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
       appBar: AppBar(
         title: Text("Event Detail"),
       ),
-      body: new Material(
-      child: new Container(
-        // color: Colors.red,
-        // padding: EdgeInsets.symmetric(horizontal: 10.0),
-        // color: Colors.red,
-        child: id == event.hostId 
-        ? Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              new Text('Name: ${event.name}'),
-              new Text('Description: ${event.description}'),
-              new Text('Category: ${event.category}'),
-            ]
-          ) 
-        : Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              new Text('Name: ${event.name}'),
-              new Text('Description: ${event.description}'),
-              new Text('Category: ${event.category}'),
-              new IconButton(icon: new Icon(Icons.edit), onPressed: () {Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UpdateEventScreen(event)));}),
-              new IconButton(icon: new Icon(Icons.delete), onPressed: () {delete();})
-            ]
+      body: Center(
+        child: new Material(
+          child: new Container(
+            // color: Colors.red,
+            // padding: EdgeInsets.symmetric(horizontal: 10.0),
+            // color: Colors.red,
+            child: id == event.hostId 
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  new Text('Name: ${event.name}'),
+                  new Text('Description: ${event.description}'),
+                  new Text('Category: ${event.category}'),
+                ]
+              ) 
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  new Text('Name: ${event.name}'),
+                  new Text('Description: ${event.description}'),
+                  new Text('Category: ${event.category}'),
+                  new IconButton(icon: new Icon(Icons.edit), onPressed: () {Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UpdateEventScreen(event)));}),
+                  new IconButton(icon: new Icon(Icons.delete), onPressed: () {delete();})
+                ]
+              )
           )
-      ),
+        ),
       )
     );
   }
