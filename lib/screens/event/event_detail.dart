@@ -52,7 +52,7 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
             // color: Colors.red,
             // padding: EdgeInsets.symmetric(horizontal: 10.0),
             // color: Colors.red,
-            child: id == event.hostId 
+            child: id == event.hostId
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
