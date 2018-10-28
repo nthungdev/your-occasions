@@ -59,6 +59,27 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
     );
   }
 
+  Widget _buildFollowerInfo(TextTheme textTheme) {
+    var followerStyle =
+        textTheme.subhead.copyWith(color: const Color(0xBBFFFFFF));
+
+    return new Padding(
+      padding: const EdgeInsets.only(top: 16.0),
+      child: new Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          new Text('90 Following', style: followerStyle),
+          new Text(
+            ' | ',
+            style: followerStyle.copyWith(
+                fontSize: 24.0, fontWeight: FontWeight.normal),
+          ),
+          new Text('100 Followers', style: followerStyle),
+        ],
+      ),
+    );
+  }
+
   Widget _createPillButton(
     String text, {
     Color backgroundColor = Colors.transparent,
@@ -78,7 +99,8 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
 
   @override
   Widget build(BuildContext context) {
-    Widget build(BuildContext context) {
+    var theme = Theme.of(context);
+    var textTheme = theme.textTheme;
     var linearGradient = const BoxDecoration(
       gradient: const LinearGradient(
         begin: FractionalOffset.centerRight,
@@ -106,7 +128,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
                     child: new Column(
                       children: <Widget>[
                         _buildAvatar(),
-                        // _buildFollowerInfo(textTheme),
+                        _buildFollowerInfo(textTheme),
                         // _buildActionButtons(theme),
                       ],
                     ),
@@ -116,6 +138,17 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
                     left: 4.0,
                     child: new BackButton(color: Colors.white),
                   ),
+                  new Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: new Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      new Text(
+                        user.name
+                      )
+                    ]
+                    )
+                  )
                 ],
               )
             ],
@@ -125,4 +158,3 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
     );
   }
 }
-} 
