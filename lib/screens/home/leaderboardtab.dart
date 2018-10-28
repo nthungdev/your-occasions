@@ -76,7 +76,9 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
     temp.forEach(((event) {
       if(topHostMap.containsKey(event.hostId) && event.views != 0) {
         print(topHostMap[event.hostId]);
-        topHostMap[event.hostId] = topHostMap[event.hostId] + event.views;
+        if(event.views != null) {
+          topHostMap[event.hostId] = topHostMap[event.hostId] + event.views;
+        }
       }
       else {
         topHostMap[event.hostId] = event.views;

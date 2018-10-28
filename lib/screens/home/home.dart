@@ -26,10 +26,14 @@ class _HomeScreen extends State<HomeScreen> with SingleTickerProviderStateMixin 
   void initState() {
     super.initState();
     getUserName().then((value) {
-      _accountName = value;
+      setState(() {
+        _accountName = value;
+      });
     });
     getUserEmail().then((value) {
-      _accountEmail = value;
+      setState(() {
+        _accountEmail = value;
+      });
     });
     _pageController = PageController();
   }
@@ -66,7 +70,10 @@ class _HomeScreen extends State<HomeScreen> with SingleTickerProviderStateMixin 
         },
         child: Icon(Icons.add)
       ),
-      drawer: HomeDrawer(accountName: _accountName, accountEmail: _accountEmail),
+      drawer: HomeDrawer(
+        accountName: _accountName == null ? "" : _accountName, 
+        accountEmail: _accountEmail == null ? "" : _accountEmail,
+      ),
       bottomNavigationBar: BottomMenu(pageController: _pageController, currentIndex: this._currentPage,),
       body: PageView(
         onPageChanged: (index) {

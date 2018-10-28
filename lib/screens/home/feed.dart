@@ -105,10 +105,10 @@ class _FeedTabView extends State<FeedTabView> {
     // print("DEBUG is getting trending music");
 
     var eventCategoryList = await _ecc.getEventCategory(categoryName: MUSIC_CATEGORYNAME);
-    // print(eventCategoryList);
+    print(eventCategoryList);
 
     for(int i = 0 ; i < eventCategoryList.length ; i++ ) {
-      var event = (await _ec.getEvent(id: eventCategoryList[i].id))[0];
+      var event = (await _ec.getEvent(id: eventCategoryList[i].eventId))[0];
       temp.add(event);
     }
 

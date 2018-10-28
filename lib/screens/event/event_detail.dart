@@ -30,7 +30,9 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
     super.initState();
     event = widget.event;
     getUserId().then((value){
-      id = value;
+      setState(() {
+        id = value;
+      });
     });
   }
 
@@ -52,7 +54,7 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
             // color: Colors.red,
             // padding: EdgeInsets.symmetric(horizontal: 10.0),
             // color: Colors.red,
-            child: id == event.hostId
+            child: id != event.hostId
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -67,7 +69,7 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
                   new Text('Name: ${event.name}'),
                   new Text('Description: ${event.description}'),
                   new Text('Category: ${event.category}'),
-                  new IconButton(icon: new Icon(Icons.edit), onPressed: () {Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UpdateEventScreen(event)));}),
+                  new IconButton(icon: new Icon(Icons.edit), onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateEventScreen(event)));}),
                   new IconButton(icon: new Icon(Icons.delete), onPressed: () {delete();})
                 ]
               )
