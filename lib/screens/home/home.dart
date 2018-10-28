@@ -64,12 +64,6 @@ class _HomeScreen extends State<HomeScreen> with SingleTickerProviderStateMixin 
           )
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => CreateEventScreen()));
-        },
-        child: Icon(Icons.add)
-      ),
       drawer: HomeDrawer(
         accountName: _accountName == null ? "" : _accountName, 
         accountEmail: _accountEmail == null ? "" : _accountEmail,
