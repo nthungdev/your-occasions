@@ -54,7 +54,7 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
         ],
       ),
     );
-    
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Event Detail"),
@@ -62,6 +62,7 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
       body: Center(
         child: new Material(
           child: new Container(
+            decoration: linearGradient,
             // color: Colors.red,
             // padding: EdgeInsets.symmetric(horizontal: 10.0),
             // color: Colors.red,
