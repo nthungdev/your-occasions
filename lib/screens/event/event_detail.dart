@@ -44,6 +44,7 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Event Detail"),
