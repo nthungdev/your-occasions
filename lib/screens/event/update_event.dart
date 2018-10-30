@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'dart:io';
+
+import 'package:image_picker/image_picker.dart';
 
 import 'package:youroccasions/screens/home/home.dart';
 import 'package:youroccasions/models/event.dart';
@@ -23,6 +26,7 @@ class UpdateEventScreen extends StatefulWidget {
 
 class _UpdateEventScreen extends State<UpdateEventScreen> {
   Event event;
+  File _image;
 
   @override
   initState() {
@@ -41,6 +45,15 @@ class _UpdateEventScreen extends State<UpdateEventScreen> {
   String start;
   String end;
 
+  
+  void getImage(ImageSource source) {
+    ImagePicker.pickImage(source: source).then((image) {
+      setState(() {
+        _image = image;
+      });
+    });
+  }
+
   Future<Null> selectStartDate(BuildContext context) async{
     final DateTime picked = await showDatePicker(
       context: context,
@@ -57,7 +70,7 @@ class _UpdateEventScreen extends State<UpdateEventScreen> {
     }
   }
 
-  Future<Null> selectStartTime(BuildContext context) async{
+  Future<Null> selectStartTime(BuildContext context) async {
     final TimeOfDay picked = await showTimePicker(
       context: context,
       initialTime: startTime
@@ -70,7 +83,7 @@ class _UpdateEventScreen extends State<UpdateEventScreen> {
     }
   }
   
-  Future<Null> selectEndDate(BuildContext context) async{
+  Future<Null> selectEndDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
       context: context,
       initialDate: startDate,
@@ -86,7 +99,7 @@ class _UpdateEventScreen extends State<UpdateEventScreen> {
     }
   }
 
-  Future<Null> selectEndTime(BuildContext context) async{
+  Future<Null> selectEndTime(BuildContext context) async {
     final TimeOfDay picked = await showTimePicker(
       context: context,
       initialTime: new TimeOfDay.now()
@@ -109,6 +122,32 @@ class _UpdateEventScreen extends State<UpdateEventScreen> {
       // if(result) {
       //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => EventDetailScreen()));
       // }
+    }
+  }
+
+  Widget selectImageButton() {
+    var screen = MediaQuery.of(context).size;
+
+    if (_image == null) {
+      return ButtonBar(
+        children: <Widget>[
+          MaterialButton(
+            onPressed: () => getImage(ImageSource.camera),
+            child: Text("Get image from camera"),
+          ),
+          MaterialButton(
+            onPressed: () => getImage(ImageSource.gallery),
+            child: Text("Get image from gallery"),
+          ),
+        ] 
+      );
+    }
+    else {
+      return SizedBox(
+        height: screen.height / 3,
+        width: screen.width,
+        child: Image.file(_image, fit: BoxFit.fitWidth,)
+      );
     }
   }
   
@@ -217,9 +256,11 @@ class _UpdateEventScreen extends State<UpdateEventScreen> {
       body: Center(
         child: Form(
           key: formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: ListView(
+            
+            // mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              selectImageButton(),
               nameForm(),
               descriptionForm(),
               categoryForm(),
