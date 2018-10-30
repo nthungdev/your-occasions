@@ -13,6 +13,10 @@ const String API_SECRET = "CPxAJ0U-NWbGzzj5RlBsuoQF4r4";
 const String UPLOAD_URL = "https://api.cloudinary.com/v1_1/dm7mijapy/image/upload";
 const String DESTROY_URL = "https://api.cloudinary.com/v1_1/dm7mijapy/image/destroy";
 
+class Presets {
+  static String eventCover = "event_header";
+  static String profilePicture = "profile_picture";
+}
 
 Future<void> fetch(String path) async {
   try {
@@ -53,6 +57,7 @@ class Cloudinary {
     : this._apiKey = apiKey, 
       this._apiSecret = apiSecret;
 
+  /// path: id/name
   Future<String> upload({@required String path, @required String file, String preset="default"}) async {
     Map<String, String> parameters = {
       "api_key": _apiKey, // Only signed authenticated request requires api_key

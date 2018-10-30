@@ -11,6 +11,11 @@ import 'package:youroccasions/utilities/config.dart';
 import 'package:youroccasions/utilities/validator..dart';
 import 'package:youroccasions/screens/event/event_detail.dart';
 
+import 'package:youroccasions/utilities/cloudinary.dart';
+
+const String API_KEY = "161729176588939";
+const String API_SECRET = "CPxAJ0U-NWbGzzj5RlBsuoQF4r4";
+
 final EventController _eventController = EventController();
 bool _isSigningUp = false;
 
@@ -25,30 +30,49 @@ class UpdateEventScreen extends StatefulWidget {
 }
 
 class _UpdateEventScreen extends State<UpdateEventScreen> {
-  Event event;
-  File _image;
-
-  @override
-  initState() {
-    super.initState();
-    event = widget.event;
-  }
-
-  final formKey = new GlobalKey<FormState>();
-  static final nameController = new TextEditingController();
-  static final descriptionController = new TextEditingController();
-  static final categoryController = new TextEditingController();
-  DateTime startDate = new DateTime.now();
-  TimeOfDay startTime = new TimeOfDay.now();
+  GlobalKey<FormState> formKey;
+  TextEditingController nameController;
+  TextEditingController descriptionController;
+  TextEditingController categoryController;
+  DateTime startDate;
+  TimeOfDay startTime;
   DateTime endDate;
   TimeOfDay endTime;
   String start;
   String end;
+  Event event;
+  File _image;
+  bool _imageChanged;
 
+  @override
+  initState() {
+    super.initState();
+    startDate = DateTime.now();
+    startTime = TimeOfDay.now();
+    event = widget.event;
+    _imageChanged = false;
+    formKey = GlobalKey<FormState>();
+    nameController = TextEditingController();
+    descriptionController = TextEditingController();
+    categoryController = TextEditingController();
+
+
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    nameController.dispose();
+    descriptionController.dispose();
+    categoryController.dispose();
+  }
   
   void getImage(ImageSource source) {
+    print(_imageChanged);
     ImagePicker.pickImage(source: source).then((image) {
       setState(() {
+        _imageChanged = true;
         _image = image;
       });
     });
@@ -228,6 +252,14 @@ class _UpdateEventScreen extends State<UpdateEventScreen> {
   Future<bool> update() async {
     if (!_isSigningUp) {
       _isSigningUp = true;
+
+      String url;
+      if(_imageChanged) {
+        Cloudinary cl = Cloudinary(API_KEY, API_SECRET);
+        url = await cl.upload(file: toDataURL(file: _image), preset: Presets.eventCover, path: "${widget.event.id}/cover");
+        print(url);
+      }
+
       final start = new DateTime(startDate.year, startDate.month, startDate.day, startTime.hour, startTime.minute);
       if (endDate != null){
         endDate = new DateTime(endDate.year, endDate.month, endDate.day, endTime.hour, endTime.minute);
@@ -239,8 +271,15 @@ class _UpdateEventScreen extends State<UpdateEventScreen> {
       // String location = "Plattsburgh";
       Event newEvent = Event(hostId: hostId, name: name, description: description, category: category, startTime: start, endTime: endDate);
       print("DEBUG new event is : $newEvent");
-      _eventController.update(event.id, hostId: hostId, name: name, description: description, category: category, startTime: start, endTime: endDate);
+      
+      if(url != null) {
+        _eventController.update(event.id, hostId: hostId, name: name, description: description, category: category, startTime: start, endTime: endDate, picture: url);
+      }
+      else {
+        _eventController.update(event.id, hostId: hostId, name: name, description: description, category: category, startTime: start, endTime: endDate);
+      }
       _isSigningUp = false;
+
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => EventDetailScreen(newEvent)));
       return true;
     }
