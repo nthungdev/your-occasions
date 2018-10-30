@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import './other_page.dart';
 
+import 'package:youroccasions/models/user.dart';
+import 'package:youroccasions/screens/user/user_profile.dart';
 import 'package:youroccasions/screens/event/create_event.dart';
 import 'package:youroccasions/screens/login/login.dart';
 import 'package:youroccasions/utilities/config.dart';
@@ -9,6 +11,7 @@ import 'package:youroccasions/utilities/config.dart';
 class HomeDrawer extends StatelessWidget {
   final String accountName;
   final String accountEmail;
+  final User user = User(name: 'duong');
 
   HomeDrawer({@required String accountName, @required String accountEmail})
       : accountName = accountName, accountEmail = accountEmail;
@@ -23,7 +26,7 @@ class HomeDrawer extends StatelessWidget {
             UserAccountsDrawerHeader(
               accountName: Text(accountName),
               accountEmail: Text(accountEmail),
-              currentAccountPicture: CircleAvatar(),
+              currentAccountPicture: CircleAvatar(child: RaisedButton(onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfileScreen(user))))),
             ),
             ListTile (
               title: Text (" Create Events"),

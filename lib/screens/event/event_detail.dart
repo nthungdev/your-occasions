@@ -44,16 +44,6 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
 
   @override
   Widget build(BuildContext context) {
-    var linearGradient = const BoxDecoration(
-      gradient: const LinearGradient(
-        begin: FractionalOffset.centerRight,
-        end: FractionalOffset.bottomLeft,
-        colors: <Color>[
-          const Color(0xFF413070),
-          const Color(0xFF2B264A),
-        ],
-      ),
-    );
 
     return Scaffold(
       appBar: AppBar(
@@ -62,7 +52,6 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
       body: Center(
         child: new Material(
           child: new Container(
-            decoration: linearGradient,
             // color: Colors.red,
             // padding: EdgeInsets.symmetric(horizontal: 10.0),
             // color: Colors.red,
