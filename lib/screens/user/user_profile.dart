@@ -59,6 +59,25 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
   //   );
   // }
 
+  Widget _buildLocationInfo(TextTheme textTheme) {
+    return new Row(
+      children: <Widget>[
+        new Icon(
+          Icons.place,
+          color: Colors.white,
+          size: 16.0,
+        ),
+        new Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: new Text(
+            'Plattsburgh',
+            style: textTheme.subhead.copyWith(color: Colors.white),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildFollowerInfo(TextTheme textTheme) {
     var followerStyle =
         textTheme.subhead.copyWith(color: const Color(0xBBFFFFFF));
@@ -137,18 +156,23 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
                     left: 4.0,
                     child: new BackButton(color: Colors.white),
                   ),
-                  new Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: new Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      new Text(
-                        "duong"
-                      )
-                    ]
-                    )
-                  )
                 ],
+              ),
+              new Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: new Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  new Text(
+                    user.name,
+                    style: textTheme.headline.copyWith(color: Colors.white),
+                  ),
+                  new Padding(
+                    padding: const EdgeInsets.only(top: 4.0),
+                    child: _buildLocationInfo(textTheme),
+                  ),
+                ]
+                )
               )
             ],
           ),
