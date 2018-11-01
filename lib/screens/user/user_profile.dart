@@ -160,19 +160,19 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
                 ],
               ),
               new Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: new Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  new Text(
-                    user.name,
-                    style: textTheme.headline.copyWith(color: Colors.white),
-                  ),
-                  new Padding(
-                    padding: const EdgeInsets.only(top: 4.0),
-                    child: _buildLocationInfo(textTheme),
-                  ),
-                ]
+                padding: const EdgeInsets.all(24.0),
+                child: new Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    new Text(
+                      user.name,
+                      style: textTheme.headline.copyWith(color: Colors.white),
+                    ),
+                    new Padding(
+                      padding: const EdgeInsets.only(top: 4.0),
+                      child: _buildLocationInfo(textTheme),
+                    ),
+                  ]
                 )
               )
             ],
