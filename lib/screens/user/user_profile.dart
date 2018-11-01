@@ -20,7 +20,8 @@ class UserProfileScreen extends StatefulWidget {
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen>{
-
+  
+  static const BACKGROUND_IMAGE = 'images/profile_header_background.png';
   User user;
   int id;
 
@@ -45,19 +46,19 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
     );
   }
 
-  // Widget _buildDiagonalImageBackground(BuildContext context) {
-  //   var screenWidth = MediaQuery.of(context).size.width;
+  Widget _buildDiagonalImageBackground(BuildContext context) {
+    var screenWidth = MediaQuery.of(context).size.width;
 
-  //   return new DiagonallyCutColoredImage(
-  //     // new Image.asset(
-  //     //   "images/profile_header_background.png",
-  //     //   width: screenWidth,
-  //     //   height: 280.0,
-  //     //   fit: BoxFit.cover,
-  //     // ),
-  //     color: const Color(0xBB8338f4),
-  //   );
-  // }
+    return new DiagonallyCutColoredImage(
+      new Image.asset(
+        BACKGROUND_IMAGE,
+        width: screenWidth,
+        height: 280.0,
+        fit: BoxFit.cover,
+      ),
+      color: const Color(0xBB8338f4),
+    );
+  }
 
   Widget _buildLocationInfo(TextTheme textTheme) {
     return new Row(
@@ -140,6 +141,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
             children: <Widget>[
               new Stack(
                 children: <Widget>[
+                  _buildDiagonalImageBackground(context),
                   new Align(
                     alignment: FractionalOffset.bottomCenter,
                     heightFactor: 1.4,
