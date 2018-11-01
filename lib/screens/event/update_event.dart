@@ -41,6 +41,7 @@ class _UpdateEventScreen extends State<UpdateEventScreen> {
   String end;
   Event event;
   File _image;
+  String _imageURL;
   bool _imageChanged;
 
   @override
@@ -283,6 +284,10 @@ class _UpdateEventScreen extends State<UpdateEventScreen> {
       return true;
     }
     return false;
+  }
+
+  Widget _buildCoverImage() {
+    
   }
 
   @override

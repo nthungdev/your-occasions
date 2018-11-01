@@ -36,6 +36,7 @@ class _SmallEventCardState extends State<SmallEventCard> {
   @override
   void initState() {
     super.initState();
+    _eventController = EventController();
     _gotData = false;
     _interestedEventController = UserInterestedEventController();
     _isInterested = false;
@@ -184,12 +185,11 @@ class _SmallEventCardState extends State<SmallEventCard> {
   // Increase the number of view of the this event by 1.
   void _increaseView() async {
     try {
-      var thisEvent = (await _eventController.getEvent(id: widget.event.id))[0];
-      _eventController.update(widget.event.id, views: thisEvent.views++);
+      _eventController.increaseView(widget.event.id);
     }
     catch (e) {
+      print("An error occurs");
       print(e);
-      print("Can't get the event");
     }
   }
 

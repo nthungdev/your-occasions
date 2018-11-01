@@ -141,7 +141,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
             children: <Widget>[
               new Stack(
                 children: <Widget>[
-                  _buildDiagonalImageBackground(context),
+                //   _buildDiagonalImageBackground(context),
                   new Align(
                     alignment: FractionalOffset.bottomCenter,
                     heightFactor: 1.4,

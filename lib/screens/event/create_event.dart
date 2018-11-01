@@ -258,7 +258,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
         _isSigningUp = false;
         print("Please select an event image");
       }
-      Event newEvent = Event(hostId: hostId, name: name, description: description, category: category, startTime: start, endTime: endDate, picture: ) ;
+      Event newEvent = Event(hostId: hostId, name: name, description: description, category: category, startTime: start, endTime: endDate) ;
       print("DEBUG new event is : $newEvent");
       await _eventController.insert(newEvent);
       print("DEBUG name is : ${newEvent.name}");

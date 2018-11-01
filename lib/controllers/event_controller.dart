@@ -81,7 +81,7 @@ class EventController extends BaseController {
   }
 
   /// Select rows from users table and return a list of User objects.
-  Future<List<Event>> getEvent({int id, int hostId, String name, String category, DateTime startTime, DateTime endTime}) async{
+  Future<List<Event>> getEvent({int id, int hostId, String name, String category, DateTime startTime, DateTime endTime}) async {
     await connect();
 
     List<Event> result = [];
@@ -110,6 +110,16 @@ class EventController extends BaseController {
     await disconnect();
 
     return result;
+  }
+
+  Future<void> increaseView(int id) async {
+    await connect();
+
+    String query = "UPDATE Events SET views = views + 1 WHERE id = $id";
+
+    await connection.execute(query);
+
+    await disconnect();
   }
   
   Future<void> test() async {
