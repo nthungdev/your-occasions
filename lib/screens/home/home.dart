@@ -8,6 +8,7 @@ import 'package:youroccasions/screens/home/bottom_menu.dart';
 import 'package:youroccasions/screens/event/create_event.dart';
 import 'package:youroccasions/screens/search/search.dart';
 import 'package:youroccasions/utilities/config.dart';
+import 'package:youroccasions/utilities/cloudinary.dart';
 
 class HomeScreen extends StatefulWidget {
   @override

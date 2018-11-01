@@ -26,7 +26,6 @@ class UpdateEventScreen extends StatefulWidget {
   
   @override
   _UpdateEventScreen createState() => _UpdateEventScreen();
-  
 }
 
 class _UpdateEventScreen extends State<UpdateEventScreen> {
