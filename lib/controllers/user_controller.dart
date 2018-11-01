@@ -38,6 +38,12 @@ class UserController extends BaseController {
     await disconnect();
   }
 
+  Future<void> increaseFollowers(int id) async {
+    await connect();
+    await connection.query("""UPDATE users SET followers = followers + 1 WHERE id = @id""", substitutionValues: { 'id': id, });
+    await disconnect();
+  }
+
   /// Update an existing row from users table.
   Future<void> update(int id, {String name, String email, String password, DateTime birthday, String picture, 
   int one, int two, int three, int four, int five, double rating, bool isUsed}) async {
