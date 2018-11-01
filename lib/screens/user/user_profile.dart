@@ -20,8 +20,7 @@ class UserProfileScreen extends StatefulWidget {
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen>{
-  
-  static const BACKGROUND_IMAGE = 'images/profile_header_background.png';
+
   User user;
   int id;
 
@@ -50,8 +49,8 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
     var screenWidth = MediaQuery.of(context).size.width;
 
     return new DiagonallyCutColoredImage(
-      new Image.asset(
-        BACKGROUND_IMAGE,
+      new Image.network(
+        "https://imgur.com/a/NvPmctY",
         width: screenWidth,
         height: 280.0,
         fit: BoxFit.cover,
@@ -141,7 +140,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
             children: <Widget>[
               new Stack(
                 children: <Widget>[
-                //   _buildDiagonalImageBackground(context),
+                  _buildDiagonalImageBackground(context),
                   new Align(
                     alignment: FractionalOffset.bottomCenter,
                     heightFactor: 1.4,
