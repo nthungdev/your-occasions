@@ -23,10 +23,13 @@ class HomeDrawer extends StatelessWidget {
       child: Drawer(
         child: ListView(
           children: <Widget>[
-            UserAccountsDrawerHeader(
-              accountName: Text(accountName),
-              accountEmail: Text(accountEmail),
-              currentAccountPicture: CircleAvatar(child: RaisedButton(onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfileScreen(user))))),
+            GestureDetector(
+              onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfileScreen(user)));},
+              child: UserAccountsDrawerHeader(
+                accountName: Text(accountName),
+                accountEmail: Text(accountEmail),
+                currentAccountPicture: CircleAvatar(),
+              ),
             ),
             ListTile (
               title: Text (" Create Events"),
