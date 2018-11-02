@@ -45,6 +45,8 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
   @override
   Widget build(BuildContext context) {
 
+    var screen = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Event Detail"),
@@ -59,6 +61,11 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
+                  SizedBox(
+                    height: screen.height / 3,
+                    width: screen.width,
+                    child: Image.network(event.picture ?? "https://img.cutenesscdn.com/640/cme/cuteness_data/s3fs-public/diy_blog/Information-on-the-Corgi-Dog-Breed.jpg", fit: BoxFit.fitWidth,)
+                  ),
                   new Text('Name: ${event.name}'),
                   new Text('Description: ${event.description}'),
                   new Text('Category: ${event.category}'),
@@ -67,6 +74,11 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
             : Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
+                  SizedBox(
+                    height: screen.height / 3,
+                    width: screen.width,
+                    child: Image.network(event.picture ?? "https://img.cutenesscdn.com/640/cme/cuteness_data/s3fs-public/diy_blog/Information-on-the-Corgi-Dog-Breed.jpg", fit: BoxFit.fitWidth,)
+                  ),
                   new Text('Name: ${event.name}'),
                   new Text('Description: ${event.description}'),
                   new Text('Category: ${event.category}'),

@@ -50,7 +50,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
 
     return new DiagonallyCutColoredImage(
       new Image.network(
-        "https://imgur.com/a/NvPmctY",
+        "https://i.imgur.com/dBy4rtg.png",
         width: screenWidth,
         height: 280.0,
         fit: BoxFit.cover,
@@ -118,6 +118,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
 
   @override
   Widget build(BuildContext context) {
+    var screenHeight = MediaQuery.of(context).size.height;
     var theme = Theme.of(context);
     var textTheme = theme.textTheme;
     var linearGradient = const BoxDecoration(
@@ -135,6 +136,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
       body: new SingleChildScrollView(
         child: new Container(
           decoration: linearGradient,
+          height: screenHeight,
           child: new Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
