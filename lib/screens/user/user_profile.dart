@@ -20,8 +20,7 @@ class UserProfileScreen extends StatefulWidget {
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen>{
-  
-  static const BACKGROUND_IMAGE = 'images/profile_header_background.png';
+
   User user;
   int id;
 
@@ -50,8 +49,8 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
     var screenWidth = MediaQuery.of(context).size.width;
 
     return new DiagonallyCutColoredImage(
-      new Image.asset(
-        BACKGROUND_IMAGE,
+      new Image.network(
+        "https://i.imgur.com/dBy4rtg.png",
         width: screenWidth,
         height: 280.0,
         fit: BoxFit.cover,
@@ -119,6 +118,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
 
   @override
   Widget build(BuildContext context) {
+    var screenHeight = MediaQuery.of(context).size.height;
     var theme = Theme.of(context);
     var textTheme = theme.textTheme;
     var linearGradient = const BoxDecoration(
@@ -136,12 +136,13 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
       body: new SingleChildScrollView(
         child: new Container(
           decoration: linearGradient,
+          height: screenHeight,
           child: new Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               new Stack(
                 children: <Widget>[
-                //   _buildDiagonalImageBackground(context),
+                  _buildDiagonalImageBackground(context),
                   new Align(
                     alignment: FractionalOffset.bottomCenter,
                     heightFactor: 1.4,
@@ -161,19 +162,19 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
                 ],
               ),
               new Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: new Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  new Text(
-                    user.name,
-                    style: textTheme.headline.copyWith(color: Colors.white),
-                  ),
-                  new Padding(
-                    padding: const EdgeInsets.only(top: 4.0),
-                    child: _buildLocationInfo(textTheme),
-                  ),
-                ]
+                padding: const EdgeInsets.all(24.0),
+                child: new Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    new Text(
+                      user.name,
+                      style: textTheme.headline.copyWith(color: Colors.white),
+                    ),
+                    new Padding(
+                      padding: const EdgeInsets.only(top: 4.0),
+                      child: _buildLocationInfo(textTheme),
+                    ),
+                  ]
                 )
               )
             ],
