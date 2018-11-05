@@ -18,9 +18,11 @@ class Presets {
   static String profilePicture = "profile_picture";
 }
 
-Future<void> fetch(String path) async {
+/// Return the url of the image
+Future<String> fetch(String path) async {
   try {
-    var response = await http.get("https://res.cloudinary.com/dm7mijapy/image/upload/event_header/acd/qazcvb/123.jpg");
+    var url = "https://res.cloudinary.com/dm7mijapy/image/upload/$path.jpg";
+    var response = await http.get(url);
 
     if(response.statusCode == 200) {
       print(response.bodyBytes);
@@ -40,6 +42,8 @@ Future<void> fetch(String path) async {
     print("An error occurs:");
     print(e);
   }
+
+  return null;
 
 }
 

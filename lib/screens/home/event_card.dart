@@ -120,7 +120,7 @@ class _SmallEventCardState extends State<SmallEventCard> {
                   AspectRatio(
                     aspectRatio: 4 / 3,
                     child: Image.network(widget.imageURL,
-                      fit: BoxFit.fitHeight,
+                      fit: BoxFit.cover,
                     ),
                   ),
                   SizedBox(

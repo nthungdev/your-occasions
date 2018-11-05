@@ -36,7 +36,7 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
     });
   }
 
-  void delete() async{
+  void delete() async {
     _eventController.delete(event.id);
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
   }
@@ -44,6 +44,7 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
 
     return Scaffold(
       appBar: AppBar(
@@ -57,21 +58,51 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
             // color: Colors.red,
             child: id != event.hostId
             ? Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  new Text('Name: ${event.name}'),
-                  new Text('Description: ${event.description}'),
-                  new Text('Category: ${event.category}'),
+                  SizedBox(
+                    width: size.width,
+                    height: size.width * 3 / 4,
+                    child: widget.event.picture != null
+                    ? Image.network(widget.event.picture, fit: BoxFit.cover,)
+                    : Image.asset("images/no-image.jpg", fit: BoxFit.cover,) 
+                  ),
+                  Expanded(
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: ListView(
+                        children: <Widget>[
+                          new Text('Name: ${event.name}'),
+                          new Text('Description: ${event.description}'),
+                          new Text('Category: ${event.category}'),
+                        ],
+                      ),
+                    ),
+                  ),
                 ]
               ) 
             : Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  new Text('Name: ${event.name}'),
-                  new Text('Description: ${event.description}'),
-                  new Text('Category: ${event.category}'),
-                  new IconButton(icon: new Icon(Icons.edit), onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateEventScreen(event)));}),
-                  new IconButton(icon: new Icon(Icons.delete), onPressed: () {delete();})
+                  SizedBox(
+                    width: size.width,
+                    height: size.width * 3 / 4,
+                    child: widget.event.picture != null
+                    ? Image.network(widget.event.picture, fit: BoxFit.cover,)
+                    : Image.asset("images/no-image.jpg", fit: BoxFit.cover,) 
+                  ),
+                  Expanded(
+                    child: ListView(
+                      children: <Widget>[
+                        new Text('Name: ${event.name}'),
+                        new Text('Description: ${event.description}'),
+                        new Text('Category: ${event.category}'),
+                        new IconButton(icon: new Icon(Icons.edit), onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateEventScreen(event)));}),
+                        new IconButton(icon: new Icon(Icons.delete), onPressed: () {delete();})
+                      ],
+                    ),
+                  )
+                  
                 ]
               )
           )

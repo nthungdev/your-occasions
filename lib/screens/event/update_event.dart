@@ -67,6 +67,10 @@ class _UpdateEventScreen extends State<UpdateEventScreen> {
     descriptionController.dispose();
     categoryController.dispose();
   }
+
+  void retrieveImageURL() {
+    var url = fetch("event_header/${widget.event.id}");
+  }
   
   void getImage(ImageSource source) {
     print(_imageChanged);
@@ -287,7 +291,12 @@ class _UpdateEventScreen extends State<UpdateEventScreen> {
   }
 
   Widget _buildCoverImage() {
-    
+    if (_imageURL == null) {
+      return selectImageButton();
+    }
+    else {
+      return Image.network(_imageURL);
+    }
   }
 
   @override
@@ -303,7 +312,7 @@ class _UpdateEventScreen extends State<UpdateEventScreen> {
             
             // mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              selectImageButton(),
+              _buildCoverImage(),
               nameForm(),
               descriptionForm(),
               categoryForm(),
