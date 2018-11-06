@@ -27,9 +27,7 @@ class LeaderboardItem extends StatefulWidget {
 }
 
 class _LeaderboardItemState extends State<LeaderboardItem> {
-  String _time;
   bool _gotData;
-  Timer _queryTimer;
 
   @override
   void initState() {
@@ -165,12 +163,15 @@ class _LeaderboardItemState extends State<LeaderboardItem> {
                             // color: Colors.red,
                             // padding: EdgeInsets.all(15.0),
                             child: Container(
-                              decoration: new BoxDecoration(
+                              decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                image: new DecorationImage(
+                                image: DecorationImage(
                                   fit: BoxFit.fill,
-                                  image: new NetworkImage(
-                                    widget.imageUrl)
+                                  image: widget.imageUrl != null 
+                                    ? NetworkImage(
+                                      widget.imageUrl
+                                    )
+                                    : AssetImage("images/no-image.jpg")
                                 )
                               )
                             ),

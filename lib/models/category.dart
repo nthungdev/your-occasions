@@ -7,11 +7,10 @@ class Category {
   DateTime _creationDate;
 
   // CONSTRUCTORS //
-  Category.create();
-  Category({String name, String description, bool isUsed=true}) {
+  Category({String name, String description}) {
     this._name = name;
     this._description = description;
-    this._isUsed = isUsed;
+    this._isUsed = true;
     this._creationDate = DateTime.now();
   }
   Category.createFromMap(Iterable<Map<String, dynamic>> map){
@@ -52,5 +51,24 @@ class Category {
   }
 
   String toString() => "An instance of Event id=$id, name=$name";
+
+}
+
+class Categories {
+  // TODO write descriptions for each category of event
+  // TODO document description for each category in comments
+
+  static final Category food = Category(name: "Food", description: "Food event");
+  static final Category festival = Category(name: "Festival", description: "Festival event");
+  static final Category party = Category(name: "Party", description: "Party event");
+  static final Category business = Category(name: "Business", description: "Business event");
+  static final Category tech = Category(name: "Tech", description: "Tech event");
+  static final Category charity = Category(name: "Charity", description: "Charity event");
+  static final Category sports = Category(name: "Sports", description: "Sports event");
+  static final Category politics = Category(name: "Politics", description: "Politics event");
+  static final Category comedy = Category(name: "Comedy", description: "Comedy event");
+  static final Category fashion = Category(name: "Fashion", description: "Fashion event");
+  static final Category science = Category(name: "Science", description: "Science event");
+  static final Category study = Category(name: "Study", description: "Study event");
 
 }

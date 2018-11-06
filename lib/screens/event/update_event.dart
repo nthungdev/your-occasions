@@ -52,11 +52,10 @@ class _UpdateEventScreen extends State<UpdateEventScreen> {
     event = widget.event;
     _imageChanged = false;
     formKey = GlobalKey<FormState>();
-    nameController = TextEditingController();
-    descriptionController = TextEditingController();
-    categoryController = TextEditingController();
-
-
+    nameController = TextEditingController(text: widget.event.name ?? "");
+    descriptionController = TextEditingController(text: widget.event.description ?? "");
+    categoryController = TextEditingController(text: widget.event.category ?? "");
+    
   }
 
   @override
@@ -200,20 +199,21 @@ class _UpdateEventScreen extends State<UpdateEventScreen> {
 
   Widget nameForm() {
     return Container(
-        margin: const EdgeInsets.all(10.0),
-        width: 260.0,
-        child: TextFormField(
-          controller: nameController,
-          keyboardType: TextInputType.emailAddress,
-          // validator: (name) => !isPassword(name) ? "Invalid name" : null,
-          autofocus: false,
-          decoration: InputDecoration(
-            hintText: 'Event Name',
-            contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-            border:
-                OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
-          ),
-        ));
+      margin: const EdgeInsets.all(10.0),
+      width: 260.0,
+      child: TextFormField(
+        controller: nameController,
+        keyboardType: TextInputType.emailAddress,
+        // validator: (name) => !isPassword(name) ? "Invalid name" : null,
+        autofocus: false,
+        // initialValue: widget.event.name,
+        decoration: InputDecoration(
+          hintText: 'Event Name',
+          contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+          border:
+              OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
+        ),
+      ));
   }
 
   Widget descriptionForm() {

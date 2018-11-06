@@ -1,3 +1,5 @@
+import 'package:youroccasions/models/category.dart';
+
 class Event {
   // PROPERTIES //
   int _id;
@@ -19,6 +21,7 @@ class Event {
   int _five;
   num _rating;
   bool _isUsed;
+  List<Category> _categories;
   DateTime _creationDate;
 
   // CONSTRUCTORS //

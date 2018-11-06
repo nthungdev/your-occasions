@@ -46,8 +46,6 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
 
-    var screen = MediaQuery.of(context).size;
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Event Detail"),
@@ -63,7 +61,6 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   SizedBox(
-<<<<<<< HEAD
                     width: size.width,
                     height: size.width * 3 / 4,
                     child: widget.event.picture != null
@@ -82,22 +79,12 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
                       ),
                     ),
                   ),
-=======
-                    height: screen.height / 3,
-                    width: screen.width,
-                    child: Image.network(event.picture ?? "https://img.cutenesscdn.com/640/cme/cuteness_data/s3fs-public/diy_blog/Information-on-the-Corgi-Dog-Breed.jpg", fit: BoxFit.fitWidth,)
-                  ),
-                  new Text('Name: ${event.name}'),
-                  new Text('Description: ${event.description}'),
-                  new Text('Category: ${event.category}'),
->>>>>>> 28feb8d13387833012ec47ff2640935efbbe2ebf
                 ]
               ) 
             : Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   SizedBox(
-<<<<<<< HEAD
                     width: size.width,
                     height: size.width * 3 / 4,
                     child: widget.event.picture != null
@@ -107,26 +94,21 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
                   Expanded(
                     child: ListView(
                       children: <Widget>[
-                        new Text('Name: ${event.name}'),
-                        new Text('Description: ${event.description}'),
-                        new Text('Category: ${event.category}'),
-                        new IconButton(icon: new Icon(Icons.edit), onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateEventScreen(event)));}),
-                        new IconButton(icon: new Icon(Icons.delete), onPressed: () {delete();})
+                        Text('Name: ${event.name}'),
+                        Text('Description: ${event.description}'),
+                        Text('Category: ${event.category}'),
+                        IconButton(
+                          icon: Icon(Icons.edit), 
+                          onPressed: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateEventScreen(event)));
+                          }),
+                        IconButton(
+                          icon: Icon(Icons.delete), 
+                          onPressed: () { delete(); }
+                        )
                       ],
                     ),
                   )
-                  
-=======
-                    height: screen.height / 3,
-                    width: screen.width,
-                    child: Image.network(event.picture ?? "https://img.cutenesscdn.com/640/cme/cuteness_data/s3fs-public/diy_blog/Information-on-the-Corgi-Dog-Breed.jpg", fit: BoxFit.fitWidth,)
-                  ),
-                  new Text('Name: ${event.name}'),
-                  new Text('Description: ${event.description}'),
-                  new Text('Category: ${event.category}'),
-                  new IconButton(icon: new Icon(Icons.edit), onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateEventScreen(event)));}),
-                  new IconButton(icon: new Icon(Icons.delete), onPressed: () {delete();})
->>>>>>> 28feb8d13387833012ec47ff2640935efbbe2ebf
                 ]
               )
           )

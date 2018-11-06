@@ -119,9 +119,13 @@ class _SmallEventCardState extends State<SmallEventCard> {
                 children: <Widget>[
                   AspectRatio(
                     aspectRatio: 4 / 3,
-                    child: Image.network(widget.imageURL,
-                      fit: BoxFit.cover,
-                    ),
+                    child: widget.imageURL != null
+                      ? Image.network(widget.imageURL,
+                          fit: BoxFit.cover,
+                        )
+                      : Image.asset("images/no-image.jpg",
+                          fit: BoxFit.cover,
+                        )
                   ),
                   SizedBox(
                     width: 10.0,

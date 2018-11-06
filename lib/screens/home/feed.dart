@@ -157,7 +157,7 @@ class _FeedTabView extends State<FeedTabView> {
         padding: const EdgeInsets.only(bottom: 8.0),
         child: SmallEventCard(
           event: currentEvent,
-          imageURL: currentEvent.picture ?? "https://img.cutenesscdn.com/640/cme/cuteness_data/s3fs-public/diy_blog/Information-on-the-Corgi-Dog-Breed.jpg",
+          imageURL: currentEvent.picture,
           place: currentEvent.locationName ?? "Unname location",
           time: currentEvent.startTime ?? DateTime.now(),
           title: currentEvent.name ?? "Untitled event" ,

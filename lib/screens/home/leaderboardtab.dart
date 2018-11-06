@@ -128,7 +128,7 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
       return LeaderboardItem(
         rank: index + 1,
         content: (LeaderboardDataset.topHost.value[index]).name ?? "NoName",
-        imageUrl: "https://imgur.com/370VKD8.png",
+        imageUrl: (LeaderboardDataset.topHost.value[index]).picture,
         score: LeaderboardDataset.topHostTotalEventViews.value[(LeaderboardDataset.topHost.value[index]).id],
       );
     });
@@ -158,7 +158,7 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
       return LeaderboardItem(
         rank: index + 1,
         content: (LeaderboardDataset.mostFollowedUsers.value[index]).name ?? "NoName",
-        imageUrl: "https://imgur.com/370VKD8.png",
+        imageUrl: (LeaderboardDataset.topHost.value[index]).picture,
         score: LeaderboardDataset.mostFollowedUsers.value[index].followers,
       );
     });
