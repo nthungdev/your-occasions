@@ -7,6 +7,9 @@ import 'package:youroccasions/screens/home/drawer.dart';
 import 'package:youroccasions/screens/home/bottom_menu.dart';
 import 'package:youroccasions/screens/search/search.dart';
 import 'package:youroccasions/utilities/config.dart';
+import 'package:youroccasions/models/data.dart';
+import 'package:youroccasions/models/user.dart';
+import 'package:youroccasions/controllers/user_controller.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -16,11 +19,18 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreen extends State<HomeScreen> with SingleTickerProviderStateMixin {
   /// _currentPage -> 0: home | 1: social | 2: leaderboard
+  UserController controller = UserController();
   int _currentPage = 0;
   String _accountName;
   String _accountEmail;
+  int id;
   PageController _pageController;
   BottomMenu bottomMenu;
+
+  Future<void> getCurrentUser(int id) async {
+    List<User> currentUser = await controller.getUser(id : id);
+    Dataset.currentUser.value = currentUser[0];
+  }
 
   @override
   void initState() {
@@ -34,6 +44,11 @@ class _HomeScreen extends State<HomeScreen> with SingleTickerProviderStateMixin 
       setState(() {
         _accountEmail = value;
       });
+    });
+    getUserId().then((value) {
+      id = value;
+      Dataset.userId.value = id;
+      getCurrentUser(id);
     });
     _pageController = PageController();
   }

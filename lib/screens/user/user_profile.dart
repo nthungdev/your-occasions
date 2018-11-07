@@ -6,6 +6,7 @@ import 'package:youroccasions/screens/home/home.dart';
 import 'package:youroccasions/utilities/config.dart';
 import 'package:youroccasions/models/user.dart';
 import 'package:youroccasions/controllers/user_controller.dart';
+import 'package:youroccasions/models/data.dart';
 
 final UserController _userController = UserController();
 
@@ -79,6 +80,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
   }
 
   Widget _buildFollowerInfo(TextTheme textTheme) {
+    int follower = user.followers;
     var followerStyle =
         textTheme.subhead.copyWith(color: const Color(0xBBFFFFFF));
 
@@ -93,7 +95,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
             style: followerStyle.copyWith(
                 fontSize: 24.0, fontWeight: FontWeight.normal),
           ),
-          new Text('100 Followers', style: followerStyle),
+          new Text('$follower Followers', style: followerStyle),
         ],
       ),
     );

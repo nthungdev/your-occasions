@@ -7,11 +7,11 @@ import 'package:youroccasions/screens/user/user_profile.dart';
 import 'package:youroccasions/screens/event/create_event.dart';
 import 'package:youroccasions/screens/login/login.dart';
 import 'package:youroccasions/utilities/config.dart';
+import 'package:youroccasions/models/data.dart';
 
 class HomeDrawer extends StatelessWidget {
   final String accountName;
   final String accountEmail;
-  final User user = User(name: 'duong');
 
   HomeDrawer({@required String accountName, @required String accountEmail})
       : accountName = accountName, accountEmail = accountEmail;
@@ -24,7 +24,7 @@ class HomeDrawer extends StatelessWidget {
         child: ListView(
           children: <Widget>[
             GestureDetector(
-              onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfileScreen(user)));},
+              onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfileScreen(Dataset.currentUser.value)));},
               child: UserAccountsDrawerHeader(
                 accountName: Text(accountName),
                 accountEmail: Text(accountEmail),
