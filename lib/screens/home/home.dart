@@ -15,6 +15,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreen extends State<HomeScreen> with SingleTickerProviderStateMixin {
+  /// _currentPage -> 0: home | 1: social | 2: leaderboard
   int _currentPage = 0;
   String _accountName;
   String _accountEmail;
@@ -49,19 +50,36 @@ class _HomeScreen extends State<HomeScreen> with SingleTickerProviderStateMixin 
     LeaderboardTabView(),
   ];
 
+  List<Widget> _buildActions() {
+    List<Widget> actions = List();
+    if (_currentPage == 0) {
+      actions.add(IconButton(
+        icon: Icon(Icons.search),
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => SearchScreen()));
+        } ,
+      ));
+      return actions;
+    }
+    return null;
+  }
+
+  void navigationTapped(int page){
+    // Animating to the page.
+    // You can use whatever duration and curve you like
+    _pageController.animateToPage(
+        page,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.ease
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Home Page"),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => SearchScreen()));
-            } ,
-          )
-        ],
+        actions: _buildActions(),
       ),
       drawer: HomeDrawer(
         accountName: _accountName == null ? "" : _accountName, 
@@ -79,16 +97,6 @@ class _HomeScreen extends State<HomeScreen> with SingleTickerProviderStateMixin 
       ),
     );
     
-  }
-
-  void navigationTapped(int page){
-    // Animating to the page.
-    // You can use whatever duration and curve you like
-    _pageController.animateToPage(
-        page,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.ease
-    );
   }
 
 

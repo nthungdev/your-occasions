@@ -31,6 +31,9 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
         id = value;
       });
     });
+
+    EventController ec = EventController();
+    ec.increaseView(event.id);
   }
 
   void delete() async {

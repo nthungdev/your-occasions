@@ -24,10 +24,8 @@ class EventController extends BaseController {
   Future<void> insert(Event model) async {
     await connect();
 
-    await connection.query("""INSERT INTO events (host_id, name, description, location_name, start_time, end_time,
-    views, age, price, picture, is_used, creation_date)
-      VALUES (@hostId, @name, @description, @locationName, @startTime, @endTime, 
-      @views, @age, @price, @picture, @isUsed, @creationDate)""",
+    await connection.query("""INSERT INTO events (host_id, name, description, location_name, start_time, end_time, age, price, picture, is_used, creation_date)
+      VALUES (@hostId, @name, @description, @locationName, @startTime, @endTime, @age, @price, @picture, @isUsed, @creationDate)""",
       substitutionValues: model.getProperties());
 
     await disconnect();
