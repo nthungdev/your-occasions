@@ -12,7 +12,6 @@ class LeaderboardTabView extends StatefulWidget {
 }
 
 class _LeaderboardTabView extends State<LeaderboardTabView> {
-  EventController ec;
   bool _hasData1;
   bool _hasData2;
   bool _hasData3;
@@ -25,7 +24,17 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
     _hasData2 = false;
     _hasData3 = false;
     _hasData4 = false;
-    ec = EventController();
+    getData();
+  }
+
+  
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  void getData() async {
     getTopHost()
       .then((onValue) {
         if(this.mounted) {
@@ -45,19 +54,9 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
     );
   }
 
-  
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-  }
-
-  void getData() async {
-    
-  }
-
   // get hosts with the highest views
   Future<void> getTopHost() async {
+    EventController ec = EventController();
     /**
      * Data is recently pulled 30 seconds ago. Wait until the 30 seconds span finish to get data again.
      */
@@ -130,6 +129,7 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
         content: (LeaderboardDataset.topHost.value[index]).name ?? "NoName",
         imageUrl: (LeaderboardDataset.topHost.value[index]).picture,
         score: LeaderboardDataset.topHostTotalEventViews.value[(LeaderboardDataset.topHost.value[index]).id],
+        user: (LeaderboardDataset.topHost.value[index]),
       );
     });
     return result;
@@ -158,8 +158,9 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
       return LeaderboardItem(
         rank: index + 1,
         content: (LeaderboardDataset.mostFollowedUsers.value[index]).name ?? "NoName",
-        imageUrl: (LeaderboardDataset.topHost.value[index]).picture,
+        imageUrl: (LeaderboardDataset.mostFollowedUsers.value[index]).picture,
         score: LeaderboardDataset.mostFollowedUsers.value[index].followers,
+        user: (LeaderboardDataset.mostFollowedUsers.value[index]),
       );
     });
     return result;
@@ -175,24 +176,24 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
           children: <Widget>[
             // Text("Leaderboard", style: TextStyle(fontSize: 30.0, fontFamily: "Niramit"),),
             (!_hasData1) 
-              ? Center(child: CircularProgressIndicator()) 
-              : Leaderboard(
-                  title: "Highest views hosts",
-                  children: _buildTopHostsItem(),
-                  contentHeading: "Host",
-                  leadingHeading: "Rank",
-                  trailingHeading: "Views",
-                ),
+            ? Center(child: CircularProgressIndicator()) 
+            : Leaderboard(
+                title: "Highest views hosts",
+                children: _buildTopHostsItem(),
+                contentHeading: "Host",
+                leadingHeading: "Rank",
+                trailingHeading: "Views",
+              ),
             SizedBox(height: screen.height / 40,),
-            (!_hasData2) 
-              ? Center(child: CircularProgressIndicator()) 
-              : Leaderboard(
-                  title: "Most followed hosts",
-                  children: _buildMostFollowedUsersItem(),
-                  contentHeading: "Host",
-                  leadingHeading: "Rank",
-                  trailingHeading: "Followers",
-                ),
+            (!_hasData2)
+            ? Center(child: CircularProgressIndicator()) 
+            : Leaderboard(
+                title: "Most followed hosts",
+                children: _buildMostFollowedUsersItem(),
+                contentHeading: "Host",
+                leadingHeading: "Rank",
+                trailingHeading: "Followers",
+              ),
           ] 
         ),
       ),

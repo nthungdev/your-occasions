@@ -57,10 +57,10 @@ class EventController extends BaseController {
       String query = "UPDATE events SET ";
       if(hostId != null) { query += "host_id = '$hostId', "; }
       if(name != null) { query += "name = '$name', "; }
-      if(description != null) { query += "email = '$description, "; }
-      if(locationName != null) { query += "password = '$locationName', "; }
+      if(description != null) { query += "description = '$description', "; }
+      if(locationName != null) { query += "locationName = '$locationName', "; }
       if(startTime != null) { query += "start_time = '$startTime', "; }
-      if(endTime != null) { query += "picture = '$endTime', "; }
+      if(endTime != null) { query += "end_time = '$endTime', "; }
       if(views != null) { query += "views = '$views', "; }
       if(age != null) { query += "age = '$age', "; }
       if(one != null) { query += "one = $one, "; }

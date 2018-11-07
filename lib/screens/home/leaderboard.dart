@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
 
+import 'package:youroccasions/models/user.dart';
 import 'package:youroccasions/screens/event/event_detail.dart';
 import 'package:youroccasions/models/event.dart';
 import 'package:youroccasions/models/user_interested_event.dart';
@@ -18,8 +19,9 @@ class LeaderboardItem extends StatefulWidget {
   final String imageUrl;
   final String content;
   final int score;
+  final User user;
 
-  LeaderboardItem({this.rank, this.imageUrl, this.content, this.score});
+  LeaderboardItem({this.rank, this.imageUrl, this.content, this.score, this.user});
 
   @override
   _LeaderboardItemState createState() => _LeaderboardItemState();
@@ -54,7 +56,7 @@ class _LeaderboardItemState extends State<LeaderboardItem> {
   }
 
   void onTap() {
-
+    Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => UserProfileScreen(widget.user)));
   }
 
 
