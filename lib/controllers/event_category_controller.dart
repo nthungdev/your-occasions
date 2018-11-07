@@ -20,8 +20,8 @@ class EventCategoryController extends BaseController{
   Future<void> insert(EventCategory model) async {
     await connect();
 
-    await connection.query("""INSERT INTO event_category (category_id, event_id, category_name, event_name, creation_date)
-      VALUES (@categoryId, @eventId, @categoryName, @eventName, @creationDate)""",
+    await connection.query("""INSERT INTO event_category (category_id, event_id, category, creation_date)
+      VALUES (@categoryId, @eventId, @category, @creationDate)""",
       substitutionValues: model.getProperties());
 
     await disconnect();
@@ -37,8 +37,8 @@ class EventCategoryController extends BaseController{
   }
 
   /// Update an existing row from user_interested_events table.
-  Future<void> update(int id, {int categoryId, int eventId, String categoryName, String eventName, DateTime creationDate}) async {
-    if(categoryId == null && eventId == null && categoryName == null && eventName == null && creationDate == null) {
+  Future<void> update(int id, {int categoryId, int eventId, String category, DateTime creationDate}) async {
+    if(categoryId == null && eventId == null && category == null && creationDate == null) {
       throw UpdateQueryException(); //
     }
     else {
@@ -47,8 +47,7 @@ class EventCategoryController extends BaseController{
       String query = "UPDATE event_categories SET ";
       if(categoryId != null) { query += "category_id = $categoryId"; }
       if(eventId != null) { query += "event_id = $eventId "; }
-      if(categoryName != null) { query += "category_name = $categoryName"; }
-      if(eventName != null) { query += "event_name = $eventName "; }
+      if(category != null) { query += "category = $category"; }
       if(creationDate != null) { query += "creation_date = '$creationDate' "; }
 
       query += " WHERE id = '$id'";
@@ -59,7 +58,7 @@ class EventCategoryController extends BaseController{
     }
   }
 
-  Future<List<EventCategory>> getEventCategory({int id, int categoryId, int eventId, String categoryName, String eventName}) async{
+  Future<List<EventCategory>> getEventCategory({int id, int categoryId, int eventId, String category}) async{
     await connect();
 
     List<EventCategory> result = [];
@@ -74,9 +73,8 @@ class EventCategoryController extends BaseController{
       query += "where ";
       
       if(eventId != null) { query += "event_id = $eventId ";}
-      else if(categoryId != null) { query += "category_id = $categoryId";}
-      else if(categoryName != null) { query += "category_name = $categoryName";}
-      else if(eventName != null) { query += "event_name = $eventName";}
+      else if(categoryId != null) { query += "category_id = $categoryId ";}
+      else if(category != null) { query += "category = '$category' ";}
       else if(id != null) { query += "id = $id ";}
     }
 

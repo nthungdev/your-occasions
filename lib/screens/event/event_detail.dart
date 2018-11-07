@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
 
 import 'package:youroccasions/screens/home/home.dart';
 import 'package:youroccasions/screens/event/update_event.dart';
@@ -20,10 +19,8 @@ class EventDetailScreen extends StatefulWidget {
 }
 
 class _EventDetailScreenState extends State<EventDetailScreen>{
-
   Event event;
   int id;
-
 
   @override
   initState() {
@@ -41,7 +38,6 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
   }
   
-
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;

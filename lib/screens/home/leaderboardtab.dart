@@ -60,11 +60,11 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
     /**
      * Data is recently pulled 30 seconds ago. Wait until the 30 seconds span finish to get data again.
      */
-    print("DEBUG lastModified topHost : ${LeaderboardDataset.topHost.lastModified}");
-    print("DEBUG current time : ${DateTime.now()}");
-    if (LeaderboardDataset.topHost.lastModified != null) {
-      print("DEBUG Diff in seconds ${(DateTime.now()).difference(LeaderboardDataset.topHost.lastModified).inSeconds}");
-    }
+    // print("DEBUG lastModified topHost : ${LeaderboardDataset.topHost.lastModified}");
+    // print("DEBUG current time : ${DateTime.now()}");
+    // if (LeaderboardDataset.topHost.lastModified != null) {
+      // print("DEBUG Diff in seconds ${(DateTime.now()).difference(LeaderboardDataset.topHost.lastModified).inSeconds}");
+    // }
     // print("DEBUG Diff in minutes ${LeaderboardDataset.topHost.lastModified.difference(DateTime.now()).inMinutes}");
     if (LeaderboardDataset.topHost.lastModified != null && (DateTime.now()).difference(LeaderboardDataset.topHost.lastModified).inSeconds < 30) return;
     
@@ -74,7 +74,7 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
     // List<List> result = List();
     temp.forEach(((event) {
       if(topHostMap.containsKey(event.hostId) && event.views != 0) {
-        print(topHostMap[event.hostId]);
+        // print(topHostMap[event.hostId]);
         if(event.views != null) {
           topHostMap[event.hostId] = topHostMap[event.hostId] + event.views;
         }
@@ -115,7 +115,7 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
     // only get the first 5
     finalResult = finalResult.sublist(0, 5);
 
-    print(finalResult);
+    // print(finalResult);
 
     LeaderboardDataset.topHostTotalEventViews.value = topHostMap;
 
@@ -139,11 +139,11 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
     /**
      * Data is recently pulled 30 seconds ago. Wait until the 30 seconds span finish to get data again.
      */
-    print("DEBUG lastModified MostFollowedUsers : ${LeaderboardDataset.mostFollowedUsers.lastModified}");
-    print("DEBUG current time : ${DateTime.now()}");
-    if (LeaderboardDataset.mostFollowedUsers.lastModified != null) {
-      print("DEBUG Diff in seconds ${(DateTime.now()).difference(LeaderboardDataset.mostFollowedUsers.lastModified).inSeconds}");
-    }
+    // print("DEBUG lastModified MostFollowedUsers : ${LeaderboardDataset.mostFollowedUsers.lastModified}");
+    // print("DEBUG current time : ${DateTime.now()}");
+    // if (LeaderboardDataset.mostFollowedUsers.lastModified != null) {
+    //   print("DEBUG Diff in seconds ${(DateTime.now()).difference(LeaderboardDataset.mostFollowedUsers.lastModified).inSeconds}");
+    // }
     // print("DEBUG Diff in minutes ${LeaderboardDataset.topHost.lastModified.difference(DateTime.now()).inMinutes}");
     if (LeaderboardDataset.mostFollowedUsers.lastModified != null && (DateTime.now()).difference(LeaderboardDataset.mostFollowedUsers.lastModified).inSeconds < 30) return;
     

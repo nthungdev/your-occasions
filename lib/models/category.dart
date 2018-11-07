@@ -1,6 +1,6 @@
 class Category {
   // PROPERTIES //
-  int _id;
+  // int _id;
   String _name;
   String _description;
   bool _isUsed;
@@ -15,7 +15,7 @@ class Category {
   }
   Category.createFromMap(Iterable<Map<String, dynamic>> map){
     map.forEach((item) {
-      this._id = item['id'];
+      // this._id = item['id'];
       this._name = item['name'];
       this._description = item['description'];
       this._isUsed = item['isUsed'];
@@ -24,14 +24,14 @@ class Category {
   }
 
   // GETTERS //
-  int get id => _id;
+  // int get id => _id;
   String get name => _name;
   String get description => _description;
   bool get isUsed => _isUsed;
   DateTime get creationDate => _creationDate;
 
   // SETTERS //
-  set id(int id) => _id = id;
+  // set id(int id) => _id = id;
   set name(String name) => _name = name;
   set description(String description) => _description = description;
   set isUsed(bool isUsed) => _isUsed = isUsed;
@@ -41,7 +41,7 @@ class Category {
   /// Return a Map<String, dynamic> with keys are the properties of User, values are the properties' values.
   Map<String, dynamic> getProperties() {
     Map<String, dynamic> map = {};
-    map['id'] = id;
+    // map['id'] = id;
     map['name'] = name;
     map['description'] = description;
     map['isUsed'] = isUsed;
@@ -50,7 +50,7 @@ class Category {
     return map;
   }
 
-  String toString() => "An instance of Event id=$id, name=$name";
+  String toString() => "An instance of Category name=$name";
 
 }
 
@@ -58,6 +58,7 @@ class Categories {
   // TODO write descriptions for each category of event
   // TODO document description for each category in comments
 
+  static final Category music = Category(name: "Music", description: "Music event");
   static final Category food = Category(name: "Food", description: "Food event");
   static final Category festival = Category(name: "Festival", description: "Festival event");
   static final Category party = Category(name: "Party", description: "Party event");

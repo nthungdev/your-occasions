@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:youroccasions/models/category.dart';
+
 import 'package:youroccasions/models/event.dart';
 import 'package:youroccasions/screens/home/event_card.dart';
 import 'package:youroccasions/controllers/event_controller.dart';
@@ -104,7 +106,7 @@ class _FeedTabView extends State<FeedTabView> {
 
     // print("DEBUG is getting trending music");
 
-    var eventCategoryList = await _ecc.getEventCategory(categoryName: MUSIC_CATEGORYNAME);
+    var eventCategoryList = await _ecc.getEventCategory(category: Categories.festival.name);
     print(eventCategoryList);
 
     for(int i = 0 ; i < eventCategoryList.length ; i++ ) {
