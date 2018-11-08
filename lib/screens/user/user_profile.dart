@@ -35,7 +35,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
   initState() {
     super.initState();
     user = widget.user;
-    _eventController.getEvent().then((value){
+    _eventController.getEvent(hostId: user.id).then((value){
       setState(() {
         _eventList = value;
       });
@@ -79,14 +79,18 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
     );
 
     cards.add(e);
-    if (_eventList == null){return cards;}
+
+    if (_eventList == null){
+      return cards;
+    }
+
     _eventList.sort((b,a) => a.startTime.compareTo(b.startTime));
     _eventList.forEach((Event currentEvent) {
       if(currentEvent.startTime.compareTo(DateTime.now()) > 0) {
         cards.insert(1, Padding(
           padding: const EdgeInsets.only(bottom: 8.0),
           child: SmallEventCard(
-            color: Colors.blue[100],
+            // color: Colors.blue[100],
             event: currentEvent,
             imageURL: currentEvent.picture ?? "https://img.cutenesscdn.com/640/cme/cuteness_data/s3fs-public/diy_blog/Information-on-the-Corgi-Dog-Breed.jpg",
             place: currentEvent.locationName ?? "Unname location",
@@ -121,7 +125,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
   Widget _buildFollowerInfo(TextTheme textTheme) {
     int follower = user.followers;
     var followerStyle =
-        textTheme.subhead.copyWith(color: const Color(0xBBFFFFFF));
+        textTheme.subhead.copyWith(color: Colors.yellow[100]);
 
     return new Padding(
       padding: const EdgeInsets.only(top: 16.0),
@@ -176,6 +180,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
     return new Scaffold(
       body: new SingleChildScrollView(
         child: new Container(
+          height: screenHeight,
           decoration: linearGradient,
           child: new Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -209,15 +214,20 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
                       user.name,
                       style: textTheme.headline.copyWith(color: Colors.white),
                     ),
+                    new Text(
+                      user.email,
+                      style: TextStyle(color: Colors.white, fontSize: 14.0)
+                    ),
                     new Padding(
-                      padding: const EdgeInsets.only(top: 4.0),
+                      padding: const EdgeInsets.only(top: 6.0),
                       child: _buildLocationInfo(textTheme),
                     ),
-                  ]
+                  ],
                 )
               ),
               new Container(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: _buildUserEventsCardList(),
                 )
               )

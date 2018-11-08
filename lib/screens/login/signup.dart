@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:youroccasions/screens/home/home.dart';
 import 'package:youroccasions/models/user.dart';
 import 'package:youroccasions/controllers/user_controller.dart';
+import 'package:youroccasions/screens/login/login.dart';
 //import 'package:youroccasions/utilities/config.dart';
 import 'package:youroccasions/utilities/validator..dart';
 
@@ -45,7 +46,7 @@ class _SignUpWithEmailScreen extends State<SignUpWithEmailScreen> {
       bool result = await signUp();
       print(result);
       if(result) {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginWithEmailScreen()));
       }
     }
   }
