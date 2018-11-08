@@ -268,12 +268,14 @@ class _CreateEventScreen extends State<CreateEventScreen> {
       Event createdEvent = (await _eventController.getEvent(hostId: hostId, name: name))[0];
       print("DEBUG: $createdEvent");
 
-      String url;
-      Cloudinary cl = Cloudinary(API_KEY, API_SECRET);
-      url = await cl.upload(file: toDataURL(file: _image), preset: Presets.eventCover, path: "${createdEvent.id}/cover");
-      print("DEBUG url: $url");
-      await _eventController.update(createdEvent.id, picture: url);
-
+      if(_image != null) {
+        String url;
+        Cloudinary cl = Cloudinary(API_KEY, API_SECRET);
+        url = await cl.upload(file: toDataURL(file: _image), preset: Presets.eventCover, path: "${createdEvent.id}/cover");
+        print("DEBUG url: $url");
+        await _eventController.update(createdEvent.id, picture: url);
+      }
+      
       _isSigningUp = false;
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => EventDetailScreen(newEvent)));
       return true;

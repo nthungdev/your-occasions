@@ -92,7 +92,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
           child: SmallEventCard(
             // color: Colors.blue[100],
             event: currentEvent,
-            imageURL: currentEvent.picture ?? "https://img.cutenesscdn.com/640/cme/cuteness_data/s3fs-public/diy_blog/Information-on-the-Corgi-Dog-Breed.jpg",
+            imageURL: currentEvent.picture,
             place: currentEvent.locationName ?? "Unname location",
             time: currentEvent.startTime ?? DateTime.now(),
             title: currentEvent.name ?? "Untitled event" ,

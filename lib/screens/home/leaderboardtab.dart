@@ -113,7 +113,7 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
     });
 
     // only get the first 5
-    finalResult = finalResult.sublist(0, 5);
+    if(finalResult.length > 5) finalResult = finalResult.sublist(0, 5);
 
     // print(finalResult);
 

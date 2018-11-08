@@ -91,7 +91,7 @@ class EventController extends BaseController {
     }
     else {
       query += "WHERE ";
-      if (name != null) { query += "name = '$name' "; }
+      if (name != null) { query += "name LIKE '%$name%' "; }
       else if (hostId != null) { query += "host_id = '$hostId' "; }
       else if (id != null) { query += "id = $id "; }
       else if (category != null) { query += "category = '$category' "; }

@@ -48,24 +48,6 @@ class _FeedTabView extends State<FeedTabView> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      child: new Container(
-        // color: Colors.red,
-        // padding: EdgeInsets.symmetric(horizontal: 10.0),
-        // color: Colors.red,
-        child: _eventList == null 
-        ? const Center(child: const CircularProgressIndicator()) 
-        : ListView(
-            padding: EdgeInsets.symmetric(horizontal: 10.0),
-            addAutomaticKeepAlives: false, // Force to kill the Card
-            children: _buildListViewChildren(),
-          ),
-      ),
-    );
-  }
-
   List<Widget> _buildUpcomingEventsCardList(int count) {
     List<Widget> cards = List<Widget>();
     int counter = 0;
@@ -86,7 +68,7 @@ class _FeedTabView extends State<FeedTabView> {
           padding: const EdgeInsets.only(bottom: 8.0),
           child: SmallEventCard(
             event: currentEvent,
-            imageURL: currentEvent.picture ?? "https://img.cutenesscdn.com/640/cme/cuteness_data/s3fs-public/diy_blog/Information-on-the-Corgi-Dog-Breed.jpg",
+            imageURL: currentEvent.picture,
             place: currentEvent.locationName ?? "Unname location",
             time: currentEvent.startTime ?? DateTime.now(),
             title: currentEvent.name ?? "Untitled event" ,
@@ -180,6 +162,23 @@ class _FeedTabView extends State<FeedTabView> {
     return alist;
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      child: new Container(
+        // color: Colors.red,
+        // padding: EdgeInsets.symmetric(horizontal: 10.0),
+        // color: Colors.red,
+        child: _eventList == null 
+        ? const Center(child: const CircularProgressIndicator()) 
+        : ListView(
+            padding: EdgeInsets.symmetric(horizontal: 10.0),
+            addAutomaticKeepAlives: false, // Force to kill the Card
+            children: _buildListViewChildren(),
+          ),
+      ),
+    );
+  }
 
 
 

@@ -50,18 +50,18 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                    color: Colors.red,
-                  )),
-                  child: Text("Type your Email")),
+                decoration: BoxDecoration(
+                    border: Border.all(
+                  color: Colors.red,
+                )),
+                child: Text("Type your Email")),
               emailInput(),
               Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                    color: Colors.red,
-                  )),
-                  child: Text("Type your password")),
+                decoration: BoxDecoration(
+                    border: Border.all(
+                  color: Colors.red,
+                )),
+                child: Text("Type your password")),
               passwordInput(),
               loginButton(),
               goToSignUpScreen()

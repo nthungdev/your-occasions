@@ -28,7 +28,9 @@ class HomeDrawer extends StatelessWidget {
               child: UserAccountsDrawerHeader(
                 accountName: Text(accountName),
                 accountEmail: Text(accountEmail),
-                currentAccountPicture: CircleAvatar(),
+                currentAccountPicture: CircleAvatar(
+                  backgroundImage: NetworkImage("https://img.huffingtonpost.com/asset/5b7fdeab1900001d035028dc.jpeg?cache=sixpwrbb1s&ops=1910_1000"),
+                ),
               ),
             ),
             ListTile (
