@@ -29,7 +29,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
   User user;
   int id;
   List<Event> _eventList;
-
+  User currentUser = Dataset.currentUser.value;
 
   @override
   initState() {
