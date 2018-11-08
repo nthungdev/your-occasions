@@ -17,8 +17,9 @@ class SmallEventCard extends StatefulWidget {
   final String title;
   final DateTime time;
   final String place;
+  final Color color;
 
-  SmallEventCard({this.event, this.imageURL, this.title, this.time, this.place});
+  SmallEventCard({this.event, this.imageURL, this.title, this.time, this.place, this.color});
 
   @override
   _SmallEventCardState createState() => _SmallEventCardState();
@@ -109,9 +110,12 @@ class _SmallEventCardState extends State<SmallEventCard> {
       child: SizedBox(
         height: screen.height / 7,
         child: Card(
+          color: Colors.blue,
+          margin: EdgeInsets.all(0.0),
           clipBehavior: Clip.antiAlias,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           child: Material(
+            color: widget.color,
             child: InkWell(
               onTap: _onTap,
               splashColor: Colors.red,

@@ -5,10 +5,14 @@ import 'package:youroccasions/screens/user/diagonally_cut_colored_image.dart';
 import 'package:youroccasions/screens/home/home.dart';
 import 'package:youroccasions/utilities/config.dart';
 import 'package:youroccasions/models/user.dart';
+import 'package:youroccasions/models/event.dart';
 import 'package:youroccasions/controllers/user_controller.dart';
+import 'package:youroccasions/controllers/event_controller.dart';
+import 'package:youroccasions/screens/home/event_card.dart';
 import 'package:youroccasions/models/data.dart';
 
 final UserController _userController = UserController();
+final EventController _eventController = EventController();
 
 class UserProfileScreen extends StatefulWidget {
   final User user;
@@ -24,17 +28,23 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
 
   User user;
   int id;
+  List<Event> _eventList;
 
 
   @override
   initState() {
     super.initState();
     user = widget.user;
-    getUserId().then((value){
+    _eventController.getEvent().then((value){
       setState(() {
-        id = value;
+        _eventList = value;
       });
     });
+    // getUserId().then((value){
+    //   setState(() {
+    //     id = value;
+    //   });
+    // });
   }
   
   Widget _buildAvatar() {
@@ -58,6 +68,35 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
       ),
       color: const Color(0xBB8338f4),
     );
+  }
+
+  List<Widget> _buildUserEventsCardList() {
+    List<Widget> cards = List<Widget>();
+
+    Widget e = Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+      child: Text("User's Events", style: TextStyle(color: Colors.white, fontSize: 30.0, fontFamily: "Niramit")),
+    );
+
+    cards.add(e);
+    if (_eventList == null){return cards;}
+    _eventList.sort((b,a) => a.startTime.compareTo(b.startTime));
+    _eventList.forEach((Event currentEvent) {
+      if(currentEvent.startTime.compareTo(DateTime.now()) > 0) {
+        cards.insert(1, Padding(
+          padding: const EdgeInsets.only(bottom: 8.0),
+          child: SmallEventCard(
+            color: Colors.blue[100],
+            event: currentEvent,
+            imageURL: currentEvent.picture ?? "https://img.cutenesscdn.com/640/cme/cuteness_data/s3fs-public/diy_blog/Information-on-the-Corgi-Dog-Breed.jpg",
+            place: currentEvent.locationName ?? "Unname location",
+            time: currentEvent.startTime ?? DateTime.now(),
+            title: currentEvent.name ?? "Untitled event" ,
+          ),
+        ));
+      }
+    });
+    return cards;
   }
 
   Widget _buildLocationInfo(TextTheme textTheme) {
@@ -128,8 +167,8 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
         begin: FractionalOffset.centerRight,
         end: FractionalOffset.bottomLeft,
         colors: <Color>[
-          const Color(0xFF413070),
-          const Color(0xFF2B264A),
+          Colors.blue,
+          Colors.white,
         ],
       ),
     );
@@ -138,13 +177,11 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
       body: new SingleChildScrollView(
         child: new Container(
           decoration: linearGradient,
-          height: screenHeight,
           child: new Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               new Stack(
                 children: <Widget>[
-                  _buildDiagonalImageBackground(context),
                   new Align(
                     alignment: FractionalOffset.bottomCenter,
                     heightFactor: 1.4,
@@ -177,6 +214,11 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
                       child: _buildLocationInfo(textTheme),
                     ),
                   ]
+                )
+              ),
+              new Container(
+                child: Column(
+                  children: _buildUserEventsCardList(),
                 )
               )
             ],
