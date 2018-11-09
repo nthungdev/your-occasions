@@ -171,6 +171,7 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
     var screen = MediaQuery.of(context).size;
     return Material(
       child: new Container(
+        // color: Colors.black,
         child: ListView(
           padding: const EdgeInsets.all(15.0),
           children: <Widget>[

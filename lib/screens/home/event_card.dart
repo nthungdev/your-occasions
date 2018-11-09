@@ -83,6 +83,7 @@ class _SmallEventCardState extends State<SmallEventCard> {
     final screen = MediaQuery.of(context).size;
 
     return Material(
+      color: Colors.transparent,
       child: SizedBox(
         height: screen.height / 7,
         child: Card(
@@ -107,15 +108,16 @@ class _SmallEventCardState extends State<SmallEventCard> {
     final screen = MediaQuery.of(context).size;
 
     return Material(
+      color: Colors.transparent,
       child: SizedBox(
         height: screen.height / 7,
         child: Card(
-          color: Colors.blue,
+          color: Colors.transparent,
           margin: EdgeInsets.all(0.0),
           clipBehavior: Clip.antiAlias,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           child: Material(
-            color: widget.color,
+            // color: Colors.transparent,
             child: InkWell(
               onTap: _onTap,
               splashColor: Colors.red,
@@ -186,20 +188,20 @@ class _SmallEventCardState extends State<SmallEventCard> {
 
   // Push EventDetailScreen to view.
   void _onTap() {
-    _increaseView();
+    // _increaseView();
     Navigator.push(context, MaterialPageRoute(builder: (context) => EventDetailScreen(widget.event)));
   }
 
   // Increase the number of view of the this event by 1.
-  void _increaseView() async {
-    try {
-      _eventController.increaseView(widget.event.id);
-    }
-    catch (e) {
-      print("An error occurs");
-      print(e);
-    }
-  }
+  // void _increaseView() async {
+  //   try {
+  //     _eventController.increaseView(widget.event.id);
+  //   }
+  //   catch (e) {
+  //     print("An error occurs");
+  //     print(e);
+  //   }
+  // }
 
   void _handleTimer() {
     if(_isInterested) {

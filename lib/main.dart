@@ -27,8 +27,9 @@ class YourOccasions extends StatelessWidget {
   Widget build(BuildContext context) {
     return new MaterialApp(
       title: 'Your Occasions',
-      theme: new ThemeData(
-        primarySwatch: Colors.blue,
+      theme: ThemeData(
+        // backgroundColor: Colors.red,
+        primarySwatch: Colors.red,
       ),
       home: home,
     );

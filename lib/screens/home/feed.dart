@@ -164,11 +164,25 @@ class _FeedTabView extends State<FeedTabView> {
 
   @override
   Widget build(BuildContext context) {
+    var linearGradient = const BoxDecoration(
+      gradient: const LinearGradient(
+        begin: FractionalOffset.centerRight,
+        end: FractionalOffset.bottomLeft,
+        colors: <Color>[
+          Colors.white,
+          // Colors.blue,
+          Colors.yellow,
+        ],
+      ),
+    );
+
     return Material(
       child: new Container(
+        // color: Colors.orange,
         // color: Colors.red,
         // padding: EdgeInsets.symmetric(horizontal: 10.0),
         // color: Colors.red,
+        decoration: linearGradient,
         child: _eventList == null 
         ? const Center(child: const CircularProgressIndicator()) 
         : ListView(

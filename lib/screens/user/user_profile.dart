@@ -178,10 +178,10 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
     );
 
     return new Scaffold(
-      body: new SingleChildScrollView(
-        child: new Container(
-          height: screenHeight,
-          decoration: linearGradient,
+      body: new Container(
+        height: double.infinity,
+        decoration: linearGradient,
+        child: new SingleChildScrollView(
           child: new Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -230,7 +230,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: _buildUserEventsCardList(),
                 )
-              )
+              ),
             ],
           ),
         ),
