@@ -169,9 +169,9 @@ class _FeedTabView extends State<FeedTabView> {
         begin: FractionalOffset.centerRight,
         end: FractionalOffset.bottomLeft,
         colors: <Color>[
-          Colors.white,
           // Colors.blue,
-          Colors.yellow,
+          Colors.blue,
+          Colors.white,
         ],
       ),
     );

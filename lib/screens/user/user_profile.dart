@@ -161,6 +161,58 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
     );
   }
 
+  Widget _buildActionButtons(ThemeData theme) {
+    return new Padding(
+      padding: const EdgeInsets.only(
+        top: 16.0,
+        left: 16.0,
+        right: 16.0,
+      ),
+      child: new Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          _createPillButton(
+            'Follow',
+            backgroundColor: theme.accentColor,
+          ),
+          // new DecoratedBox(
+          //   decoration: new BoxDecoration(
+          //     border: new Border.all(color: Colors.white30),
+          //     borderRadius: new BorderRadius.circular(30.0),
+          //   ),
+          //   child: _createPillButton(
+          //     'FOLLOW',
+          //     textColor: Colors.white70,
+          //   ),
+          // ),
+        ],
+      ),
+    );
+  }
+
+  Widget body (var textTheme){
+    return new Padding(
+      padding: const EdgeInsets.all(24.0),
+      child: new Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          new Text(
+            user.name,
+            style: textTheme.headline.copyWith(color: Colors.white),
+          ),
+          new Text(
+            user.email,
+            style: TextStyle(color: Colors.white, fontSize: 14.0)
+          ),
+          new Padding(
+            padding: const EdgeInsets.only(top: 6.0),
+            child: _buildLocationInfo(textTheme),
+          ),
+        ],
+      )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
@@ -182,7 +234,8 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
         height: double.infinity,
         decoration: linearGradient,
         child: new SingleChildScrollView(
-          child: new Column(
+          child: user.id == currentUser.id
+          ? new Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               new Stack(
@@ -232,7 +285,58 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
                 )
               ),
             ],
-          ),
+          )
+          : new Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              new Stack(
+                children: <Widget>[
+                  new Align(
+                    alignment: FractionalOffset.bottomCenter,
+                    heightFactor: 1.4,
+                    child: new Column(
+                      children: <Widget>[
+                        _buildAvatar(),
+                        _buildFollowerInfo(textTheme),
+                        _buildActionButtons(theme),
+                      ],
+                    ),
+                  ),
+                  new Positioned(
+                    top: 26.0,
+                    left: 4.0,
+                    child: new BackButton(color: Colors.white),
+                  ),
+                ],
+              ),
+              new Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: new Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    new Text(
+                      user.name,
+                      style: textTheme.headline.copyWith(color: Colors.white),
+                    ),
+                    new Text(
+                      user.email,
+                      style: TextStyle(color: Colors.white, fontSize: 14.0)
+                    ),
+                    new Padding(
+                      padding: const EdgeInsets.only(top: 6.0),
+                      child: _buildLocationInfo(textTheme),
+                    ),
+                  ],
+                )
+              ),
+              new Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: _buildUserEventsCardList(),
+                )
+              ),
+            ],
+          )
         ),
       ),
     );
