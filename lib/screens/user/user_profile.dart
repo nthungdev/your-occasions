@@ -168,7 +168,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
         minWidth: 140.0,
         color: backgroundColor,
         textColor: textColor,
-        onPressed: () {if (followed == true) { 
+        onPressed: () async {if (followed == true) { 
                         friendController.deleteFriend(currentUser.id, id);
                         _userController.decreaseFollowers(user.id);
                         setState((){
