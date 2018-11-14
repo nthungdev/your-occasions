@@ -37,7 +37,7 @@ class FriendListController extends BaseController{
     await disconnect();
   }
 
-  Future<void> deletefriend(int userId, int friendId) async {
+  Future<void> deleteFriend(int userId, int friendId) async {
     await connect();
 
     await connection.query("""DELETE FROM friendlists WHERE user_id = @userId AND friend_id = @friendId""", substitutionValues: { 'userId': userId,'friendId': friendId });  

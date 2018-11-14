@@ -33,13 +33,15 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
   int id;
   List<Event> _eventList;
   User currentUser = Dataset.currentUser.value;
-  bool followed;
+  bool followed = true;
   FriendList friend;
+  int follower;
 
   @override
   initState() {
     super.initState();
     user = widget.user;
+    follower = user.followers;
     _eventController.getEvent(hostId: user.id).then((value){
       setState(() {
         _eventList = value;
@@ -47,7 +49,9 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
         friend.friendId = id;
       });
     friendController.getFriend(currentUser.id, id).then((value){
+      setState(() {
         followed = value;
+      });
     });
   });
 
@@ -134,7 +138,6 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
   }
 
   Widget _buildFollowerInfo(TextTheme textTheme) {
-    int follower = user.followers;
     var followerStyle =
         textTheme.subhead.copyWith(color: Colors.yellow[100]);
 
@@ -155,8 +158,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
     );
   }
 
-  Widget _createPillButton(
-    String text, {
+  Widget _createFollowButton ({
     Color backgroundColor = Colors.transparent,
     Color textColor = Colors.white70,
   }) {
@@ -166,10 +168,23 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
         minWidth: 140.0,
         color: backgroundColor,
         textColor: textColor,
-        onPressed: () {followed == true 
-                      ? friendController.deletefriend(currentUser.id, id)
-                      : friendController.insert(friend);},
-        child: new Text(followed == true ? text : 'Follow'),
+        onPressed: () {if (followed == true) { 
+                        friendController.deleteFriend(currentUser.id, id);
+                        _userController.decreaseFollowers(user.id);
+                        setState((){
+                          followed = !followed;
+                          follower-=1;
+                        });
+                      } 
+                      else {
+                        friendController.insert(friend);
+                        _userController.increaseFollowers(user.id);
+                        setState((){
+                          followed = !followed;
+                          follower+=1;
+                        });
+                      }},
+        child: new Text(followed == true ? 'Followed' : 'Follow'),
       ),
     );
   }
@@ -184,9 +199,8 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
       child: new Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          _createPillButton(
-            'Followed',
-            backgroundColor: theme.accentColor,
+          _createFollowButton(
+            backgroundColor: Colors.transparent,
           ),
           // new DecoratedBox(
           //   decoration: new BoxDecoration(
