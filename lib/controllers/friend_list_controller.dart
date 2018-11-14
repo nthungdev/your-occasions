@@ -37,6 +37,14 @@ class FriendListController extends BaseController{
     await disconnect();
   }
 
+  Future<void> deletefriend(int userId, int friendId) async {
+    await connect();
+
+    await connection.query("""DELETE FROM friendlists WHERE user_id = @userId AND friend_id = @friendId""", substitutionValues: { 'userId': userId,'friendId': friendId });  
+
+    await disconnect();
+  }
+
   /// Update an existing row from friendlists table.
   Future<void> update(int id, {int, userId, int friendId, DateTime creationDate}) async {
     if(userId == null && friendId == null && creationDate == null) {
@@ -57,6 +65,28 @@ class FriendListController extends BaseController{
       await disconnect();
     }
   }
+
+  Future<bool> getFriend(int userId, int friendId) async{
+    await connect();
+
+    List<FriendList> result = [];
+
+
+    String query = "SELECT * from friendlists ";
+
+    query += """where user_id = $userId AND friend_id = $friendId""";
+
+    var queryResult = await connection.mappedResultsQuery(query);
+
+    for (var item in queryResult) {
+      result.add(FriendList.createFromMap(item.values));
+    }
+
+    await disconnect();
+
+    return result == [];
+  }
+
 
   Future<List<FriendList>> getFriendList({int userId, int id}) async{
     await connect();

@@ -10,9 +10,12 @@ import 'package:youroccasions/controllers/user_controller.dart';
 import 'package:youroccasions/controllers/event_controller.dart';
 import 'package:youroccasions/screens/home/event_card.dart';
 import 'package:youroccasions/models/data.dart';
+import 'package:youroccasions/controllers/friend_list_controller.dart';
+import 'package:youroccasions/models/friend_list.dart';
 
 final UserController _userController = UserController();
 final EventController _eventController = EventController();
+final FriendListController friendController = FriendListController();
 
 class UserProfileScreen extends StatefulWidget {
   final User user;
@@ -30,6 +33,8 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
   int id;
   List<Event> _eventList;
   User currentUser = Dataset.currentUser.value;
+  bool followed;
+  FriendList friend;
 
   @override
   initState() {
@@ -38,8 +43,14 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
     _eventController.getEvent(hostId: user.id).then((value){
       setState(() {
         _eventList = value;
+        friend.userId = currentUser.id;
+        friend.friendId = id;
       });
+    friendController.getFriend(currentUser.id, id).then((value){
+        followed = value;
     });
+  });
+
     // getUserId().then((value){
     //   setState(() {
     //     id = value;
@@ -155,8 +166,10 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
         minWidth: 140.0,
         color: backgroundColor,
         textColor: textColor,
-        onPressed: () {},
-        child: new Text(text),
+        onPressed: () {followed == true 
+                      ? friendController.deletefriend(currentUser.id, id)
+                      : friendController.insert(friend);},
+        child: new Text(followed == true ? text : 'Follow'),
       ),
     );
   }
@@ -172,7 +185,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           _createPillButton(
-            'Follow',
+            'Followed',
             backgroundColor: theme.accentColor,
           ),
           // new DecoratedBox(
