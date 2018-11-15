@@ -40,7 +40,7 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   /// This function fires when the clear keyword button is tapped.
-  /// Set the search field to empty, dismiss the keyboaord on screen.
+  /// Set the search field to empty, dismiss the keyboard on screen.
   void onClearKeywordField() {
     _searchController.text = "";
     _keywordFocusNode.unfocus();
@@ -53,14 +53,15 @@ class _SearchScreenState extends State<SearchScreen> {
     EventController ec = EventController();
     UserController uc = UserController();
     
-    /// Hide the on screen keyboard
-    SystemChannels.textInput.invokeMethod('TextInput.hide');
 
     if(_searchController.text.isEmpty) {
       _eventCards = null;
       _events = null;
     }
     else {
+      /// Hide the on screen keyboard
+      SystemChannels.textInput.invokeMethod('TextInput.hide');
+
       var eventList = await ec.getEvent(name: _searchController.text);
       print("DEBUG: event list: ");
       print(eventList);

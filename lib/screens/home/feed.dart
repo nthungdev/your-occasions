@@ -8,9 +8,6 @@ import 'package:youroccasions/controllers/event_controller.dart';
 // import 'package:youroccasions/controllers/category_controller.dart';
 import 'package:youroccasions/controllers/event_category_controller.dart';
 
-const String MUSIC_CATEGORYNAME = "Music";
-
-
 class FeedTabView extends StatefulWidget {
   @override
   _FeedTabView createState() => _FeedTabView();
@@ -26,6 +23,7 @@ class _FeedTabView extends State<FeedTabView> {
   void initState() {
     super.initState();
     getNearbyEventList();
+    _getTrendingMusicData();
     _eventList = List<Event>();
     _trendingEventList = List<Event>();
   }
@@ -33,13 +31,12 @@ class _FeedTabView extends State<FeedTabView> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _eventList = null;
     _trendingEventList = null;
   }
 
-  getNearbyEventList() async {
+  void getNearbyEventList() async {
     EventController _eventController = EventController();
     var data = await _eventController.getEvent();
     if(!this.mounted){ return; }
@@ -88,13 +85,17 @@ class _FeedTabView extends State<FeedTabView> {
 
     // print("DEBUG is getting trending music");
 
-    var eventCategoryList = await _ecc.getEventCategory(category: Categories.festival.name);
+    var eventCategoryList = await _ecc.getEventCategory(category: Categories.music.name);
     print(eventCategoryList);
+    print("DEBUG: eventCategoryList length ${eventCategoryList.length}");
 
     for(int i = 0 ; i < eventCategoryList.length ; i++ ) {
+      // print("DEBUG: i = $i");
       var event = (await _ec.getEvent(id: eventCategoryList[i].eventId))[0];
+      // print("DEBUG: $event");
       temp.add(event);
     }
+    print("DEBUG: temp: $temp");
 
     temp.sort((a,b) => a.views.compareTo(b.views));
 
@@ -117,10 +118,10 @@ class _FeedTabView extends State<FeedTabView> {
 
     // print("DEBUG trending count : ${_trendingEventList.length}");
 
-    if(_trendingEventList.length == 0) {
-      // print("DEBUG inside the if statement");
-      _getTrendingMusicData();
-    }
+    // if(_trendingEventList.length == 0) {
+    //   // print("DEBUG inside the if statement");
+    //   _getTrendingMusicData();
+    // }
 
     cards.add(e);
 

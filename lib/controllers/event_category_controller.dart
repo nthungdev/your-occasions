@@ -63,10 +63,9 @@ class EventCategoryController extends BaseController{
 
     List<EventCategory> result = [];
 
-
     String query = "SELECT * from event_categories ";
 
-    if(eventId == null && id == null) {
+    if(eventId == null && id == null && categoryId == null && category == null) {
 
     }
     else {
@@ -77,7 +76,7 @@ class EventCategoryController extends BaseController{
       else if(category != null) { query += "category = '$category' ";}
       else if(id != null) { query += "id = $id ";}
     }
-
+    print(query);
 
     var queryResult = await connection.mappedResultsQuery(query);
 

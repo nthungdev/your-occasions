@@ -42,6 +42,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
     super.initState();
     user = widget.user;
     follower = user.followers;
+    friend = FriendList();
     _eventController.getEvent(hostId: user.id).then((value){
       setState(() {
         _eventList = value;
@@ -66,6 +67,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
     return new Hero(
       tag: "User Profile",
       child: new CircleAvatar(
+        backgroundImage: NetworkImage(user.picture ?? ""),
         radius: 50.0,
       ),
     );
@@ -162,9 +164,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
     Color backgroundColor = Colors.transparent,
     Color textColor = Colors.white70,
   }) {
-    return new ClipRRect(
-      borderRadius: new BorderRadius.circular(30.0),
-      child: new MaterialButton(
+    return new MaterialButton(
         minWidth: 140.0,
         color: backgroundColor,
         textColor: textColor,
@@ -185,8 +185,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
                         });
                       }},
         child: new Text(followed == true ? 'Followed' : 'Follow'),
-      ),
-    );
+      );
   }
 
   Widget _buildActionButtons(ThemeData theme) {
@@ -200,7 +199,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           _createFollowButton(
-            backgroundColor: Colors.transparent,
+            backgroundColor: Colors.blue,
           ),
           // new DecoratedBox(
           //   decoration: new BoxDecoration(

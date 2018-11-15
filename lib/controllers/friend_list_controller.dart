@@ -72,7 +72,7 @@ class FriendListController extends BaseController{
     List<FriendList> result = [];
 
 
-    String query = "SELECT * from friendlists ";
+    String query = "SELECT * from friend_lists ";
 
     query += """where user_id = $userId AND friend_id = $friendId""";
 
