@@ -37,21 +37,22 @@ class Dataset {
   static Data userId = Data();
 }
 
-// void main() async {
-//   print(Dataset._allEvents);
-//   EventController ec = EventController();
-//   Dataset.allEvents = await ec.getEvent();
-//   print(Dataset.allEvents);
-//   Dataset.allEvents = null;
-//   print(Dataset.allEvents);
-// }
+class FeedDataset {
+  static Data<List<Event>> trendingEvents = Data();
+  static Data<List<Event>> upcomingEvents = Data();
+
+  static void clearData() {
+    trendingEvents = Data();
+    upcomingEvents = Data();
+  }
+}
+
 
 class LeaderboardDataset {
   // values of topHost is a List of 5 hosts with highest total views from their events
   static Data<List<User>> topHost = Data<List<User>>();
   /// Pair of id,views
   static Data<Map<int,int>> topHostTotalEventViews = Data<Map<int,int>>();
-  
   // values of topHost is a List of 5 hosts with highest total followers
   static Data<List<User>> mostFollowedUsers = Data<List<User>>();
   /// Pair of id,followers
@@ -60,5 +61,11 @@ class LeaderboardDataset {
 
 void main() {
   // Dataset.
+  // Dataset.allUsers.value = [User()];
+  // List<User> id = Dataset.allUsers.value;
+  // id.clear();
+  // print(Dataset.allUsers.value);
+  // print(id);
+
 }
 

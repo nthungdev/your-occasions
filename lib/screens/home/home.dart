@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'package:youroccasions/screens/home/feed.dart';
@@ -10,6 +12,7 @@ import 'package:youroccasions/utilities/config.dart';
 import 'package:youroccasions/models/data.dart';
 import 'package:youroccasions/models/user.dart';
 import 'package:youroccasions/controllers/user_controller.dart';
+import 'package:youroccasions/models/data.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -26,15 +29,22 @@ class _HomeScreen extends State<HomeScreen> with SingleTickerProviderStateMixin 
   int id;
   PageController _pageController;
   BottomMenu bottomMenu;
+  String _title;
 
-  Future<void> getCurrentUser(int id) async {
-    List<User> currentUser = await controller.getUser(id : id);
-    Dataset.currentUser.value = currentUser[0];
-  }
+  final List<Widget> _myTabViews = <Widget>[
+    FeedTabView(),
+    SocialTabView(),
+    LeaderboardTabView(),
+  ];
+
+  var feedRefreshNotifier = ValueNotifier(true);
 
   @override
   void initState() {
     super.initState();
+    _pageController = PageController();
+    _title = "Feed";
+
     getUserName().then((value) {
       setState(() {
         _accountName = value;
@@ -50,7 +60,6 @@ class _HomeScreen extends State<HomeScreen> with SingleTickerProviderStateMixin 
       Dataset.userId.value = id;
       getCurrentUser(id);
     });
-    _pageController = PageController();
   }
 
   @override
@@ -59,33 +68,34 @@ class _HomeScreen extends State<HomeScreen> with SingleTickerProviderStateMixin 
     _pageController.dispose();
   }
 
-  final List<Widget> myTabViews = <Widget>[
-    FeedTabView(),
-    SocialTabView(),
-    LeaderboardTabView(),
-  ];
+  Future<void> getCurrentUser(int id) async {
+    List<User> currentUser = await controller.getUser(id : id);
+    Dataset.currentUser.value = currentUser[0];
+  }
 
   List<Widget> _buildActions() {
     List<Widget> actions = List();
     if (_currentPage == 0) {
-      actions.add(IconButton(
-        icon: Icon(Icons.search),
-        onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => SearchScreen()));
-        } ,
-      ));
+      actions.addAll([
+        IconButton(
+          icon: Icon(Icons.search),
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => SearchScreen()));
+          } ,
+        ),
+      ]);
       return actions;
     }
     return null;
   }
 
-  void navigationTapped(int page){
+  void navigationTapped(int page) {
     // Animating to the page.
     // You can use whatever duration and curve you like
     _pageController.animateToPage(
-        page,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.ease
+      page,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.ease
     );
   }
 
@@ -95,7 +105,7 @@ class _HomeScreen extends State<HomeScreen> with SingleTickerProviderStateMixin 
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: Text("Home Page"),
+        title: Text(_title),
         actions: _buildActions(),
       ),
       drawer: HomeDrawer(
@@ -106,11 +116,24 @@ class _HomeScreen extends State<HomeScreen> with SingleTickerProviderStateMixin 
       body: PageView(
         onPageChanged: (index) {
           setState(() {
-            this._currentPage = index;      
+            _currentPage = index;   
+            switch (index) {
+              case 0:
+                _title = "Feed";
+                break;
+              case 1:
+                _title = "Social";
+                break;
+              case 2:
+                _title = "Leaderboard";
+                break;
+              default:
+                _title = "Unknown Page";
+            }
           });
         },
         controller: _pageController,
-        children: myTabViews,
+        children: _myTabViews,
       ),
     );
     

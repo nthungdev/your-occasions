@@ -166,12 +166,6 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
             Divider(),
             Expanded(
-              // child: ListView(
-              //   padding: EdgeInsets.symmetric(horizontal: 10.0),
-              //   children: <Widget>[
-                  
-              //   ],
-              // ),
               child: _eventCards == null
               ? Container()
               : _eventCards.length == 0

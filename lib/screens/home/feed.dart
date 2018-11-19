@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:youroccasions/models/category.dart';
@@ -7,6 +10,7 @@ import 'package:youroccasions/screens/home/event_card.dart';
 import 'package:youroccasions/controllers/event_controller.dart';
 // import 'package:youroccasions/controllers/category_controller.dart';
 import 'package:youroccasions/controllers/event_category_controller.dart';
+import 'package:youroccasions/models/data.dart';
 
 class FeedTabView extends StatefulWidget {
   @override
@@ -16,33 +20,78 @@ class FeedTabView extends StatefulWidget {
 class _FeedTabView extends State<FeedTabView> {
   // TODO Fix duplicate card issue. If there is multiple cards of the same event,
   // and 1 of them is interested, the other ones' interest status are not updated.
-  List<Event> _eventList;
-  List<Event> _trendingEventList;
+  List<Event> _upcomingEvents;
+  List<Event> _trendingEvents;
 
   @override
   void initState() {
     super.initState();
-    getNearbyEventList();
-    _getTrendingMusicData();
-    _eventList = List<Event>();
-    _trendingEventList = List<Event>();
+    _upcomingEvents = FeedDataset.upcomingEvents.value;
+    _trendingEvents = FeedDataset.trendingEvents.value;
+    loadData();
   }
-
 
   @override
   void dispose() {
     super.dispose();
-    _eventList = null;
-    _trendingEventList = null;
+    _upcomingEvents = null;
+    _trendingEvents = null;
   }
 
-  void getNearbyEventList() async {
+  Future _refresh() async {
+    // setState(() {
+    //   FeedDataset.clearData();      
+    // });
+    await _getUpcomingEventData();
+    await _getTrendingMusicData();
+  }
+
+  void loadData() async {
+    await _refresh();
+    // _upcomingEventsController.add(FeedDataset.upcomingEvents.value);
+
+  }
+
+  Future _getUpcomingEventData() async {
     EventController _eventController = EventController();
     var data = await _eventController.getEvent();
-    if(!this.mounted){ return; }
-    setState(() {
-      _eventList = data;
-    });
+    FeedDataset.upcomingEvents.value = data;
+    if(this.mounted) {
+      setState(() {
+        _upcomingEvents = FeedDataset.upcomingEvents.value;
+      });
+    }
+    
+  }
+
+  Future _getTrendingMusicData() async {
+    // TODO don't get past event
+    EventController _ec = EventController();
+    EventCategoryController _ecc = EventCategoryController();
+    List<Event> temp = List<Event>();
+
+    // print("DEBUG is getting trending music");
+
+    var eventCategoryList = await _ecc.getEventCategory(category: Categories.music.name);
+    // print(eventCategoryList);
+    // print("DEBUG: eventCategoryList length ${eventCategoryList.length}");
+
+    for(int i = 0 ; i < eventCategoryList.length ; i++ ) {
+      // print("DEBUG: i = $i");
+      var event = (await _ec.getEvent(id: eventCategoryList[i].eventId))[0];
+      // print("DEBUG: $event");
+      temp.add(event);
+    }
+    // print("DEBUG: temp: $temp");
+
+    temp.sort((a,b) => a.views.compareTo(b.views));
+
+    FeedDataset.trendingEvents.value = temp;
+    if(this.mounted) {
+      setState(() {
+        _trendingEvents = FeedDataset.trendingEvents.value;
+      });
+    }
   }
 
   List<Widget> _buildUpcomingEventsCardList(int count) {
@@ -56,8 +105,8 @@ class _FeedTabView extends State<FeedTabView> {
 
     cards.add(e);
 
-    _eventList.sort((b,a) => a.startTime.compareTo(b.startTime));
-    _eventList.forEach((Event currentEvent) {
+    _upcomingEvents.sort((b,a) => a.startTime.compareTo(b.startTime));
+    _upcomingEvents.forEach((Event currentEvent) {
       counter++;
       if(counter > count) return cards;
       if(currentEvent.startTime.compareTo(DateTime.now()) > 0) {
@@ -75,35 +124,6 @@ class _FeedTabView extends State<FeedTabView> {
     });
 
     return cards;
-  }
-
-  void _getTrendingMusicData() async {
-    // TODO don't get past event
-    EventController _ec = EventController();
-    EventCategoryController _ecc = EventCategoryController();
-    List<Event> temp = List<Event>();
-
-    // print("DEBUG is getting trending music");
-
-    var eventCategoryList = await _ecc.getEventCategory(category: Categories.music.name);
-    print(eventCategoryList);
-    print("DEBUG: eventCategoryList length ${eventCategoryList.length}");
-
-    for(int i = 0 ; i < eventCategoryList.length ; i++ ) {
-      // print("DEBUG: i = $i");
-      var event = (await _ec.getEvent(id: eventCategoryList[i].eventId))[0];
-      // print("DEBUG: $event");
-      temp.add(event);
-    }
-    print("DEBUG: temp: $temp");
-
-    temp.sort((a,b) => a.views.compareTo(b.views));
-
-    if(this.mounted) {
-      setState(() {
-        _trendingEventList = temp;
-      });
-    }
   }
 
   List<Widget> _buildTrendingMusicEventsCardList(int count) {
@@ -125,12 +145,12 @@ class _FeedTabView extends State<FeedTabView> {
 
     cards.add(e);
 
-    if(_trendingEventList.length == 0) {
+    if(_trendingEvents == null || _trendingEvents.length == 0) {
       cards.add(Center(child: CircularProgressIndicator()));
       return cards;
     }
 
-    _trendingEventList.forEach((Event currentEvent) {
+    _trendingEvents.forEach((Event currentEvent) {
       counter++;
       if(counter > count) return cards;
       
@@ -159,8 +179,13 @@ class _FeedTabView extends State<FeedTabView> {
 
     alist.addAll(_buildUpcomingEventsCardList(5));
     alist.addAll(_buildTrendingMusicEventsCardList(5));
-
+    
     return alist;
+  }
+
+  void onDragDown(DragDownDetails details) {
+    print(details.globalPosition);
+    _refresh();
   }
 
   @override
@@ -184,13 +209,17 @@ class _FeedTabView extends State<FeedTabView> {
         // padding: EdgeInsets.symmetric(horizontal: 10.0),
         // color: Colors.red,
         decoration: linearGradient,
-        child: _eventList == null 
+        child: _upcomingEvents == null 
         ? const Center(child: const CircularProgressIndicator()) 
-        : ListView(
-            padding: EdgeInsets.symmetric(horizontal: 10.0),
-            addAutomaticKeepAlives: false, // Force to kill the Card
-            children: _buildListViewChildren(),
-          ),
+        : RefreshIndicator(
+            onRefresh: _refresh,
+            child: ListView(
+              physics: AlwaysScrollableScrollPhysics(),
+              padding: EdgeInsets.symmetric(horizontal: 10.0),
+              addAutomaticKeepAlives: false, // Force to kill the Card
+              children: _buildListViewChildren(),
+            ),
+          )
       ),
     );
   }
