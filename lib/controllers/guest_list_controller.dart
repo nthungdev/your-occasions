@@ -45,7 +45,7 @@ class GuestListController extends BaseController{
     else {
       await connect();
 
-      String query = "UPDATE guestlists SET ";
+      String query = "UPDATE guest_lists SET ";
       if(userId != null) { query += "user_id = $userId"; }
       if(eventId != null) { query += "event_id = $eventId "; }
       if(creationDate != null) { query += "creation_date = '$creationDate' "; }
@@ -58,7 +58,7 @@ class GuestListController extends BaseController{
     }
   }
 
-  Future<List<GuestList>> getGuestList({int userId, int eventId, int id}) async{
+  Future<List<GuestList>> getGuestList({int userId, int guestId, int id}) async{
     await connect();
 
     List<GuestList> result = [];
@@ -66,13 +66,13 @@ class GuestListController extends BaseController{
 
     String query = "SELECT * from guestlists ";
 
-    if(eventId == null && id == null) {
+    if(guestId == null && id == null) {
 
     }
     else {
       query += "where ";
       
-      if(eventId != null) { query += "event_id = $eventId ";}
+      if(guestId != null) { query += "guest_id = $guestId ";}
       else if(userId != null) { query += "user_id = $userId";}
       else if(id != null) { query += "id = $id ";}
     }

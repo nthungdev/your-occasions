@@ -8,10 +8,10 @@ class FriendList {
 
   // CONSTRUCTORS //
   FriendList.create();
-  FriendList({int userId, int friendId, DateTime creationDate}){
+  FriendList({int userId, int friendId}){
     _userId = userId;
     _friendId = friendId;
-    _creationDate = creationDate;
+    _creationDate = DateTime.now();
   }
   FriendList.createFromMap(Iterable<Map<String, dynamic>> map){
     map.forEach((item) {

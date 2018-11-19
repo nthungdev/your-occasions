@@ -7,6 +7,7 @@ import 'package:youroccasions/models/user.dart';
 import 'package:youroccasions/controllers/event_controller.dart';
 import 'package:youroccasions/controllers/user_controller.dart';
 import 'package:youroccasions/screens/home/event_card.dart';
+import 'package:youroccasions/screens/user/user_card.dart';
 
 
 class SearchScreen extends StatefulWidget {
@@ -14,13 +15,20 @@ class SearchScreen extends StatefulWidget {
   _SearchScreenState createState() => _SearchScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen> {
+class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderStateMixin {
   TextEditingController _searchController;
   GlobalKey<FormState> _formKey;
   FocusNode _keywordFocusNode;
   List<Event> _events;
   List<User> _users;
   List<SmallEventCard> _eventCards;
+  List<SmallUserCard> _userCards;
+  TabController _tabController;
+
+  final List<Tab> _myTabs = <Tab>[
+    Tab(text: "Events"),
+    Tab(text: 'Hosts'),
+  ];
 
   @override
   void initState() {
@@ -29,7 +37,7 @@ class _SearchScreenState extends State<SearchScreen> {
     _searchController = TextEditingController();
     _keywordFocusNode = FocusNode();
     _searchController.addListener(onChange);
-    _eventCards = null;
+    _tabController = TabController(length: 2, vsync: this);
   }
 
   /// Detect key input event to force rebuild state.
@@ -53,22 +61,29 @@ class _SearchScreenState extends State<SearchScreen> {
     EventController ec = EventController();
     UserController uc = UserController();
     
-
     if(_searchController.text.isEmpty) {
       _eventCards = null;
       _events = null;
+      _userCards = null;
+      _users = null;
     }
     else {
       /// Hide the on screen keyboard
       SystemChannels.textInput.invokeMethod('TextInput.hide');
 
-      var eventList = await ec.getEvent(name: _searchController.text);
-      print("DEBUG: event list: ");
-      print(eventList);
+      ec.getEvent(name: _searchController.text).then((value) {
+        _events = value;
+        print("DEBUG: event list: ");
+        _generateSmallEventCards();
+      });
 
-      _events = eventList;
+      uc.getUser(name: _searchController.text).then((value) {
+        _users = value;
+        print("DEBUG: users list: ");
+        _generateSmallUserCards();
+      });
+
     }
-    _buildSearchResult();
 
   }
 
@@ -115,7 +130,7 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  void _buildSearchResult() {
+  void _generateSmallEventCards() {
     List<SmallEventCard> cards = List<SmallEventCard>();
 
     if(_events == null) return;
@@ -131,11 +146,29 @@ class _SearchScreenState extends State<SearchScreen> {
       ));
     });
       
-    print(cards);
+    // print(cards);
 
     setState(() {
       _eventCards = cards;
       print(_eventCards);
+    });
+  }
+
+  void _generateSmallUserCards() {
+    List<SmallUserCard> cards = List<SmallUserCard>();
+
+    if(_users == null) return;
+
+    // _users.sort((b,a) => a.startTime.compareTo(b.startTime));
+    _users.forEach((User currentUser) {
+      cards.insert(0, SmallUserCard(
+        user: currentUser,
+      ));
+    });
+    
+    setState(() {
+      _userCards = cards;
+      print(_userCards);
     });
   }
 
@@ -145,42 +178,88 @@ class _SearchScreenState extends State<SearchScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Search"),
+        elevation: 0,
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          onPressed: (){ Navigator.pop(context,true); },
+          icon: Icon(Icons.arrow_back, color: Colors.black,),
+        ),
         actions: <Widget>[
           IconButton(
             onPressed: () {},
-            icon: Icon(Icons.filter_list)
+            icon: Icon(Icons.filter_list, color: Colors.black,)
           )
         ],
+        // bottom: TabBar(
+        //   tabs: _myTabs,
+        //   controller: _tabController,
+        // ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: onSearch,
         child: Icon(Icons.search),
       ),
-      body: Center(
+      backgroundColor: Colors.white,
+      body: Container(
+        padding: EdgeInsets.all(0),
         child: Column(
           children: <Widget>[
-            Form(
-              key: _formKey,
-              child: _buildSearchBar()
+            Container(
+              color: Colors.white,
+              child: Form(
+                key: _formKey,
+                child: _buildSearchBar()
+              ),
             ),
-            Divider(),
+            PreferredSize(
+              preferredSize: Size(screen.width, 100),
+              child: Container(
+                color: Colors.white,
+                child: TabBar(
+                  indicatorColor: Colors.blue,
+                  labelColor: Colors.black,
+                  tabs: _myTabs,
+                  controller: _tabController,
+                ),
+              ),
+            ),
             Expanded(
-              child: _eventCards == null
-              ? Container()
-              : _eventCards.length == 0
-                ? Center(
-                    child: Text("Result not found")
+              child: TabBarView(
+                controller: _tabController,
+                children: <Widget>[
+                  Container(
+                    child: _eventCards == null
+                    ? Container()
+                    : _eventCards.length == 0
+                      ? Center(
+                          child: Text("Result not found")
+                        )
+                      : ListView.builder(
+                          itemCount: _events.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: _eventCards[index],
+                            );
+                          },
+                        )
+                  ),
+                  Container(
+                    child: _userCards == null
+                    ? Container()
+                    : _userCards.length == 0
+                      ? Center(
+                          child: Text("Result not found")
+                        )
+                      : ListView.builder(
+                          itemCount: _users.length,
+                          itemBuilder: (context, index) {
+                            return _userCards[index];
+                          },
+                        )
                   )
-                : ListView.builder(
-                    itemCount: _events.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: _eventCards[index],
-                      );
-                    },
-                  )
+                ],
+              ),
             ),
           ],
         ),

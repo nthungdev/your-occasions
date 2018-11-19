@@ -21,7 +21,7 @@ class FriendListController extends BaseController{
   Future<void> insert(FriendList model) async {
     await connect();
 
-    await connection.query("""INSERT INTO friendlists (user_id, friend_id, creation_date)
+    await connection.query("""INSERT INTO friend_lists (user_id, friend_id, creation_date)
       VALUES (@userId, @friendId, @creationDate)""",
       substitutionValues: model.getProperties());
 
@@ -32,7 +32,7 @@ class FriendListController extends BaseController{
   Future<void> delete(int id) async {
     await connect();
 
-    await connection.query("""DELETE FROM friendlists WHERE id = @id""", substitutionValues: { 'id': id, });  
+    await connection.query("""DELETE FROM friend_lists WHERE id = @id""", substitutionValues: { 'id': id, });  
 
     await disconnect();
   }
@@ -40,7 +40,7 @@ class FriendListController extends BaseController{
   Future<void> deleteFriend(int userId, int friendId) async {
     await connect();
 
-    await connection.query("""DELETE FROM friendlists WHERE user_id = @userId AND friend_id = @friendId""", substitutionValues: { 'userId': userId,'friendId': friendId });  
+    await connection.query("""DELETE FROM friend_lists WHERE user_id = @userId AND friend_id = @friendId""", substitutionValues: { 'userId': userId,'friendId': friendId });  
 
     await disconnect();
   }
@@ -53,7 +53,7 @@ class FriendListController extends BaseController{
     else {
       await connect();
 
-      String query = "UPDATE friendlists SET ";
+      String query = "UPDATE friend_lists SET ";
       if(userId != null) { query += "user_id = $userId"; }
       if(friendId != null) { query += "friend_id = $friendId"; }
       if(creationDate != null) { query += "creation_date = '$creationDate' "; }
@@ -87,14 +87,13 @@ class FriendListController extends BaseController{
     return result == [];
   }
 
-
-  Future<List<FriendList>> getFriendList({int userId, int id}) async{
+  Future<List<FriendList>> getFriendList({int id, int userId, int friendId}) async{
     await connect();
 
     List<FriendList> result = [];
 
 
-    String query = "SELECT * from friendlists ";
+    String query = "SELECT * from friend_lists ";
 
     if(userId == null && id == null) {
 
@@ -102,8 +101,9 @@ class FriendListController extends BaseController{
     else {
       query += "where ";
       
-      if(userId != null) { query += "user_id = $userId";}
-      else if(id != null) { query += "id = $id ";}
+      if(userId != null) { query += "user_id = $userId" ; }
+      else if (friendId != null) { query += "friend_id = $friendId "; }
+      else if(id != null) { query += "id = $id "; }
     }
 
 
