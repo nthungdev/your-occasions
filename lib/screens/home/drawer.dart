@@ -10,10 +10,9 @@ import 'package:youroccasions/models/data.dart';
 class HomeDrawer extends StatelessWidget {
   final String accountName;
   final String accountEmail;
+  final String accountPicture;
 
-  HomeDrawer({@required String accountName, @required String accountEmail})
-      : accountName = accountName, accountEmail = accountEmail;
-
+  HomeDrawer({@required this.accountEmail, @required this.accountName, @required this.accountPicture});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +25,9 @@ class HomeDrawer extends StatelessWidget {
               accountName: Text(accountName),
               accountEmail: Text(accountEmail),
               currentAccountPicture: CircleAvatar(
-                backgroundImage: NetworkImage("https://img.huffingtonpost.com/asset/5b7fdeab1900001d035028dc.jpeg?cache=sixpwrbb1s&ops=1910_1000"),
+                backgroundImage: accountPicture == null
+                ? NetworkImage("https://img.huffingtonpost.com/asset/5b7fdeab1900001d035028dc.jpeg?cache=sixpwrbb1s&ops=1910_1000")
+                : NetworkImage(accountPicture)
               ),
             ),
           ),

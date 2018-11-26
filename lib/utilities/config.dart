@@ -1,5 +1,8 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// This file interact with local data stored on user's device
@@ -58,6 +61,8 @@ Future<void> setUserName(String userName) async {
 
 Future<void> logout() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  // await setIsLogin(false);
   await prefs.clear();
+
+  FirebaseAuth auth = FirebaseAuth.instance;
+  await auth.signOut();
 }

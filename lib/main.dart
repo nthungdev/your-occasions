@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:youroccasions/controllers/user_controller.dart';
+import 'package:youroccasions/models/data.dart';
+import 'package:youroccasions/models/user.dart';
 
 import 'package:youroccasions/screens/login/login.dart';
 import 'package:youroccasions/utilities/config.dart';
@@ -8,17 +11,26 @@ void main() async {
   var id = await getUserId();
 
   if(id != null){
-    runApp(YourOccasions(true));
+    UserController uc = UserController();
+    User userFromDB = await uc.getUserWithId(id);
+    if (userFromDB == null) {
+      print("Getting user error");
+    }
+    else {
+      Dataset.currentUser.value = userFromDB;
+    }
+    runApp(YourOccasions(HomeScreen()));
   }
   else {
-    runApp(YourOccasions(false));
+    runApp(YourOccasions(LoginWithEmailScreen()));
+    
   }
 }
 
 class YourOccasions extends StatelessWidget {
   final Widget home;
 
-  YourOccasions(bool isLoggin) : home = (isLoggin ? HomeScreen() : LoginWithEmailScreen());
+  YourOccasions(this.home);
   // YourOccasions(bool isLoggin) : home = SignInDemo();
 
   @override

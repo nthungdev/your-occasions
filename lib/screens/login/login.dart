@@ -141,7 +141,7 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
       print("uid: ${firebaseUser.uid}");
 
       if (userFromDB == null) {
-        User newUser = User(id: firebaseUser.uid, name: googleUser.displayName, email: googleUser.email, picture: googleUser.photoUrl);
+        User newUser = User(id: firebaseUser.uid, name: googleUser.displayName, email: googleUser.email, picture: googleUser.photoUrl, provider: "google");
         _userController.insert(newUser)
           .then((value) {
             print("DEBUG name is : ${newUser.name}");

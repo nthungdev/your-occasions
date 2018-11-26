@@ -60,6 +60,11 @@ class _HomeScreen extends State<HomeScreen> with SingleTickerProviderStateMixin 
       Dataset.userId.value = id;
       getCurrentUser(id);
     });
+
+    _accountName = Dataset.currentUser.value.name;
+    _accountEmail = Dataset.currentUser.value.email;
+    
+    
   }
 
   @override
@@ -112,6 +117,7 @@ class _HomeScreen extends State<HomeScreen> with SingleTickerProviderStateMixin 
       drawer: HomeDrawer(
         accountName: _accountName == null ? "" : _accountName, 
         accountEmail: _accountEmail == null ? "" : _accountEmail,
+        accountPicture: Dataset.currentUser.value.picture,
       ),
       bottomNavigationBar: BottomMenu(pageController: _pageController, currentIndex: this._currentPage,),
       body: PageView(

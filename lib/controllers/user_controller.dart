@@ -132,6 +132,23 @@ class UserController extends BaseController {
     return result[0];
   }
 
+  Future<User> getUserWithId(String id) async{
+    await connect();
+    List<User> result = [];
+    String query = "SELECT * FROM users WHERE id = @id ";
+    
+    var queryResult = await connection.mappedResultsQuery(query, substitutionValues: { 'id': id });
+    
+    for (var item in queryResult) {
+      result.add(User.createFromMap(item.values));
+    }
+
+    if (result.length == 0) { return null; }
+
+    await disconnect();
+    return result[0];
+  }
+
   Future<User> getUserWithGoogle(String email) async{
     await connect();
     List<User> result = [];
