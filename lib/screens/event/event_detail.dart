@@ -11,7 +11,7 @@ final EventController _eventController = EventController();
 class EventDetailScreen extends StatefulWidget {
   final Event event;
 
-  EventDetailScreen(Event event) :  this.event = event;
+  EventDetailScreen(this.event);
 
   @override
   _EventDetailScreenState createState() => _EventDetailScreenState();
@@ -20,7 +20,7 @@ class EventDetailScreen extends StatefulWidget {
 
 class _EventDetailScreenState extends State<EventDetailScreen>{
   Event event;
-  int id;
+  String id;
 
   @override
   initState() {
@@ -64,7 +64,7 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
                     height: size.width * 3 / 4,
                     child: widget.event.picture != null
                     ? Image.network(widget.event.picture, fit: BoxFit.cover,)
-                    : Image.asset("images/no-image.jpg", fit: BoxFit.cover,) 
+                    : Image.asset("assets/images/no-image.jpg", fit: BoxFit.cover,) 
                   ),
                   Expanded(
                     child: Container(
@@ -88,7 +88,7 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
                     height: size.width * 3 / 4,
                     child: widget.event.picture != null
                     ? Image.network(widget.event.picture, fit: BoxFit.cover,)
-                    : Image.asset("images/no-image.jpg", fit: BoxFit.cover,) 
+                    : Image.asset("assets/images/no-image.jpg", fit: BoxFit.cover,) 
                   ),
                   Expanded(
                     child: ListView(

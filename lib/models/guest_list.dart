@@ -1,14 +1,14 @@
 class GuestList {
   // PROPERTIES //
   int _id;
-  int _userId;
+  String _userId;
   int _eventId;
   DateTime _creationDate;
   
 
   // CONSTRUCTORS //
   GuestList.create();
-  GuestList({int userId, int eventId, DateTime creationDate}){
+  GuestList({String userId, int eventId, DateTime creationDate}){
     _userId = userId;
     _eventId = eventId;
     _creationDate = creationDate;
@@ -24,13 +24,13 @@ class GuestList {
 
   // GETTERS //
   int get id => _id;
-  int get userId => _userId;
+  String get userId => _userId;
   int get eventId => _eventId;
   DateTime get creationDate => _creationDate;
 
   // SETTERS //
   set id(int id) => _id = id;
-  set userId(int userId) => _userId = userId;
+  set userId(String userId) => _userId = userId;
   set eventId(int eventId) => _eventId = eventId;
   set creationDate(DateTime creationDate) => _creationDate = creationDate;
 

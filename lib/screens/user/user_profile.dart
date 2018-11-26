@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
 
 import 'package:youroccasions/screens/user/diagonally_cut_colored_image.dart';
-import 'package:youroccasions/screens/home/home.dart';
-import 'package:youroccasions/utilities/config.dart';
 import 'package:youroccasions/models/user.dart';
 import 'package:youroccasions/models/event.dart';
 import 'package:youroccasions/controllers/user_controller.dart';
@@ -30,7 +27,7 @@ class UserProfileScreen extends StatefulWidget {
 class _UserProfileScreenState extends State<UserProfileScreen>{
 
   User user;
-  int id;
+  String id;
   List<Event> _eventList;
   User currentUser = Dataset.currentUser.value;
   bool followed = true;
@@ -168,22 +165,23 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
         minWidth: 140.0,
         color: backgroundColor,
         textColor: textColor,
-        onPressed: () async {if (followed == true) { 
-                        friendController.deleteFriend(currentUser.id, id);
-                        _userController.decreaseFollowers(user.id);
-                        setState((){
-                          followed = !followed;
-                          follower-=1;
-                        });
-                      } 
-                      else {
-                        friendController.insert(friend);
-                        _userController.increaseFollowers(user.id);
-                        setState((){
-                          followed = !followed;
-                          follower+=1;
-                        });
-                      }},
+        onPressed: () async {
+          if (followed == true) { 
+            friendController.deleteFriend(currentUser.id, id);
+            _userController.decreaseFollowers(user.id);
+            setState((){
+              followed = !followed;
+              follower-=1;
+            });
+          } 
+          else {
+            friendController.insert(friend);
+            _userController.increaseFollowers(user.id);
+            setState((){
+              followed = !followed;
+              follower+=1;
+            });
+          }},
         child: new Text(followed == true ? 'Followed' : 'Follow'),
       );
   }

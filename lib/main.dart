@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
 
 import 'package:youroccasions/screens/login/login.dart';
 import 'package:youroccasions/utilities/config.dart';
 import 'package:youroccasions/screens/home/home.dart';
 
 void main() async {
-  var result = await checkIsLogin();
-  if(result){
+  var id = await getUserId();
+
+  if(id != null){
     runApp(YourOccasions(true));
   }
   else {
@@ -15,13 +15,11 @@ void main() async {
   }
 }
 
-Future<bool> checkIsLogin() async {
-    return await getIsLogin();
-  }
-
 class YourOccasions extends StatelessWidget {
   final Widget home;
+
   YourOccasions(bool isLoggin) : home = (isLoggin ? HomeScreen() : LoginWithEmailScreen());
+  // YourOccasions(bool isLoggin) : home = SignInDemo();
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +27,7 @@ class YourOccasions extends StatelessWidget {
       title: 'Your Occasions',
       theme: ThemeData(
         // backgroundColor: Colors.red,
-        primarySwatch: Colors.red,
+        primarySwatch: Colors.blue,
       ),
       home: home,
     );

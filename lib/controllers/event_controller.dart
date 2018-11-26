@@ -41,7 +41,7 @@ class EventController extends BaseController {
   }
 
   /// Update an existing row from Events table based on id.
-  Future<void> update(int id, {int hostId, String name, String description, String locationName, DateTime startTime, DateTime endTime,
+  Future<void> update(int id, {String hostId, String name, String description, String locationName, DateTime startTime, DateTime endTime,
   int views, int age, int price, String category, int one, int two, int three, int four, int five, double rating, bool isUsed, String picture, DateTime creationDate}) async {
     
     if(hostId == null && name == null && description == null && locationName == null && startTime == null && endTime == null
@@ -79,7 +79,7 @@ class EventController extends BaseController {
   }
 
   /// Select rows from users table and return a list of User objects.
-  Future<List<Event>> getEvent({int id, int hostId, String name, String category, DateTime startTime, DateTime endTime}) async {
+  Future<List<Event>> getEvent({int id, String hostId, String name, String category, DateTime startTime, DateTime endTime}) async {
     await connect();
 
     List<Event> result = [];
@@ -119,21 +119,4 @@ class EventController extends BaseController {
 
     await disconnect();
   }
-  
-  Future<void> test() async {
-    // update(9);
-    // await getEvent();
-    // print(allEvents);
-    Event e = Event(hostId: 3, name: 'test data 3', description: "buasbudabuad");
-    await insert(e);
-    var item = await getEvent();
-    print(item);
-  }
-}
-
-void main () {
-  EventController e = EventController();
-  e.test();
-
-
 }

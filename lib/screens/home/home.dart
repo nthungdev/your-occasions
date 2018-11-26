@@ -26,7 +26,7 @@ class _HomeScreen extends State<HomeScreen> with SingleTickerProviderStateMixin 
   int _currentPage = 0;
   String _accountName;
   String _accountEmail;
-  int id;
+  String id;
   PageController _pageController;
   BottomMenu bottomMenu;
   String _title;
@@ -68,8 +68,9 @@ class _HomeScreen extends State<HomeScreen> with SingleTickerProviderStateMixin 
     _pageController.dispose();
   }
 
-  Future<void> getCurrentUser(int id) async {
-    List<User> currentUser = await controller.getUser(id : id);
+  Future<void> getCurrentUser(String id) async {
+    List<User> currentUser = await controller.getUser(id: id);
+    print(currentUser);
     Dataset.currentUser.value = currentUser[0];
   }
 

@@ -12,6 +12,6 @@ class OtherPage extends StatelessWidget {
       body:new Center(
         child: new Text(pageText)
       ),
-      );
+    );
   }
 }

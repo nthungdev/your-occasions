@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
 import './other_page.dart';
 
-import 'package:youroccasions/models/user.dart';
 import 'package:youroccasions/screens/user/user_profile.dart';
 import 'package:youroccasions/screens/event/create_event.dart';
 import 'package:youroccasions/screens/login/login.dart';
@@ -57,7 +55,7 @@ class HomeDrawer extends StatelessWidget {
           child:  MaterialButton(
             color: Colors.red,
             onPressed: () async {
-              await setIsLogin(false);
+              await logout();
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginWithEmailScreen()));
             },
             child: Text("Logout"),

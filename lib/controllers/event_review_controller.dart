@@ -41,7 +41,7 @@ class EventReviewController extends BaseController {
   }
 
   /// Update an existing row from Events table based on id.
-  Future<void> update(int id, {int eventId, int reviewerId, int hostId, String description, bool isUsed, DateTime creationDate}) async {
+  Future<void> update(int id, {int eventId, String reviewerId, String hostId, String description, bool isUsed, DateTime creationDate}) async {
     if(eventId == null && reviewerId == null && hostId == null && description == null && isUsed == null && creationDate == null) {
       throw UpdateQueryException(); 
     }
@@ -63,7 +63,7 @@ class EventReviewController extends BaseController {
   }
 
   /// Select rows from users table and return a list of User objects.
-  Future<List<EventReview>> getEventReview({int id, int eventId, int reviewerId, int hostId}) async{
+  Future<List<EventReview>> getEventReview({int id, int eventId, String reviewerId, String hostId}) async{
     await connect();
 
     List<EventReview> result = [];
@@ -78,8 +78,8 @@ class EventReviewController extends BaseController {
       query += "WHERE ";
       if (id != null) { query += "id = $id "; }
       else if (eventId != null) { query += "event_id = $eventId "; }
-      else if (reviewerId != null) { query += "reviewer_id = $reviewerId "; }
-      else if (hostId != null) { query += "host_id = $hostId "; }
+      else if (reviewerId != null) { query += "reviewer_id = '$reviewerId' "; }
+      else if (hostId != null) { query += "host_id = '$hostId' "; }
     }
 
     var queryResult = await connection.mappedResultsQuery(query);

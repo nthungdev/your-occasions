@@ -2,8 +2,8 @@ class EventReview {
   // PROPERTIES //
   int _id;
   int _eventId;
-  int _reviewerId;
-  int _hostId;
+  String _reviewerId;
+  String _hostId;
   int _score;
   String _description;
   bool _isUsed;
@@ -11,7 +11,7 @@ class EventReview {
 
   // CONSTRUCTORS //
   EventReview.create();
-  EventReview({int eventId, int reviewerId, int hostId, String description, bool isUsed}) {
+  EventReview({int eventId, String reviewerId, String hostId, String description, bool isUsed}) {
     eventId = eventId;
     reviewerId = reviewerId;
     hostId = hostId;
@@ -34,8 +34,8 @@ class EventReview {
   // GETTERS //
   int get id => _id;
   int get eventId => _eventId;
-  int get reviewerId => _reviewerId;
-  int get hostId => _hostId;
+  String get reviewerId => _reviewerId;
+  String get hostId => _hostId;
   String get description => _description;
   bool get isUsed => _isUsed;
   DateTime get creationDate => _creationDate;
@@ -43,8 +43,8 @@ class EventReview {
   // SETTERS //
   set id(int id) => _id = id;
   set eventId(int eventId) => _eventId = eventId;
-  set reviewerId(int reviewerId) => reviewerId = reviewerId;
-  set hostId(int hostId) => _hostId = hostId;
+  set reviewerId(String reviewerId) => reviewerId = reviewerId;
+  set hostId(String hostId) => _hostId = hostId;
   set description(String description) => _description = description;
   set isUsed(bool isUsed) => _isUsed = isUsed;
   set creationDate(DateTime creationDate) => _creationDate = creationDate;

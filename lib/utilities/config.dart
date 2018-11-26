@@ -17,29 +17,29 @@ Future<bool> getIsLogin() async {
   return result;
 }
 
-setIsLogin(bool status) async {
+Future<void> setIsLogin(bool status) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.setBool(IS_LOGIN, status);
 }
 
-Future<int> getUserId() async {
+Future<String> getUserId() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  int id = (prefs.getInt(USER_ID) ?? 0);
-  return id;
+  String id = (prefs.getString(USER_ID) ?? "");
+  return id == "" ? null : id;
 }
 
-setUserId(int userId) async {
+Future<void> setUserId(String userId) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.setInt(USER_ID, userId);
+  await prefs.setString(USER_ID, userId);
 }
 
 Future<String> getUserEmail() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String email = (prefs.getString(USER_EMAIL) ?? "");
-  return email;
+  return email == "" ? null : email;
 }
 
-setUserEmail(String userEmail) async {
+Future<void> setUserEmail(String userEmail) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.setString(USER_EMAIL, userEmail);
 }
@@ -51,11 +51,13 @@ Future<String> getUserName() async {
 }
 
 
-setUserName(String userName) async {
+Future<void> setUserName(String userName) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.setString(USER_NAME, userName);
 }
 
-void logout() async {
-  await setIsLogin(false);
+Future<void> logout() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  // await setIsLogin(false);
+  await prefs.clear();
 }

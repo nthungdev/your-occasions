@@ -4,8 +4,6 @@ import 'package:youroccasions/controllers/base_controller.dart';
 import 'package:youroccasions/models/user.dart';
 import 'package:youroccasions/exceptions/UpdateQueryException.dart';
 
-import 'package:postgres/postgres.dart';
-
 class UserController extends BaseController {
   // PROPERTIES //
   int _count;
@@ -25,8 +23,8 @@ class UserController extends BaseController {
   /// Insert a new row into users table.
   Future<void> insert(User model) async {
     await connect();
-    await connection.query("""INSERT INTO users (name, email, password, birthday, is_used, creation_date)
-      VALUES (@name, @email, @password, @birthday, @isUsed, @creationDate)""",
+    await connection.query("""INSERT INTO users (id, name, email, provider, birthday, is_used, creation_date)
+      VALUES (@id, @name, @email, @provider, @birthday, @isUsed, @creationDate)""",
       substitutionValues: model.getProperties());
     await disconnect();
   }
@@ -38,7 +36,7 @@ class UserController extends BaseController {
     await disconnect();
   }
 
-  Future<void> increaseFollowers(int id) async {
+  Future<void> increaseFollowers(String id) async {
     await connect();
 
     await connection.query("""UPDATE users SET followers = followers + 1 WHERE id = @id""", substitutionValues: { 'id': id, });
@@ -46,7 +44,7 @@ class UserController extends BaseController {
     await disconnect();
   }
 
-  Future<void> decreaseFollowers(int id) async {
+  Future<void> decreaseFollowers(String id) async {
     await connect();
 
     await connection.query("""UPDATE users SET followers = followers - 1 WHERE id = @id""", substitutionValues: { 'id': id, });
@@ -55,7 +53,7 @@ class UserController extends BaseController {
   }
 
   /// Update an existing row from users table.
-  Future<void> update(int id, {String name, String email, String password, DateTime birthday, String picture, 
+  Future<void> update(String id, {String name, String email, String password, DateTime birthday, String picture, 
   int one, int two, int three, int four, int five, double rating, bool isUsed}) async {
     if(name == null && email == null && password == null && birthday == null && picture == null 
     && one == null && two == null && three == null && four == null && five == null && rating == null && isUsed == null) {
@@ -77,14 +75,14 @@ class UserController extends BaseController {
       if(rating != null) { query += "rating = $rating "; }
       if(isUsed != null) { query += "is_used = '$isUsed' "; }
 
-      query += " WHERE id = '$id'";
+      query += " WHERE id = '$id' ";
       await connection.query(query);  
       await disconnect();
     }
   }
 
   /// Select rows from users table and return a list of User objects.
-  Future<List<User>> getUser({String email, String name, int id, bool isUsed=true}) async{
+  Future<List<User>> getUser({ String id, String email, String name, bool isUsed=true}) async{
     await connect();
     List<User> result = [];
     String query = "SELECT * FROM users ";
@@ -115,6 +113,23 @@ class UserController extends BaseController {
     return result;
   }
 
+  Future<User> getUserWithEmail(String email) async{
+    await connect();
+    List<User> result = [];
+    String query = "SELECT * FROM users WHERE email = @email ";
+    
+    var queryResult = await connection.mappedResultsQuery(query, substitutionValues: { 'email': email });
+    
+    for (var item in queryResult) {
+      result.add(User.createFromMap(item.values));
+    }
+
+    if (result.length == 0) { return null; }
+
+    await disconnect();
+    return result[0];
+  }
+
   Future<List<User>> getMostFollowedUsers() async {
     await connect();
     var query = "SELECT * FROM mostfollowedusers()";
@@ -128,15 +143,15 @@ class UserController extends BaseController {
   /// Check email and password is valid in the database or not.
   /// 
   /// Return User object if valid, null otherwise.
-  Future<User> loginWithEmail(String email, String password) async {
-    var result = await getUser(email: email);
-    // print("DEBUG RESULT IS : $result");
-    if(result.length != 0) {
-      User loginUser = result[0];
-      if(loginUser.password == password) { return result[0]; }
-    }
-    return null;
-  }
+  // Future<User> loginWithEmail(String email, String password) async {
+  //   var result = await getUser(email: email);
+  //   // print("DEBUG RESULT IS : $result");
+  //   if(result.length != 0) {
+  //     User loginUser = result[0];
+  //     if(loginUser.password == password) { return result[0]; }
+  //   }
+  //   return null;
+  // }
 
   void test() async {
     // update(9);

@@ -173,7 +173,7 @@ class _LeaderboardItemState extends State<LeaderboardItem> {
                                     ? NetworkImage(
                                       widget.imageUrl
                                     )
-                                    : AssetImage("images/no-image.jpg")
+                                    : AssetImage("assets/images/no-image.jpg")
                                 )
                               )
                             ),

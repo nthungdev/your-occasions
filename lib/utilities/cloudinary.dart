@@ -1,17 +1,11 @@
 import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
-import 'package:async/async.dart';
-import 'package:http_parser/http_parser.dart';
 
 import 'package:meta/meta.dart';
 import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
-
-const String API_KEY = "161729176588939";
-const String API_SECRET = "CPxAJ0U-NWbGzzj5RlBsuoQF4r4";
-const String UPLOAD_URL = "https://api.cloudinary.com/v1_1/dm7mijapy/image/upload";
-const String DESTROY_URL = "https://api.cloudinary.com/v1_1/dm7mijapy/image/destroy";
+import 'package:youroccasions/utilities/secret.dart';
 
 class Presets {
   static String eventCover = "event_header";
@@ -140,7 +134,7 @@ class Cloudinary {
 }
 
 void main() async {
-  Cloudinary cl = Cloudinary(API_KEY, API_SECRET);
+  Cloudinary cl = Cloudinary(CLOUDINARY_API_KEY, API_SECRET);
   File image = File("C:/Users/vuaga/Downloads/42899034_265577847632775_6533329548585467904_n.jpg");
 
   // cl.destroy("event_header/me2");

@@ -73,7 +73,7 @@ class _FeedTabView extends State<FeedTabView> {
     // print("DEBUG is getting trending music");
 
     var eventCategoryList = await _ecc.getEventCategory(category: Categories.music.name);
-    // print(eventCategoryList);
+    print(eventCategoryList);
     // print("DEBUG: eventCategoryList length ${eventCategoryList.length}");
 
     for(int i = 0 ; i < eventCategoryList.length ; i++ ) {
@@ -96,6 +96,11 @@ class _FeedTabView extends State<FeedTabView> {
 
   List<Widget> _buildUpcomingEventsCardList(int count) {
     List<Widget> cards = List<Widget>();
+
+    if (_upcomingEvents == null || _upcomingEvents.length == 0) {
+      return cards;
+    }
+
     int counter = 0;
 
     Widget e = Padding(
@@ -104,6 +109,11 @@ class _FeedTabView extends State<FeedTabView> {
     );
 
     cards.add(e);
+
+    if(_upcomingEvents == null || _upcomingEvents.length == 0) {
+      cards.add(Center(child: CircularProgressIndicator()));
+      return cards;
+    }
 
     _upcomingEvents.sort((b,a) => a.startTime.compareTo(b.startTime));
     _upcomingEvents.forEach((Event currentEvent) {
@@ -128,6 +138,10 @@ class _FeedTabView extends State<FeedTabView> {
 
   List<Widget> _buildTrendingMusicEventsCardList(int count) {
     List<Widget> cards = List<Widget>();
+
+    if (_trendingEvents == null || _trendingEvents.length == 0) {
+      return cards;
+    }
 
     int counter = 0;
 

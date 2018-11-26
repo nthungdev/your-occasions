@@ -39,7 +39,7 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
       .then((onValue) {
         if(this.mounted) {
           setState(() { 
-            _hasData1 = true;
+            if (LeaderboardDataset.topHost.value.length != 0) { _hasData1 = true; }
           });
         }
       });
@@ -47,7 +47,7 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
       .then((onValue) {
         if(this.mounted) {
           setState(() { 
-            _hasData2 = true;
+            if (LeaderboardDataset.mostFollowedUsers.value.length != 0) { _hasData2 = true; }
           });
         }
       }
@@ -69,7 +69,7 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
     if (LeaderboardDataset.topHost.lastModified != null && (DateTime.now()).difference(LeaderboardDataset.topHost.lastModified).inSeconds < 30) return;
     
     var temp = await ec.getEvent();
-    Map<int,int> topHostMap = Map();
+    Map<String,int> topHostMap = Map();
     var hostIds = List();
     // List<List> result = List();
     temp.forEach(((event) {
@@ -126,7 +126,7 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
     List<LeaderboardItem> result = List.generate(LeaderboardDataset.topHost.value.length, (index) {
       return LeaderboardItem(
         rank: index + 1,
-        content: (LeaderboardDataset.topHost.value[index]).name ?? "NoName",
+        content: (LeaderboardDataset.topHost.value[index]).name ?? (LeaderboardDataset.topHost.value[index]).email,
         imageUrl: (LeaderboardDataset.topHost.value[index]).picture,
         score: LeaderboardDataset.topHostTotalEventViews.value[(LeaderboardDataset.topHost.value[index]).id],
         user: (LeaderboardDataset.topHost.value[index]),
@@ -154,7 +154,20 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
   }
 
   List<LeaderboardItem> _buildMostFollowedUsersItem() {
-    List<LeaderboardItem> result = List.generate(LeaderboardDataset.mostFollowedUsers.value.sublist(0, 5).length, (index) {
+    List<LeaderboardItem> result;
+    if (LeaderboardDataset.mostFollowedUsers.value.length == 0) { return List<LeaderboardItem>(); }
+    if (LeaderboardDataset.mostFollowedUsers.value.length < 5) {
+      result = List.generate(LeaderboardDataset.mostFollowedUsers.value.length, (index) {
+        return LeaderboardItem(
+          rank: index + 1,
+          content: (LeaderboardDataset.topHost.value[index]).name ?? (LeaderboardDataset.topHost.value[index]).email,
+          imageUrl: (LeaderboardDataset.mostFollowedUsers.value[index]).picture,
+          score: LeaderboardDataset.mostFollowedUsers.value[index].followers,
+          user: (LeaderboardDataset.mostFollowedUsers.value[index]),
+        );
+      });
+    }
+    result = List.generate(LeaderboardDataset.mostFollowedUsers.value.sublist(0, 5).length, (index) {
       return LeaderboardItem(
         rank: index + 1,
         content: (LeaderboardDataset.mostFollowedUsers.value[index]).name ?? "NoName",
@@ -165,38 +178,48 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
     });
     return result;
   }
+  
+
+  List<Widget> _buildListViewChildren() {
+    var screen = MediaQuery.of(context).size;
+    List<Widget> alist = List<Widget>();
+    
+    if (_hasData1) {
+      alist.addAll([
+        Leaderboard(
+          title: "Highest views hosts",
+          children: _buildTopHostsItem(),
+          contentHeading: "Host",
+          leadingHeading: "Rank",
+          trailingHeading: "Views",
+        ),
+        SizedBox(height: screen.height / 40,),
+      ]);
+    }
+    
+    if (_hasData2) {
+      alist.add(
+        Leaderboard(
+          title: "Most followed hosts",
+          children: _buildMostFollowedUsersItem(),
+          contentHeading: "Host",
+          leadingHeading: "Rank",
+          trailingHeading: "Followers",
+        )
+      );
+    }
+    
+    return alist;
+  }
 
   @override
   Widget build(BuildContext context) {
     var screen = MediaQuery.of(context).size;
-    return Material(
-      child: new Container(
-        // color: Colors.black,
-        child: ListView(
-          padding: const EdgeInsets.all(15.0),
-          children: <Widget>[
-            // Text("Leaderboard", style: TextStyle(fontSize: 30.0, fontFamily: "Niramit"),),
-            (!_hasData1) 
-            ? Center(child: CircularProgressIndicator()) 
-            : Leaderboard(
-                title: "Highest views hosts",
-                children: _buildTopHostsItem(),
-                contentHeading: "Host",
-                leadingHeading: "Rank",
-                trailingHeading: "Views",
-              ),
-            SizedBox(height: screen.height / 40,),
-            (!_hasData2)
-            ? Center(child: CircularProgressIndicator()) 
-            : Leaderboard(
-                title: "Most followed hosts",
-                children: _buildMostFollowedUsersItem(),
-                contentHeading: "Host",
-                leadingHeading: "Rank",
-                trailingHeading: "Followers",
-              ),
-          ] 
-        ),
+    return new Container(
+      color: Colors.white,
+      child: ListView(
+        padding: const EdgeInsets.all(15.0),
+        children: _buildListViewChildren(),
       ),
     );
   }

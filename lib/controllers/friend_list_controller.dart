@@ -37,7 +37,7 @@ class FriendListController extends BaseController{
     await disconnect();
   }
 
-  Future<void> deleteFriend(int userId, int friendId) async {
+  Future<void> deleteFriend(String userId, String friendId) async {
     await connect();
 
     await connection.query("""DELETE FROM friend_lists WHERE user_id = @userId AND friend_id = @friendId""", substitutionValues: { 'userId': userId,'friendId': friendId });  
@@ -46,7 +46,7 @@ class FriendListController extends BaseController{
   }
 
   /// Update an existing row from friendlists table.
-  Future<void> update(int id, {int, userId, int friendId, DateTime creationDate}) async {
+  Future<void> update(int id, {String userId, String friendId, DateTime creationDate}) async {
     if(userId == null && friendId == null && creationDate == null) {
       throw UpdateQueryException(); //
     }
@@ -54,8 +54,8 @@ class FriendListController extends BaseController{
       await connect();
 
       String query = "UPDATE friend_lists SET ";
-      if(userId != null) { query += "user_id = $userId"; }
-      if(friendId != null) { query += "friend_id = $friendId"; }
+      if(userId != null) { query += "user_id = '$userId' "; }
+      if(friendId != null) { query += "friend_id = '$friendId'"; }
       if(creationDate != null) { query += "creation_date = '$creationDate' "; }
 
       query += " WHERE id = '$id'";
@@ -66,7 +66,7 @@ class FriendListController extends BaseController{
     }
   }
 
-  Future<bool> getFriend(int userId, int friendId) async{
+  Future<bool> getFriend(String userId, String friendId) async{
     await connect();
 
     List<FriendList> result = [];
@@ -74,9 +74,12 @@ class FriendListController extends BaseController{
 
     String query = "SELECT * from friend_lists ";
 
-    query += """where user_id = $userId AND friend_id = $friendId""";
-
-    var queryResult = await connection.mappedResultsQuery(query);
+    query += """where user_id = @userId AND friend_id = @friendId """;
+    // print(query);
+    var queryResult = await connection.mappedResultsQuery(query, substitutionValues: {
+      'userId': userId,
+      'friendId': friendId,
+    });
 
     for (var item in queryResult) {
       result.add(FriendList.createFromMap(item.values));
@@ -87,7 +90,7 @@ class FriendListController extends BaseController{
     return result == [];
   }
 
-  Future<List<FriendList>> getFriendList({int id, int userId, int friendId}) async{
+  Future<List<FriendList>> getFriendList({int id, String userId, String friendId}) async{
     await connect();
 
     List<FriendList> result = [];
@@ -101,8 +104,8 @@ class FriendListController extends BaseController{
     else {
       query += "where ";
       
-      if(userId != null) { query += "user_id = $userId" ; }
-      else if (friendId != null) { query += "friend_id = $friendId "; }
+      if(userId != null) { query += "user_id = '$userId' " ; }
+      else if (friendId != null) { query += "friend_id = '$friendId' "; }
       else if(id != null) { query += "id = $id "; }
     }
 

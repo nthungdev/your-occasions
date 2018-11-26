@@ -37,7 +37,7 @@ class UserInterestedEventController extends BaseController{
   }
 
   /// Update an existing row from user_interested_events table.
-  Future<void> update(int id, {int, userId, int eventId, DateTime creationDate}) async {
+  Future<void> update(int id, {String userId, int eventId, DateTime creationDate}) async {
     if(userId == null && eventId == null && creationDate == null) {
       throw UpdateQueryException(); //
     }
@@ -45,7 +45,7 @@ class UserInterestedEventController extends BaseController{
       await connect();
 
       String query = "UPDATE user_interested_events SET ";
-      if(userId != null) { query += "user_id = $userId"; }
+      if(userId != null) { query += "user_id = '$userId' "; }
       if(eventId != null) { query += "event_id = $eventId "; }
       if(creationDate != null) { query += "creation_date = '$creationDate' "; }
 
@@ -57,7 +57,7 @@ class UserInterestedEventController extends BaseController{
     }
   }
 
-  Future<List<UserInterestedEvent>> getUserInterestedEvent({int userId, int eventId , int id}) async{
+  Future<List<UserInterestedEvent>> getUserInterestedEvent({String userId, int eventId , int id}) async{
     await connect();
 
     List<UserInterestedEvent> result = [];
@@ -72,7 +72,7 @@ class UserInterestedEventController extends BaseController{
       query += "where ";
       
       if(eventId != null) { query += "event_id = $eventId ";}
-      else if(userId != null) { query += "user_id = $userId";}
+      else if(userId != null) { query += "user_id = '$userId' ";}
       else if(id != null) { query += "id = $id ";}
     }
 

@@ -52,11 +52,11 @@ class LeaderboardDataset {
   // values of topHost is a List of 5 hosts with highest total views from their events
   static Data<List<User>> topHost = Data<List<User>>();
   /// Pair of id,views
-  static Data<Map<int,int>> topHostTotalEventViews = Data<Map<int,int>>();
+  static Data<Map<String,int>> topHostTotalEventViews = Data();
   // values of topHost is a List of 5 hosts with highest total followers
   static Data<List<User>> mostFollowedUsers = Data<List<User>>();
   /// Pair of id,followers
-  static Data<Map<int,int>> mostFollowedUsersMap = Data<Map<int,int>>();
+  static Data<Map<String,int>> mostFollowedUsersMap = Data();
 }
 
 void main() {

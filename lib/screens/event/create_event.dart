@@ -8,6 +8,7 @@ import 'package:youroccasions/screens/home/home.dart';
 import 'package:youroccasions/models/event.dart';
 import 'package:youroccasions/controllers/event_controller.dart';
 import 'package:youroccasions/utilities/config.dart';
+import 'package:youroccasions/utilities/secret.dart';
 import 'package:youroccasions/utilities/validator..dart';
 import 'package:youroccasions/utilities/cloudinary.dart';
 import 'package:youroccasions/screens/event/event_detail.dart';
@@ -168,21 +169,19 @@ class _CreateEventScreen extends State<CreateEventScreen> {
   
   Widget createButton() {
     return Padding(
-        padding: EdgeInsets.symmetric(vertical: 16.0),
-        child: Material(
-          borderRadius: BorderRadius.circular(30.0),
-          shadowColor: Colors.lightBlueAccent.shade100,
-          elevation: 5.0,
-          child: MaterialButton(
-            minWidth: 200.0,
-            height: 42.0,
-            onPressed: () async {
-              _submit();
-            },
-            // color: Colors.lightBlueAccent,
-            child: Text('Create', style: TextStyle(color: Colors.black)),
-          ),
-        ));
+      padding: EdgeInsets.symmetric(vertical: 16.0),
+      child: Material(
+        borderRadius: BorderRadius.circular(30.0),
+        shadowColor: Colors.lightBlueAccent.shade100,
+        elevation: 5.0,
+        child: MaterialButton(
+          minWidth: 200.0,
+          height: 42.0,
+          onPressed: _submit,
+          // color: Colors.lightBlueAccent,
+          child: Text('Create', style: TextStyle(color: Colors.black)),
+        ),
+      ));
   }
 
   Widget nameForm() {
@@ -252,7 +251,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
       String name = nameController.text;
       String description = descriptionController.text;
       String category = categoryController.text;
-      int hostId = await getUserId();
+      String hostId = await getUserId();
       // String location = "Plattsburgh";
       if(_image == null) {
         _isSigningUp = false;
@@ -270,10 +269,11 @@ class _CreateEventScreen extends State<CreateEventScreen> {
 
       if(_image != null) {
         String url;
-        Cloudinary cl = Cloudinary(API_KEY, API_SECRET);
+        Cloudinary cl = Cloudinary(CLOUDINARY_API_KEY, API_SECRET);
         url = await cl.upload(file: toDataURL(file: _image), preset: Presets.eventCover, path: "${createdEvent.id}/cover");
         print("DEBUG url: $url");
         await _eventController.update(createdEvent.id, picture: url);
+        newEvent.picture = url;
       }
       
       _isSigningUp = false;

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'dart:async';
 
 import 'package:youroccasions/models/user.dart';
@@ -13,11 +12,10 @@ const Color _favoriteColor = Colors.red;
 
 class SmallUserCard extends StatefulWidget {
   final User user;
-  int userId;
+  final int userId;
 
-  SmallUserCard({this.user, int userId}) {
-    this.userId = userId;
-  }
+  SmallUserCard({this.user, this.userId}) 
+    : assert(userId != null);
 
   @override
   _SmallUserCardState createState() => _SmallUserCardState();
@@ -140,8 +138,6 @@ class _SmallUserCardState extends State<SmallUserCard> {
   }
 
   Widget _buildLoadingCard() {
-    final screen = MediaQuery.of(context).size;
-
     return ListTile(
       onTap: () {},
       leading: CircleAvatar(
@@ -157,13 +153,11 @@ class _SmallUserCardState extends State<SmallUserCard> {
   }
 
   Widget _buildCard() {
-    final screen = MediaQuery.of(context).size;
-
     return ListTile(
       onTap: _onTap,
       leading: CircleAvatar(
         backgroundImage: widget.user.picture == null 
-        ? AssetImage("images/no-image.jpg")
+        ? AssetImage("assets/images/no-image.jpg")
         : NetworkImage(widget.user.picture)
       ),
       title: Text(widget.user.name),

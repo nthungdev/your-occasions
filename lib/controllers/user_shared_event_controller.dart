@@ -43,7 +43,7 @@ class UserSharedEventController extends BaseController{
   }
 
   /// Update an existing row from user_shared_events table.
-  Future<void> update(int id, {int userId, int eventId, int sharerId}) async {
+  Future<void> update(int id, {String userId, int eventId, String sharerId}) async {
     if(userId == null && eventId == null && sharerId == null) {
       throw UpdateQueryException(); //
     }
@@ -51,9 +51,9 @@ class UserSharedEventController extends BaseController{
       await connect();
 
       String query = "UPDATE user_shared_events SET ";
-      if(userId != null) { query += "user_id = $userId "; }
+      if(userId != null) { query += "user_id = '$userId' "; }
       if(eventId != null) { query += "eventId = $eventId "; }
-      if(sharerId != null) { query += "sharerId = $sharerId "; }
+      if(sharerId != null) { query += "sharerId = '$sharerId' "; }
 
       query += " WHERE id = '$id'";
 
@@ -63,7 +63,7 @@ class UserSharedEventController extends BaseController{
     }
   }
 
-  Future<List<UserSharedEvent>> getUserSharedEvent({int id , int userId, int eventId, int sharerId}) async{
+  Future<List<UserSharedEvent>> getUserSharedEvent({int id , String userId, int eventId, String sharerId}) async{
     await connect();
 
     List<UserSharedEvent> result = [];
@@ -77,9 +77,9 @@ class UserSharedEventController extends BaseController{
       query += "WHERE ";
       
       if(id != null) { query += "id = $id ";}
-      else if(userId != null) { query += "user_id = $userId ";}
+      else if(userId != null) { query += "user_id = '$userId' ";}
       else if(eventId != null) { query += "event_id = $eventId ";}
-      else if(sharerId != null) { query += "sharer_id = $sharerId ";}
+      else if(sharerId != null) { query += "sharer_id = '$sharerId' ";}
     }
 
     var queryResult = await connection.mappedResultsQuery(query);

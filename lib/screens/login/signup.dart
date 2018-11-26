@@ -1,5 +1,6 @@
 //import 'dart:io';
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:youroccasions/screens/home/home.dart';
@@ -19,229 +20,303 @@ class SignUpWithEmailScreen extends StatefulWidget {
 }
 
 class _SignUpWithEmailScreen extends State<SignUpWithEmailScreen> {
-  // Create a text controller. We will use it to retrieve the current value
-  // of the TextField!
-  static final passwordController = new TextEditingController();
-  static final password2Controller = new TextEditingController();
-  static final emailController = new TextEditingController();
-  static final firstNameController = new TextEditingController();
-  static final lastNameController = new TextEditingController();
+  TextEditingController firstNameController;
+  TextEditingController lastNameController;
+  TextEditingController emailController;
+  TextEditingController passwordController;
+  TextEditingController password2Controller;
+  FocusNode firstNameNode;
+  FocusNode lastNameNode;
+  FocusNode emailNode;
+  FocusNode passwordNode;
+  FocusNode password2Node;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  final formKey = new GlobalKey<FormState>();
-  // @override
-  // void dispose() {
-  //   // Clean up the controller when the Widget is removed from the Widget tree
-  //   passwordController.dispose();
-  //   emailController.dispose();
-  //   super.dispose();
-  // }
+  @override
+  void initState() {
+    super.initState();
+    firstNameController = TextEditingController();
+    lastNameController = TextEditingController();
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
+    password2Controller = TextEditingController();
+
+    firstNameNode = FocusNode();
+    lastNameNode = FocusNode();
+    emailNode = FocusNode();
+    passwordNode = FocusNode();
+    password2Node = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    // Clean up the controllers when the Widget is removed from the Widget tree
+    super.dispose();
+    firstNameNode.dispose();
+    lastNameNode.dispose();
+    emailNode.dispose();
+    passwordNode.dispose();
+    password2Node.dispose();
+    
+    firstNameController.dispose();
+    lastNameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    password2Controller.dispose();
+  }
 
   void _submit() async {
-    final form = formKey.currentState;
-
-    userList = await _userController.getUser(email: emailController.text);
-
-    if (form.validate()) {
-      form.save();
-      bool result = await signUp();
-      print(result);
-      if(result) {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginWithEmailScreen()));
-      }
+    if (!this._formKey.currentState.validate()) {
+      this._formKey.currentState.save();
+      // Validate failed
+      print("Invalid login");
+      return;
     }
-  }
+    this._formKey.currentState.save();
 
-  String _validateEmail(String email) {
-    if(!isEmail(email)) { return "Invalid email"; }
-   
-    if(userList.length == 0) { return null; }
-    else { return "Already taken email!"; }
-  }
-  
-  Widget switchPageButton() {
-    return Padding(
-        padding: EdgeInsets.symmetric(vertical: 16.0),
-        child: Material(
-          borderRadius: BorderRadius.circular(30.0),
-          shadowColor: Colors.lightBlueAccent.shade100,
-          elevation: 5.0,
-          child: MaterialButton(
-            minWidth: 200.0,
-            height: 42.0,
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => HomeScreen()),
-              );
-            },
-            // color: Colors.lightBlueAccent,
-            child: Text('Go to Home', style: TextStyle(color: Colors.black)),
-          ),
-        ));
-  }
+    try {
+      var userFirebase = await _auth.createUserWithEmailAndPassword(
+        email: emailController.text, 
+        password: passwordController.text);
 
-  Widget signUpButton() {
-    return Padding(
-        padding: EdgeInsets.symmetric(vertical: 16.0),
-        child: Material(
-          borderRadius: BorderRadius.circular(30.0),
-          shadowColor: Colors.lightBlueAccent.shade100,
-          elevation: 5.0,
-          child: MaterialButton(
-            minWidth: 200.0,
-            height: 42.0,
-            onPressed: () async {
-              _submit();
-            },
-            // color: Colors.lightBlueAccent,
-            child: Text('Sign Up', style: TextStyle(color: Colors.black)),
-          ),
-        ));
-  }
-
-  Widget firstNameForm() {
-    return Container(
-        margin: const EdgeInsets.all(10.0),
-        width: 120.0,
-        child: TextFormField(
-          controller: firstNameController,
-          keyboardType: TextInputType.emailAddress,
-          validator: (name) => !isName(name) ? "Invalid name" : null,
-          autofocus: false,
-          decoration: InputDecoration(
-            hintText: 'First Name',
-            contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-            border:
-                OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
-          ),
-        ));
-  }
-
-  Widget lastNameForm() {
-    return Container(
-        margin: const EdgeInsets.all(10.0),
-        width: 120.0,
-        child: TextFormField(
-          controller: lastNameController,
-          keyboardType: TextInputType.emailAddress,
-          validator: (name) => !isName(name) ? "Invalid name" : null,
-          autofocus: false,
-          decoration: InputDecoration(
-            hintText: 'Last Name',
-            contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-            border:
-                OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
-          ),
-        ));
-  }
-
-  Widget emailForm() {
-    return Container(
-        margin: const EdgeInsets.all(10.0),
-        width: 260.0,
-        // color: const Color(0xFF00FF00),
-        child: TextFormField(
-          controller: emailController,
-          keyboardType: TextInputType.emailAddress,
-          // validator: (email) !_validateEmail(email) ? "Invalid email" : null,
-          validator: (email) => _validateEmail(email),
-          autofocus: false,
-          decoration: InputDecoration(
-            hintText: 'Email',
-            contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-            border:
-                OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
-          ),
-        ));
-  }
-
-  Widget passwordForm() {
-    return Container(
-      margin: const EdgeInsets.all(10.0),
-      width: 250.0,
-      child: TextFormField(
-          controller: passwordController,
-          autofocus: false,
-          keyboardType: TextInputType.text,
-          validator: (password) => !isPassword(password) ? "Invalid password" : null,
-          obscureText: true,
-          decoration: InputDecoration(
-            hintText: 'Password',
-            contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-            border:
-                OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
-          )),
-    );
-  }
-
-  Widget password2Form() {
-    return Container(
-      margin: const EdgeInsets.all(10.0),
-      width: 250.0,
-      child: TextFormField(
-          controller: password2Controller,
-          autofocus: false,
-          keyboardType: TextInputType.text,
-          validator: (password) => !isPasswordMatched(passwordController.text, password) ? "Password not matched!" : null,
-          obscureText: true,
-          decoration: InputDecoration(
-            hintText: 'Password',
-            contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-            border:
-                OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
-          )),
-    );
-  }
-
-
-  Future<bool> signUp() async {
-    if (!_isSigningUp) {
-      _isSigningUp = true;
       String name = "${firstNameController.text} ${lastNameController.text}";
-      String email = emailController.text;
-      String password = passwordController.text;
-      User newUser = User(name: name, email: email, password: password);
-      print("DEBUG new user is : $newUser");
-      _userController.insert(newUser)
-        ..then((value) {
-          print("DEBUG name is : ${newUser.name}");
+
+      User newUser = User(id: userFirebase.uid, email: userFirebase.email, provider: "password", name: name);
+      await _userController.insert(newUser)
+        .then((value) {
           print("Your account is created successfully!");
         }, onError: (e) {
-          print("Sign up failed");
-          print(e);
-        });
-      _isSigningUp = false;
-      return true;
+          print("Sign up with email failed");
+          print("error $e");
+        }
+      );
+      // String id = userFirebase.uid;
+
+      Navigator.of(context).pop();
+
+      print(_auth.currentUser());
+
+    } catch (e) {
+      print("Error occurs: \n$e");
     }
+    
+  }
+
+  Widget _buildSignUpButton() {
+    final screen = MediaQuery.of(context).size;
+
+    return SizedBox(
+      width: screen.width / 1.5 + 10,
+      height: 40,
+      child: FlatButton(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(45))),
+        color: Colors.blue,
+        onPressed: _submit,
+        // color: Colors.lightBlueAccent,
+        child: Text('SIGN UP', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+      ),
+    );
+  }
+
+  // Widget emailForm() {
+  //   return Container(
+  //       margin: const EdgeInsets.all(10.0),
+  //       width: 260.0,
+  //       // color: const Color(0xFF00FF00),
+  //       child: TextFormField(
+  //         controller: emailController,
+  //         keyboardType: TextInputType.emailAddress,
+  //         // validator: (email) !_validateEmail(email) ? "Invalid email" : null,
+  //         validator: (email) => _validateEmail(email),
+  //         autofocus: false,
+  //         decoration: InputDecoration(
+  //           hintText: 'Email',
+  //           contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+  //           border:
+  //               OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
+  //         ),
+  //       ));
+  // }
+
+  Widget _buildFirstNameInput() {
+    final screen = MediaQuery.of(context).size;
+
+    return SizedBox(
+      width: screen.width / 1.5,
+      child: TextFormField(
+        focusNode: firstNameNode,
+        controller: firstNameController,
+        textInputAction: TextInputAction.next,
+        keyboardType: TextInputType.text,
+        validator: (name) => isName(name) ? null : "Invalid",
+        autofocus: false,
+        onFieldSubmitted: (term) {
+          emailNode.unfocus();
+          FocusScope.of(context).requestFocus(lastNameNode);
+        },
+        decoration: InputDecoration(
+          labelText: "FIRST NAME",
+          labelStyle: TextStyle(fontWeight: FontWeight.bold)
+        ),
+      ));
+  }
+
+  Widget _buildLastNameInput() {
+    final screen = MediaQuery.of(context).size;
+
+    return SizedBox(
+      width: screen.width / 1.5,
+      child: TextFormField(
+        focusNode: lastNameNode,
+        controller: lastNameController,
+        textInputAction: TextInputAction.next,
+        keyboardType: TextInputType.text,
+        validator: (name) => isName(name) ? null : "Invalid",
+        autofocus: false,
+        onFieldSubmitted: (term) {
+          emailNode.unfocus();
+          FocusScope.of(context).requestFocus(emailNode);
+        },
+        decoration: InputDecoration(
+          labelText: "LAST NAME",
+          labelStyle: TextStyle(fontWeight: FontWeight.bold)
+        ),
+      ));
+  }
+
+  Widget _buildEmailInput() {
+    final screen = MediaQuery.of(context).size;
+
+    return SizedBox(
+      width: screen.width / 1.5,
+      child: TextFormField(
+        focusNode: emailNode,
+        controller: emailController,
+        textInputAction: TextInputAction.next,
+        keyboardType: TextInputType.emailAddress,
+        validator: (email) => isEmail(email) ? null : "Invalid",
+        autofocus: false,
+        onFieldSubmitted: (term) {
+          emailNode.unfocus();
+          FocusScope.of(context).requestFocus(passwordNode);
+        },
+        decoration: InputDecoration(
+          labelText: "EMAIL",
+          labelStyle: TextStyle(fontWeight: FontWeight.bold)
+        ),
+      ));
+  }
+
+  Widget _buildPasswordInput() {
+    final screen = MediaQuery.of(context).size;
+
+    return SizedBox(
+      width: screen.width / 1.5,
+      child: TextFormField(
+        focusNode: passwordNode,
+        controller: passwordController,
+        autofocus: false,
+        validator: (password) => isPassword(password) ? null : "Invalid",
+        textInputAction: TextInputAction.next,
+        obscureText: true,
+        onFieldSubmitted: (term) {
+          emailNode.unfocus();
+          FocusScope.of(context).requestFocus(password2Node);
+        },
+        decoration: InputDecoration(
+          labelText: "PASSWORD",
+          labelStyle: TextStyle(fontWeight: FontWeight.bold)
+        )),
+    );
+  }
+
+  Widget _buildPassword2Input() {
+    final screen = MediaQuery.of(context).size;
+
+    return SizedBox(
+      width: screen.width / 1.5,
+      child: TextFormField(
+        focusNode: password2Node,
+        controller: password2Controller,
+        autofocus: false,
+        validator: (password) => isPassword(password) ? null : "Invalid",
+        textInputAction: TextInputAction.done,
+        obscureText: true,
+        decoration: InputDecoration(
+          labelText: "COMFIRM PASSWORD",
+          labelStyle: TextStyle(fontWeight: FontWeight.bold)
+        )),
+    );
+  }
+
+  Future<bool> signUp() async {
+    // if (!_isSigningUp) {
+    //   _isSigningUp = true;
+    //   String name = "${firstNameController.text} ${lastNameController.text}";
+    //   String email = emailController.text;
+    //   String password = passwordController.text;
+    //   User newUser = User(name: name, email: email, password: password);
+    //   print("DEBUG new user is : $newUser");
+    //   _userController.insert(newUser)
+    //     ..then((value) {
+    //       print("DEBUG name is : ${newUser.name}");
+    //       print("Your account is created successfully!");
+    //     }, onError: (e) {
+    //       print("Sign up failed");
+    //       print(e);
+    //     });
+    //   _isSigningUp = false;
+    //   return true;
+    // }
     return false;
   }
   
   @override
   Widget build(BuildContext context) {
+    final screen = MediaQuery.of(context).size;
+
     return new Scaffold(
+      key: _scaffoldKey,
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text("Sign Up"),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          onPressed: () { Navigator.of(context).pop(); },
+          icon: Icon(Icons.arrow_back, color: Colors.black,),
+        ),
+        // title: Text("Sign Up"),
       ),
-      body: Center(
-        child: Form(
-          key: formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  firstNameForm(),
-                  lastNameForm()
-              ],),
-              emailForm(),
-              passwordForm(),
-              password2Form(),
-              signUpButton(),
-              switchPageButton()
-            ]
+      body: ListView(
+        children: <Widget>[
+          Form(
+            key: _formKey,
+            child: Column(
+              children: <Widget>[
+                SizedBox(height: screen.height * 0.1,),
+                _buildFirstNameInput(),
+                _buildLastNameInput(),
+                _buildEmailInput(),
+                _buildPasswordInput(),
+                _buildPassword2Input(),
+                SizedBox(height: screen.height * 0.05,),
+                _buildSignUpButton(),
+              ],
+            ),
           ),
-        )
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.center,
+          //   children: <Widget>[
+          //     firstNameForm(),
+          //     lastNameForm()
+          // ],),
+          // passwordForm(),
+          // password2Form(),
+          // signUpButton(),
+          // switchPageButton()
+        ]
       )
     );
   }

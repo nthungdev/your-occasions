@@ -129,7 +129,7 @@ class _SmallEventCardState extends State<SmallEventCard> {
                       ? Image.network(widget.imageURL,
                           fit: BoxFit.cover,
                         )
-                      : Image.asset("images/no-image.jpg",
+                      : Image.asset("assets/images/no-image.jpg",
                           fit: BoxFit.cover,
                         )
                   ),

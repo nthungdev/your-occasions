@@ -8,13 +8,11 @@ import 'package:youroccasions/screens/home/home.dart';
 import 'package:youroccasions/models/event.dart';
 import 'package:youroccasions/controllers/event_controller.dart';
 import 'package:youroccasions/utilities/config.dart';
+import 'package:youroccasions/utilities/secret.dart';
 import 'package:youroccasions/utilities/validator..dart';
 import 'package:youroccasions/screens/event/event_detail.dart';
 
 import 'package:youroccasions/utilities/cloudinary.dart';
-
-const String API_KEY = "161729176588939";
-const String API_SECRET = "CPxAJ0U-NWbGzzj5RlBsuoQF4r4";
 
 final EventController _eventController = EventController();
 bool _isSigningUp = false;
@@ -259,7 +257,7 @@ class _UpdateEventScreen extends State<UpdateEventScreen> {
 
       String url;
       if(_imageChanged) {
-        Cloudinary cl = Cloudinary(API_KEY, API_SECRET);
+        Cloudinary cl = Cloudinary(CLOUDINARY_API_KEY, API_SECRET);
         url = await cl.upload(file: toDataURL(file: _image), preset: Presets.eventCover, path: "${widget.event.id}/cover");
         print(url);
       }
@@ -271,7 +269,7 @@ class _UpdateEventScreen extends State<UpdateEventScreen> {
       String name = nameController.text;
       String description = descriptionController.text;
       String category = categoryController.text;
-      int hostId = await getUserId();
+      String hostId = await getUserId();
       // String location = "Plattsburgh";
       Event newEvent = Event(hostId: hostId, name: name, description: description, category: category, startTime: start, endTime: endDate);
       print("DEBUG new event is : $newEvent");

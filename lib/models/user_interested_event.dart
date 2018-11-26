@@ -1,13 +1,13 @@
 class UserInterestedEvent {
   // PROPERTIES //
   int _id;
-  int _userId;
+  String _userId;
   int _eventId;
   DateTime _creationDate;
   
   // CONSTRUCTORS //
   UserInterestedEvent.create();
-  UserInterestedEvent({int userId, int eventId}){
+  UserInterestedEvent({String userId, int eventId}){
     _userId = userId;
     _eventId = eventId;
     _creationDate = DateTime.now();
@@ -23,13 +23,13 @@ class UserInterestedEvent {
 
   // GETTERS //
   int get id => _id;
-  int get userId => _userId;
+  String get userId => _userId;
   int get eventId => _eventId;
   DateTime get creationDate => _creationDate;
 
   // SETTERS //
   set id(int id) => _id = id;
-  set userId(int userId) => _userId = userId;
+  set userId(String userId) => _userId = userId;
   set eventId(int eventId) => _eventId = eventId;
   set creationDate(DateTime creationDate) => _creationDate = creationDate;
 

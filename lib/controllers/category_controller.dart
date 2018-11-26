@@ -93,9 +93,3 @@ class CategoryController extends BaseController {
   Future<void> test() async {
   }
 }
-
-void main () {
-  CategoryController e = CategoryController();
-
-
-}

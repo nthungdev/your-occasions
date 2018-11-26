@@ -1,14 +1,14 @@
 class FriendList {
   // PROPERTIES //
   int _id;
-  int _userId;
-  int _friendId;
+  String _userId;
+  String _friendId;
   DateTime _creationDate;
   
 
   // CONSTRUCTORS //
   FriendList.create();
-  FriendList({int userId, int friendId}){
+  FriendList({String userId, String friendId}){
     _userId = userId;
     _friendId = friendId;
     _creationDate = DateTime.now();
@@ -24,14 +24,14 @@ class FriendList {
 
   // GETTERS //
   int get id => _id;
-  int get userId => _userId;
-  int get friendId => _friendId;
+  String get userId => _userId;
+  String get friendId => _friendId;
   DateTime get creationDate => _creationDate;
 
   // SETTERS //
   set id(int id) => _id = id;
-  set userId(int userId) => _userId = userId;
-  set friendId(int friendId) => _friendId = friendId;
+  set userId(String userId) => _userId = userId;
+  set friendId(String friendId) => _friendId = friendId;
   set creationDate(DateTime creationDate) => _creationDate = creationDate;
 
   // METHODS //

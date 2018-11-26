@@ -1,105 +1,96 @@
+import 'package:meta/meta.dart';
+
 class User {
   // PROPERTIES //
-  int _id;
-  String _name;
-  String _email;
-  String _password;
-  DateTime _birthday;
-  String _picture;
-  int _one;
-  int _two;
-  int _three;
-  int _four;
-  int _five;
-  int _followers;
-  double _rating;
-  bool _isUsed;
-  DateTime _creationDate;
+  String id;
+  String name;
+  String email;
+  String provider;
+  DateTime birthday;
+  String picture;
+  int one;
+  int two;
+  int three;
+  int four;
+  int five;
+  double rating;
+  bool isUsed;
+  DateTime creationDate;
+  int followers;
+  int following;
 
   // CONSTRUCTORS //
   User.create();
-  User({String name, String email, String password, DateTime birthday, String picture, 
-  int one, int two, int three, int four, int five, double rating, bool isUsed=true}) {
-    // print("name is $name");
-    this._name = name;
-    this._email = email;
-    this._password = password;
-    this._birthday = birthday;
-    this._picture = picture;
-    this._one = one;
-    this._two = two;
-    this._three = three;
-    this._four = four;
-    this._five = five;
-    this._rating = rating;
-    this._isUsed = isUsed;
-    this._creationDate = DateTime.now();
+  User({@required this.id, this.name, this.email, @required this.provider, this.birthday, this.picture, 
+  this.one, this.two, this.three, this.four, this.five, this.rating, bool isUsed=true}) {
+    this.isUsed = isUsed;
+    this.creationDate = DateTime.now();
   }
   User.createFromMap(Iterable<Map<String, dynamic>> map){
     map.forEach((item) {
-      _id = item['id'];
-      _name = item['name'];
-      _email = item['email'];
-      _password = item['password'];
-      _birthday = item['birthday'];
-      _picture = item['picture'];
-      _one = item['one'];
-      _two = item['two'];
-      _three = item['three'];
-      _four = item['four'];
-      _five = item['five'];
-      _rating = item['rating'];
-      _followers = item['followers'];
-      _isUsed = item['isUsed'];
-      _creationDate = item['creationDate'];
+      id = item['id'];
+      name = item['name'];
+      email = item['email'];
+      provider = item['provider'];
+      birthday = item['birthday'];
+      picture = item['picture'];
+      one = item['one'];
+      two = item['two'];
+      three = item['three'];
+      four = item['four'];
+      five = item['five'];
+      rating = item['rating'];
+      isUsed = item['isUsed'];
+      creationDate = item['creationDate'];
+      followers = item['followers'];
+      following = item['following'];
     });
   }
 
   // GETTERS //
-  int get id => _id;
-  String get name => _name;
-  String get email => _email;
-  String get password => _password;
-  DateTime get birthday => _birthday;
-  String get picture => _picture;
-  int get one => _one;
-  int get two => _two;
-  int get three => _three;
-  int get four => _four;
-  int get five => _five;
-  double  get rating => _rating;
-  int get followers => _followers;
-  bool get isUsed => _isUsed;
-  DateTime get creationDate => _creationDate;
+  // String get id => _id;
+  // String get name => _name;
+  // String get email => _email;
+  // String get password => _password;
+  // DateTime get birthday => _birthday;
+  // String get picture => _picture;
+  // int get one => _one;
+  // int get two => _two;
+  // int get three => _three;
+  // int get four => _four;
+  // int get five => _five;
+  // double  get rating => _rating;
+  // int get followers => _followers;
+  // bool get isUsed => _isUsed;
+  // DateTime get creationDate => _creationDate;
 
   // SETTERS //
-  set id(int id) => _id = id;
-  set name(String name) => _name = name;
-  set email(String email) => _email = email;
-  set password(String password) => _password = password;
-  set birthday(DateTime birthday) => _birthday = birthday;
-  set picture(String picture) => _picture = picture;
-  set one(int one) => _one = one;
-  set two(int two) => _two = two;
-  set three(int three) => _three = three;
-  set four(int four) => _four = four;
-  set five(int five) => _five = five;
-  set rating(double rating) => _rating = rating;
-  set followers(int followers) => _followers = followers;
-  set isUsed(bool isUsed) => _isUsed = isUsed;
-  set creationDate(DateTime creationDate) => _creationDate = creationDate;
+  // set id(String id) => _id = id;
+  // set name(String name) => _name = name;
+  // set email(String email) => _email = email;
+  // set password(String password) => _password = password;
+  // set birthday(DateTime birthday) => _birthday = birthday;
+  // set picture(String picture) => _picture = picture;
+  // set one(int one) => _one = one;
+  // set two(int two) => _two = two;
+  // set three(int three) => _three = three;
+  // set four(int four) => _four = four;
+  // set five(int five) => _five = five;
+  // set rating(double rating) => _rating = rating;
+  // set followers(int followers) => _followers = followers;
+  // set isUsed(bool isUsed) => _isUsed = isUsed;
+  // set creationDate(DateTime creationDate) => _creationDate = creationDate;
 
   // METHODS //
-  User clone() {
-    return User.createFromMap(List.filled(1, this.getProperties()));
+  static User clone(User user) {
+    return User.createFromMap(List.filled(1, user.getProperties()));
   }
 
   void printInfo() {
     String info = """
-    ID: ${id.toString()}
+    ID: $id
     Name: $name
     Email: $email
-    Password: $password
     Birthday: $birthday
     Picture: $picture
     IsUsed: $isUsed
@@ -112,10 +103,10 @@ class User {
   /// Return a Map<String, dynamic> with keys are the properties of User, values are the properties' values.
   Map<String, dynamic> getProperties() {
     Map<String, dynamic> map = {};
-    map['id'] = id;
+    map['id'] = this.id;
     map['name'] = name;
     map['email'] = email;
-    map['password'] = password;
+    map['provider'] = provider;
     map['birthday'] = birthday;
     map['picture'] = picture;
     map['one'] = one;
@@ -124,9 +115,10 @@ class User {
     map['four'] = four;
     map['five'] = five;
     map['rating'] = rating;
-    map['followers'] = followers;
     map['isUsed'] = isUsed;
     map['creationDate'] = creationDate;
+    map['followers'] = followers;
+    map['following'] = following;
     return map;
   }
 
