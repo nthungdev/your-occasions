@@ -182,7 +182,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
               follower+=1;
             });
           }},
-        child: new Text(followed == true ? 'Followed' : 'Follow'),
+        child: new Text(followed == false ? 'Follow' : 'Following'),
       );
   }
 
