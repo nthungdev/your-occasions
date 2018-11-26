@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:image_picker/image_picker.dart';
+import 'package:youroccasions/models/data.dart';
 
 import 'package:youroccasions/screens/home/home.dart';
 import 'package:youroccasions/models/event.dart';
@@ -251,7 +252,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
       String name = nameController.text;
       String description = descriptionController.text;
       String category = categoryController.text;
-      String hostId = await getUserId();
+      String hostId = Dataset.currentUser.value.id;
       // String location = "Plattsburgh";
       if(_image == null) {
         _isSigningUp = false;
