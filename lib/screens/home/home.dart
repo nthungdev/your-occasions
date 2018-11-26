@@ -69,7 +69,7 @@ class _HomeScreen extends State<HomeScreen> with SingleTickerProviderStateMixin 
   }
 
   Future<void> getCurrentUser(String id) async {
-    List<User> currentUser = await controller.getUser(id: id);
+    List<User> currentUser = await controller.getUsers(id: id);
     print(currentUser);
     Dataset.currentUser.value = currentUser[0];
   }

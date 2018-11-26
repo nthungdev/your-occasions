@@ -82,7 +82,7 @@ class UserController extends BaseController {
   }
 
   /// Select rows from users table and return a list of User objects.
-  Future<List<User>> getUser({ String id, String email, String name, bool isUsed=true}) async{
+  Future<List<User>> getUsers({ String id, String email, String name, String provider, bool isUsed=true}) async{
     await connect();
     List<User> result = [];
     String query = "SELECT * FROM users ";
@@ -93,6 +93,7 @@ class UserController extends BaseController {
       query += "WHERE ";
       if(name != null) { query += "name LIKE '%$name%' "; }
       else if(email != null) { query += "email = @email "; }
+      else if(provider != null) { query += "provider = @provider "; }
       else if(id != null) { query += "id = @id ";}
     }
     // print("DEBUG email is: $email");
@@ -103,6 +104,7 @@ class UserController extends BaseController {
       'email' : email,
       'id' : id,
       'name' : name,
+      'provider' : provider,
       'isUsed' : isUsed,
     });
     // print("DEBUG RESULT is : $queryResult");
@@ -117,6 +119,23 @@ class UserController extends BaseController {
     await connect();
     List<User> result = [];
     String query = "SELECT * FROM users WHERE email = @email ";
+    
+    var queryResult = await connection.mappedResultsQuery(query, substitutionValues: { 'email': email });
+    
+    for (var item in queryResult) {
+      result.add(User.createFromMap(item.values));
+    }
+
+    if (result.length == 0) { return null; }
+
+    await disconnect();
+    return result[0];
+  }
+
+  Future<User> getUserWithGoogle(String email) async{
+    await connect();
+    List<User> result = [];
+    String query = "SELECT * FROM users WHERE email = @email AND provider = 'google'";
     
     var queryResult = await connection.mappedResultsQuery(query, substitutionValues: { 'email': email });
     

@@ -100,7 +100,7 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
     }
     else {
       UserController uc = UserController();
-      finalResult = await uc.getUser()
+      finalResult = await uc.getUsers()
         ..removeWhere((user) => !topHostMap.containsKey(user.id));
     }
     

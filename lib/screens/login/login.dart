@@ -84,7 +84,8 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
       await setUserId(userFirebase.uid);
       await setIsLogin(true);
       await setUserEmail(userFirebase.email);
-      
+      await setUserName(userFirebase.displayName);
+
       Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()),);
     }
     catch (e) {
@@ -123,7 +124,7 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
       print(googleUser);
       /// Check email is used on any other user or not.
       /// If yes, stop. 
-      User userFromDB = await _userController.getUserWithEmail(googleUser.email);
+      User userFromDB = await _userController.getUserWithGoogle(googleUser.email);
       if (userFromDB != null && userFromDB.provider != "google") { 
         showSnackbar("Email is used");
         print("Email is used");
@@ -151,12 +152,16 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
           }
         );
       }
+      
+      await setUserEmail(firebaseUser.email);
+      await setUserName(firebaseUser.displayName);
+      Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()),);
+
     }
     catch (e) {
       print("error $e");
     }
 
-    Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()),);
   }
 
   void handleSignIn() async {

@@ -77,7 +77,7 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
         _generateSmallEventCards();
       });
 
-      uc.getUser(name: _searchController.text).then((value) {
+      uc.getUsers(name: _searchController.text).then((value) {
         _users = value;
         print("DEBUG: users list: ");
         _generateSmallUserCards();
