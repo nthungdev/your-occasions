@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:youroccasions/models/data.dart';
 
 import 'package:youroccasions/screens/home/home.dart';
 import 'package:youroccasions/screens/login/signup.dart';
@@ -85,6 +86,7 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
       await setIsLogin(true);
       await setUserEmail(userFirebase.email);
       await setUserName(userFirebase.displayName);
+      Dataset.currentUser.value = await _userController.getUserWithEmail(userFirebase.email);
 
       Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()),);
     }
@@ -122,6 +124,7 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
       });
       if (googleUser == null) return;
       print(googleUser);
+      print("googleUser User's picture: ${googleUser.photoUrl}");
       /// Check email is used on any other user or not.
       /// If yes, stop. 
       User userFromDB = await _userController.getUserWithGoogle(googleUser.email);
@@ -141,8 +144,8 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
       print("uid: ${firebaseUser.uid}");
 
       if (userFromDB == null) {
-        User newUser = User(id: firebaseUser.uid, name: googleUser.displayName, email: googleUser.email, picture: googleUser.photoUrl, provider: "google");
-        _userController.insert(newUser)
+        User newUser = User(id: firebaseUser.uid, name: firebaseUser.displayName, email: firebaseUser.email, picture: firebaseUser.photoUrl, provider: "google");
+        await _userController.insert(newUser)
           .then((value) {
             print("DEBUG name is : ${newUser.name}");
             print("Your account is created successfully!");
@@ -153,8 +156,12 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
         );
       }
       
+      await setUserId(firebaseUser.uid);
       await setUserEmail(firebaseUser.email);
       await setUserName(firebaseUser.displayName);
+      
+      print("Firebase User's picture: ${firebaseUser.photoUrl}");
+      Dataset.currentUser.value = await _userController.getUserWithEmail(firebaseUser.email);
       Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()),);
 
     }

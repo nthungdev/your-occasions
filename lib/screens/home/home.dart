@@ -45,24 +45,26 @@ class _HomeScreen extends State<HomeScreen> with SingleTickerProviderStateMixin 
     _pageController = PageController();
     _title = "Feed";
 
-    getUserName().then((value) {
-      setState(() {
-        _accountName = value;
-      });
-    });
-    getUserEmail().then((value) {
-      setState(() {
-        _accountEmail = value;
-      });
-    });
-    getUserId().then((value) {
-      id = value;
-      Dataset.userId.value = id;
-      getCurrentUser(id);
-    });
+    // getUserName().then((value) {
+    //   setState(() {
+    //     _accountName = value;
+    //   });
+    // });
+    // getUserEmail().then((value) {
+    //   setState(() {
+    //     _accountEmail = value;
+    //   });
+    // });
+    // getUserId().then((value) {
+    //   id = value;
+    //   Dataset.userId.value = id;
+    //   getCurrentUser(id);
+    // });
 
     _accountName = Dataset.currentUser.value.name;
     _accountEmail = Dataset.currentUser.value.email;
+
+    print("User's picture: " + Dataset.currentUser.value.picture);
     
     
   }

@@ -18,13 +18,11 @@ void main() async {
     }
     else {
       Dataset.currentUser.value = userFromDB;
+      runApp(YourOccasions(HomeScreen()));
     }
-    runApp(YourOccasions(HomeScreen()));
   }
-  else {
-    runApp(YourOccasions(LoginWithEmailScreen()));
-    
-  }
+
+  runApp(YourOccasions(LoginWithEmailScreen()));
 }
 
 class YourOccasions extends StatelessWidget {

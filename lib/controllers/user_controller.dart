@@ -23,8 +23,8 @@ class UserController extends BaseController {
   /// Insert a new row into users table.
   Future<void> insert(User model) async {
     await connect();
-    await connection.query("""INSERT INTO users (id, name, email, provider, birthday, is_used, creation_date)
-      VALUES (@id, @name, @email, @provider, @birthday, @isUsed, @creationDate)""",
+    await connection.query("""INSERT INTO users (id, name, email, provider, birthday, is_used, creation_date, picture)
+      VALUES (@id, @name, @email, @provider, @birthday, @isUsed, @creationDate, @picture)""",
       substitutionValues: model.getProperties());
     await disconnect();
   }
@@ -170,6 +170,7 @@ class UserController extends BaseController {
     await connect();
     var query = "SELECT * FROM mostfollowedusers()";
     var queryResult = await connection.mappedResultsQuery(query);
+    print(queryResult);
     await disconnect();
     return List<User>.generate(queryResult.length, (index) {
       return User.createFromMap(queryResult[index].values);
