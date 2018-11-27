@@ -64,7 +64,8 @@ class _HomeScreen extends State<HomeScreen> with SingleTickerProviderStateMixin 
     _accountName = Dataset.currentUser.value.name;
     _accountEmail = Dataset.currentUser.value.email;
 
-    print("User's picture: " + Dataset.currentUser.value.picture);
+    print("User's picture: \n");
+    print(Dataset.currentUser.value.picture);
     
     
   }

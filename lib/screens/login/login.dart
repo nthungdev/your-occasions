@@ -87,6 +87,8 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
       await setUserEmail(userFirebase.email);
       await setUserName(userFirebase.displayName);
       Dataset.currentUser.value = await _userController.getUserWithEmail(userFirebase.email);
+      print("User: ");
+      print(Dataset.currentUser.value);
 
       Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()),);
     }

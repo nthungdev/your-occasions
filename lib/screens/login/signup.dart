@@ -2,6 +2,7 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:youroccasions/screens/home/home.dart';
 import 'package:youroccasions/models/user.dart';
@@ -32,7 +33,11 @@ class _SignUpWithEmailScreen extends State<SignUpWithEmailScreen> {
   FocusNode password2Node;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormFieldState> _emailKey = GlobalKey<FormFieldState>();
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  bool _isDuplicatedEmail;
+
 
   @override
   void initState() {
@@ -48,6 +53,8 @@ class _SignUpWithEmailScreen extends State<SignUpWithEmailScreen> {
     emailNode = FocusNode();
     passwordNode = FocusNode();
     password2Node = FocusNode();
+
+    _isDuplicatedEmail = false;
   }
 
   @override
@@ -67,6 +74,19 @@ class _SignUpWithEmailScreen extends State<SignUpWithEmailScreen> {
     password2Controller.dispose();
   }
 
+  String _validateEmail(String input) {
+    if (_isDuplicatedEmail) {
+      _isDuplicatedEmail = false;
+      return "The email address is already in use by another account";
+    }
+    
+    if (!isEmail(input)) {
+      return "Invalid Email";
+    }
+
+    return null;
+  }
+
   void _submit() async {
     if (!this._formKey.currentState.validate()) {
       this._formKey.currentState.save();
@@ -74,6 +94,7 @@ class _SignUpWithEmailScreen extends State<SignUpWithEmailScreen> {
       print("Invalid login");
       return;
     }
+
     this._formKey.currentState.save();
 
     try {
@@ -98,8 +119,18 @@ class _SignUpWithEmailScreen extends State<SignUpWithEmailScreen> {
 
       print(_auth.currentUser());
 
-    } catch (e) {
-      print("Error occurs: \n$e");
+    } on PlatformException catch (e) {
+      print("Error occurs: \n${e.toString()}");
+      
+      switch (e.message) {
+        case "The email address is already in use by another account.":
+          print("The email address is already in use by another account.");
+          FocusScope.of(context).requestFocus(emailNode);
+          _isDuplicatedEmail = true;
+          this._emailKey.currentState.validate();
+          break;
+      }
+
     }
     
   }
@@ -119,26 +150,6 @@ class _SignUpWithEmailScreen extends State<SignUpWithEmailScreen> {
       ),
     );
   }
-
-  // Widget emailForm() {
-  //   return Container(
-  //       margin: const EdgeInsets.all(10.0),
-  //       width: 260.0,
-  //       // color: const Color(0xFF00FF00),
-  //       child: TextFormField(
-  //         controller: emailController,
-  //         keyboardType: TextInputType.emailAddress,
-  //         // validator: (email) !_validateEmail(email) ? "Invalid email" : null,
-  //         validator: (email) => _validateEmail(email),
-  //         autofocus: false,
-  //         decoration: InputDecoration(
-  //           hintText: 'Email',
-  //           contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-  //           border:
-  //               OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
-  //         ),
-  //       ));
-  // }
 
   Widget _buildFirstNameInput() {
     final screen = MediaQuery.of(context).size;
@@ -192,11 +203,12 @@ class _SignUpWithEmailScreen extends State<SignUpWithEmailScreen> {
     return SizedBox(
       width: screen.width / 1.5,
       child: TextFormField(
+        key: _emailKey,
         focusNode: emailNode,
         controller: emailController,
         textInputAction: TextInputAction.next,
         keyboardType: TextInputType.emailAddress,
-        validator: (email) => isEmail(email) ? null : "Invalid",
+        validator: _validateEmail,
         autofocus: false,
         onFieldSubmitted: (term) {
           emailNode.unfocus();
@@ -204,7 +216,8 @@ class _SignUpWithEmailScreen extends State<SignUpWithEmailScreen> {
         },
         decoration: InputDecoration(
           labelText: "EMAIL",
-          labelStyle: TextStyle(fontWeight: FontWeight.bold)
+          labelStyle: TextStyle(fontWeight: FontWeight.bold),
+          errorMaxLines: 2
         ),
       ));
   }
@@ -250,28 +263,6 @@ class _SignUpWithEmailScreen extends State<SignUpWithEmailScreen> {
         )),
     );
   }
-
-  Future<bool> signUp() async {
-    // if (!_isSigningUp) {
-    //   _isSigningUp = true;
-    //   String name = "${firstNameController.text} ${lastNameController.text}";
-    //   String email = emailController.text;
-    //   String password = passwordController.text;
-    //   User newUser = User(name: name, email: email, password: password);
-    //   print("DEBUG new user is : $newUser");
-    //   _userController.insert(newUser)
-    //     ..then((value) {
-    //       print("DEBUG name is : ${newUser.name}");
-    //       print("Your account is created successfully!");
-    //     }, onError: (e) {
-    //       print("Sign up failed");
-    //       print(e);
-    //     });
-    //   _isSigningUp = false;
-    //   return true;
-    // }
-    return false;
-  }
   
   @override
   Widget build(BuildContext context) {
@@ -306,16 +297,6 @@ class _SignUpWithEmailScreen extends State<SignUpWithEmailScreen> {
               ],
             ),
           ),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.center,
-          //   children: <Widget>[
-          //     firstNameForm(),
-          //     lastNameForm()
-          // ],),
-          // passwordForm(),
-          // password2Form(),
-          // signUpButton(),
-          // switchPageButton()
         ]
       )
     );
