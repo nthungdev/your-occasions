@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'dart:async';
 
 import 'package:youroccasions/screens/user/diagonally_cut_colored_image.dart';
 import 'package:youroccasions/models/user.dart';
@@ -33,6 +35,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
   bool followed = true;
   FriendList friend;
   int follower;
+  Timer _queryTimer;
 
   @override
   initState() {
@@ -58,6 +61,18 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
     //     id = value;
     //   });
     // });
+  }
+
+  void _handleTimer() {
+    if(followed) {
+      friendController.deleteFriend(currentUser.id, id);
+      _userController.decreaseFollowers(user.id);
+    }
+    else{
+      friendController.insert(friend);
+      _userController.increaseFollowers(user.id);
+    }
+    _queryTimer = null;
   }
   
   Widget _buildAvatar() {
@@ -167,19 +182,27 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
         textColor: textColor,
         onPressed: () async {
           if (followed == true) { 
-            friendController.deleteFriend(currentUser.id, id);
-            _userController.decreaseFollowers(user.id);
+            // friendController.deleteFriend(currentUser.id, id);
+            // _userController.decreaseFollowers(user.id);
             setState((){
               followed = !followed;
               follower-=1;
+
+              if(_queryTimer == null) {
+                _queryTimer = Timer(Duration(seconds: 1), _handleTimer);
+              }
             });
           } 
           else {
-            friendController.insert(friend);
-            _userController.increaseFollowers(user.id);
+            // friendController.insert(friend);
+            // _userController.increaseFollowers(user.id);
             setState((){
               followed = !followed;
               follower+=1;
+
+              if(_queryTimer == null) {
+                _queryTimer = Timer(Duration(seconds: 1), _handleTimer);
+              }
             });
           }},
         child: new Text(followed == false ? 'Follow' : 'Following'),
