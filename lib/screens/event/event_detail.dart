@@ -51,7 +51,7 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
   }
 
-  Widget _buildHost(BuildContext context) {
+  Widget _buildHost() {
 
     new ListTile(
       onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => UserProfileScreen(user))),
@@ -84,17 +84,18 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  new ListTile(
-                    onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => UserProfileScreen(user))),
-                    leading: new Hero(
-                      tag: 0,
-                      child: new CircleAvatar(
-                        backgroundImage: new NetworkImage(user.picture),
-                      ),
-                    ),
-                    title: new Text(user.name),
-                    subtitle: new Text(user.email),
-                  ),
+                  // new ListTile(
+                  //   onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => UserProfileScreen(user))),
+                  //   leading: new Hero(
+                  //     tag: 0,
+                  //     child: new CircleAvatar(
+                  //       backgroundImage: new NetworkImage(user.picture),
+                  //     ),
+                  //   ),
+                  //   title: new Text(user.name),
+                  //   subtitle: new Text(user.email),
+                  // ),
+                  _buildHost(),
                   SizedBox(
                     width: size.width,
                     height: size.width * 3 / 4,
@@ -119,17 +120,18 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
             : Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  new ListTile(
-                    onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => UserProfileScreen(user))),
-                    leading: new Hero(
-                      tag: 0,
-                      child: new CircleAvatar(
-                        backgroundImage: new NetworkImage(user.picture),
-                      ),
-                    ),
-                    title: new Text(user.name),
-                    subtitle: new Text(user.email),
-                  ),
+                  // new ListTile(
+                  //   onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => UserProfileScreen(user))),
+                  //   leading: new Hero(
+                  //     tag: 0,
+                  //     child: new CircleAvatar(
+                  //       backgroundImage: new NetworkImage(user.picture),
+                  //     ),
+                  //   ),
+                  //   title: new Text(user.name),
+                  //   subtitle: new Text(user.email),
+                  // ),
+                  _buildHost(),
                   SizedBox(
                     width: size.width,
                     height: size.width * 3 / 4,
