@@ -24,7 +24,8 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
     _hasData2 = false;
     _hasData3 = false;
     _hasData4 = false;
-    getData();
+    // getData();
+    _refresh();
   }
 
   
@@ -52,6 +53,23 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
         }
       }
     );
+  }
+
+  Future<void> _refresh() async {
+    await getTopHost().then((onValue) {
+      if(this.mounted) {
+        setState(() { 
+          if (LeaderboardDataset.topHost.value.length != 0) { _hasData1 = true; }
+        });
+      }
+    });
+    await getMostFollowedUsers().then((onValue) {
+      if(this.mounted) {
+        setState(() { 
+          if (LeaderboardDataset.mostFollowedUsers.value.length != 0) { _hasData2 = true; }
+        });
+      }
+    });
   }
 
   // get hosts with the highest views
@@ -208,18 +226,26 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
         )
       );
     }
+
+    if (alist.length == 0) {
+      alist.add(
+        Center(child: Text("Wow such empty!"))
+      );
+    }
     
     return alist;
   }
 
   @override
   Widget build(BuildContext context) {
-    var screen = MediaQuery.of(context).size;
     return new Container(
       color: Colors.white,
-      child: ListView(
-        padding: const EdgeInsets.all(15.0),
-        children: _buildListViewChildren(),
+      child: RefreshIndicator(
+        onRefresh: _refresh,
+        child: ListView(
+          padding: const EdgeInsets.all(15.0),
+          children: _buildListViewChildren(),
+        ),
       ),
     );
   }

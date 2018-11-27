@@ -38,7 +38,7 @@ class _FeedTabView extends State<FeedTabView> {
     _trendingEvents = null;
   }
 
-  Future _refresh() async {
+  Future<void> _refresh() async {
     // setState(() {
     //   FeedDataset.clearData();      
     // });
