@@ -7,6 +7,7 @@ import 'package:youroccasions/controllers/friend_list_controller.dart';
 import 'package:youroccasions/models/friend_list.dart';
 import 'package:youroccasions/controllers/user_controller.dart';
 import 'package:youroccasions/models/data.dart';
+import 'package:youroccasions/screens/user/user_profile.dart';
 
 const Color _favoriteColor = Colors.red;
 
@@ -15,7 +16,7 @@ class SmallUserCard extends StatefulWidget {
   final int userId;
 
   SmallUserCard({this.user, this.userId}) 
-    : assert(userId != null);
+    : assert(user != null);
 
   @override
   _SmallUserCardState createState() => _SmallUserCardState();
@@ -68,7 +69,7 @@ class _SmallUserCardState extends State<SmallUserCard> {
   // Push EventDetailScreen to view.
   void _onTap() {
     // _increaseView();
-    // Navigator.push(context, MaterialPageRoute(builder: (context) => EventDetailScreen(widget.event)));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfileScreen(widget.user)));
   }
 
   void _onFollowPressed() {
