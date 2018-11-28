@@ -278,7 +278,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
       }
       
       _isSigningUp = false;
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => EventDetailScreen(newEvent)));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => EventDetailScreen(createdEvent)));
       return true;
     }
     return false;

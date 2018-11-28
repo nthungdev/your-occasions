@@ -42,7 +42,7 @@ class _SmallEventCardState extends State<SmallEventCard> {
     _interestedEventController = UserInterestedEventController();
     _isInterested = false;
     _time = _formatDate(widget.time.toLocal());
-    getData();
+    _getData();
   }
 
   @override
@@ -52,7 +52,7 @@ class _SmallEventCardState extends State<SmallEventCard> {
     _interestedEventController = null;
   }
 
-  void getData() async {
+  void _getData() async {
     try {
       var userId = await getUserId();
       var result = await _interestedEventController.getUserInterestedEvent(eventId: widget.event.id, userId: userId);

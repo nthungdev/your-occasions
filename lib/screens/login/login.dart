@@ -43,6 +43,7 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
   @override
   void initState() {
     super.initState();
+    print("ENTER LOGIN SCREEN");
     passwordController = TextEditingController();
     emailController = TextEditingController();
     emailNode = FocusNode();
