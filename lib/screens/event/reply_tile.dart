@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 
-class CommentTile extends StatelessWidget {
+class ReplyTile extends StatelessWidget {
   final ImageProvider image;
   final String userName;
   final DateTime postTime;
@@ -9,7 +9,7 @@ class CommentTile extends StatelessWidget {
   final VoidCallback onTap;
   final VoidCallback onTapReply;
 
-  CommentTile({Key key, this.image, this.userName, this.postTime, this.messsage, this.onTap, this.onTapReply}) 
+  ReplyTile({Key key, this.image, this.userName, this.postTime, this.messsage, this.onTap, this.onTapReply}) 
     : super(key: key);
 
   String _getTimeAway() {
@@ -51,12 +51,19 @@ class CommentTile extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   children: <Widget>[
-                    SizedBox(
-                      height: 40,
-                      width: 40,
-                      child: CircleAvatar(
-                        backgroundImage: image,
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: <Widget>[
+                        SizedBox(width: 10,),
+                        SizedBox(
+                          height: 30,
+                          width: 30,
+                          child: CircleAvatar(
+                            backgroundImage: image,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

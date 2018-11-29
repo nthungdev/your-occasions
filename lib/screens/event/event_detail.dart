@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:youroccasions/models/event_comment.dart';
+import 'package:youroccasions/screens/event/comment_input.dart';
 import 'package:youroccasions/screens/event/comment_tile.dart';
 import 'package:youroccasions/screens/event/reply_comment_page.dart';
 
@@ -44,13 +45,20 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
     super.initState();
     _gotData = false;
     commentController = TextEditingController();
-    commentController.addListener(_onCommentInputChange);
     commentNode = FocusNode();
     event = widget.event;
     _refresh();
 
     EventController ec = EventController();
     ec.increaseView(event.id);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    commentNode.dispose();
+    commentController.dispose();
   }
 
   Future<void> _refresh() async {
@@ -62,7 +70,7 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
       }
     });
 
-    _getComments();
+    await _getComments();
 
     if(this.mounted) {
       setState(() { 
@@ -128,9 +136,7 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
       ));
   }
 
-  Future<void> _getComments() async {
-    Firestore firestore = Firestore.instance;
-    // ref = FD.FirebaseDatabase.instance.reference().child("EventThreads");
+  Future<void> _getComments() async {;
     DocumentReference ref = Firestore.instance.collection('EventThreads').document('0');
     DocumentSnapshot snapshot = await ref.get();
     EventComment model = EventComment.fromSnapshot(snapshot);
@@ -139,7 +145,6 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
     print(modelNested.replies);
     EventComment modelNested2 = modelNested.replies[0];
     print(modelNested2.message);
-
 
     eventComment = model;
   }
@@ -165,79 +170,50 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
     return result;
   }
 
-  /// Detect key input event to force rebuild state.
-  /// This helps enabling or disabling the clear keyword button
-  void _onCommentInputChange(){
-    print(commentController.text);
-    setState(() { });
-  }
-
-  Widget _buildCommentInput() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
+  Widget _buildCommentHeader() {
+    return Container(
+      alignment: Alignment.centerLeft,
+      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       child: Row(
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: SizedBox(
-              height: 40,
-              width: 40,
-              child: CircleAvatar(
-                backgroundImage: Dataset.currentUser.value.picture != null 
-                ? NetworkImage(Dataset.currentUser.value.picture)
-                : AssetImage("assets/images/no-image.jpg")
-              ),
+          Text("Comments ",
+            style: TextStyle(
+              fontSize: 20,
             ),
           ),
-          Expanded(
-            child: TextFormField(
-              focusNode: commentNode,
-              controller: commentController,
-              autofocus: false,
-              validator: (message) => null,
-              textInputAction: TextInputAction.done,
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.all(0),
-                hintText: "Add a public comment",
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(style: BorderStyle.none, width: 0),
-                  // gapPadding: 0,
-                )
-              )
+          Text(eventComment.replies.length.toString(),
+            style: TextStyle(
+              color: Colors.black54,
+              fontSize: 20,
             ),
           ),
-          SizedBox(
-            width: 40,
-            height: 40,
-            child: IconButton(
-              color: Colors.blueAccent,
-              disabledColor: Colors.transparent,
-              onPressed: commentController.text.isEmpty ? null :
-              () {
-                print("Send comment");
-              },
-              icon: Icon(Icons.send),
-            ),
-          )
         ],
       ),
     );
   }
 
-  Widget _buildComment() {
-    return CommentTile(
-      onTap: () {
-        print("Comment is tapped");
-      },
-      onTapReply: () {
-        print("Reply button press");
-        Navigator.push(context, MaterialPageRoute(builder: (context) => ReplyCommentPage(eventComment: eventComment,)));
-      },
-      image: NetworkImage("https://cdn0.iconfinder.com/data/icons/avatar-15/512/ninja-512.png"),
-      userName: "Ninja",
-      messsage: "test comment",
-      postTime: DateTime.now().subtract(Duration(hours: 3, days: 7)),
-    );
+  List<Widget> _buildCommentList() {
+    List<Widget> result = List<Widget>();
+
+    eventComment.replies.forEach((comment) {
+      result.add(
+        CommentTile(
+          onTap: () {
+            print("Comment is tapped");
+          },
+          onTapReply: () {
+            print("Reply button press");
+            Navigator.push(context, MaterialPageRoute(builder: (context) => ReplyCommentPage(eventComment: eventComment,)));
+          },
+          image: NetworkImage("https://cdn0.iconfinder.com/data/icons/avatar-15/512/ninja-512.png"),
+          userName: comment.authorId,
+          messsage: comment.message,
+          postTime: comment.date,
+        )
+      );
+    });
+
+    return result;
   }
 
   List<Widget> _buildListViewContent() {
@@ -249,37 +225,36 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
           _buildCoverImage(),
           _buildHost(),
           ListTile(
+            contentPadding: EdgeInsets.symmetric(horizontal: 20),
             title: Text('Name: ${event.name}'),
           ),
           ListTile(
+            contentPadding: EdgeInsets.symmetric(horizontal: 20),
             title: Text('Description: ${event.description}'),
           ),
           ListTile(
+            contentPadding: EdgeInsets.symmetric(horizontal: 20),
             title: Text('Category: ${event.category}'),
           ),
           Divider(
             height: 1,
           ),
-          _buildCommentInput(),
+          Container(
+            height: 10,
+            color: Colors.grey[100],
+          ),
+          _buildCommentHeader(),
+          CommentInput(commentNode: commentNode, commentController: commentController, onPostComment: () {},),
           Divider(
             height: 1,
           ),
-          _buildComment(),
-          Divider(
-            height: 1,
-          ),
-          _buildComment(),
-          Divider(
-            height: 1,
-          ),
-          _buildComment(),
-          Divider(
-            height: 1,
-          ),
-          _buildComment(),
         ],
       )
     ]);
+
+    if (_gotData) {
+      result.addAll(_buildCommentList());
+    }
 
     return result;
   }
@@ -301,3 +276,4 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
     );
   }
 }
+

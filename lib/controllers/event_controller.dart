@@ -113,7 +113,7 @@ class EventController extends BaseController {
   Future<void> increaseView(int id) async {
     await connect();
 
-    String query = "UPDATE Events SET views = views + 1 WHERE id = $id";
+    String query = "UPDATE events SET views = views + 1 WHERE id = $id";
 
     await connection.execute(query);
 

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:youroccasions/models/event_comment.dart';
+import 'package:youroccasions/screens/event/comment_input.dart';
 import 'package:youroccasions/screens/event/comment_tile.dart';
+import 'package:youroccasions/screens/event/reply_tile.dart';
 
 
 class ReplyCommentPage extends StatelessWidget {
@@ -8,6 +10,8 @@ class ReplyCommentPage extends StatelessWidget {
 
   ReplyCommentPage({Key key, @required this.eventComment}) 
     : super(key: key);
+
+    
 
   String _getTimeAway() {
     Duration period = DateTime.now().difference(eventComment.date);
@@ -31,23 +35,28 @@ class ReplyCommentPage extends StatelessWidget {
   }
 
   List<Widget> _buildListViewContent() {
+    TextEditingController commentController = TextEditingController();
+    FocusNode commentNode = FocusNode();
     List<Widget> result = List<Widget>();
 
-    
     result.addAll([
       CommentTile(
         image: NetworkImage("https://cdn0.iconfinder.com/data/icons/avatar-15/512/ninja-512.png"),
-        messsage: "Main comment",
+        messsage: eventComment.message,
         onTap: () {},
         onTapReply: () {},
-        postTime: DateTime.now().subtract(Duration(days: 5)),
-        userName: "Ninja 2",
+        postTime: eventComment.date,
+        userName: eventComment.authorId,
       ),
       Divider(
         height: 1,
       ),
-      Container(
-        child: Text("Type reply here"),
+      CommentInput(
+        hintText: "Add a public reply",
+        avatarRadius: 30,
+        commentNode: commentNode, 
+        commentController: commentController, 
+        onPostComment: () {},
       ),
       Divider(
         height: 1,
@@ -57,7 +66,7 @@ class ReplyCommentPage extends StatelessWidget {
     int count = 0;
     eventComment.replies.forEach((reply) {
       result.add(
-        CommentTile(
+        ReplyTile(
           image: NetworkImage("https://cdn0.iconfinder.com/data/icons/avatar-15/512/ninja-512.png"),
           messsage: "reply $count",
           onTap: () {},
@@ -72,6 +81,10 @@ class ReplyCommentPage extends StatelessWidget {
     return result;
 
   }
+
+  // void _onCommentInputChange(){
+  //   print(commentController.text);
+  // }
 
   @override
   Widget build(BuildContext context) {
