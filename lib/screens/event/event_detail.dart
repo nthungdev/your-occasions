@@ -1,7 +1,8 @@
-import 'package:firebase_database/firebase_database.dart' as FD;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:youroccasions/models/event_comment.dart';
+import 'package:youroccasions/screens/event/comment_tile.dart';
+import 'package:youroccasions/screens/event/reply_comment_page.dart';
 
 import 'package:youroccasions/screens/home/home.dart';
 import 'package:youroccasions/screens/event/update_event.dart';
@@ -35,15 +36,15 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
   FocusNode commentNode;
   final GlobalKey<FormFieldState> commentKey = GlobalKey<FormFieldState>();
   bool _gotData;
-  FD.DatabaseReference ref;
-  FD.DataSnapshot snapshot;
   
+  EventComment eventComment;
 
   @override
   initState() {
     super.initState();
     _gotData = false;
     commentController = TextEditingController();
+    commentController.addListener(_onCommentInputChange);
     commentNode = FocusNode();
     event = widget.event;
     _refresh();
@@ -138,26 +139,9 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
     print(modelNested.replies);
     EventComment modelNested2 = modelNested.replies[0];
     print(modelNested2.message);
-    // print(model);
-    // print(model.authorId);
-    // print(model.date);
-    // print(model.eventId);
-    // // print(model.replies[0]['date']);
-    // print(model.toJson());
-    // print(snapshot.exists);
-    // print(snapshot.data);
-    // print(snapshot?.data);
 
-    // snapshot = await ref.once();
-    // print(snapshot.value);
-  }
 
-  Widget _buildCommentSection() {
-    return ListView(
-      children: <Widget>[
-
-      ],
-    );
+    eventComment = model;
   }
 
   List<Widget> _buildActionButtons() {
@@ -181,49 +165,121 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
     return result;
   }
 
+  /// Detect key input event to force rebuild state.
+  /// This helps enabling or disabling the clear keyword button
+  void _onCommentInputChange(){
+    print(commentController.text);
+    setState(() { });
+  }
+
+  Widget _buildCommentInput() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Row(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: SizedBox(
+              height: 40,
+              width: 40,
+              child: CircleAvatar(
+                backgroundImage: Dataset.currentUser.value.picture != null 
+                ? NetworkImage(Dataset.currentUser.value.picture)
+                : AssetImage("assets/images/no-image.jpg")
+              ),
+            ),
+          ),
+          Expanded(
+            child: TextFormField(
+              focusNode: commentNode,
+              controller: commentController,
+              autofocus: false,
+              validator: (message) => null,
+              textInputAction: TextInputAction.done,
+              decoration: InputDecoration(
+                contentPadding: EdgeInsets.all(0),
+                hintText: "Add a public comment",
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(style: BorderStyle.none, width: 0),
+                  // gapPadding: 0,
+                )
+              )
+            ),
+          ),
+          SizedBox(
+            width: 40,
+            height: 40,
+            child: IconButton(
+              color: Colors.blueAccent,
+              disabledColor: Colors.transparent,
+              onPressed: commentController.text.isEmpty ? null :
+              () {
+                print("Send comment");
+              },
+              icon: Icon(Icons.send),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildComment() {
+    return CommentTile(
+      onTap: () {
+        print("Comment is tapped");
+      },
+      onTapReply: () {
+        print("Reply button press");
+        Navigator.push(context, MaterialPageRoute(builder: (context) => ReplyCommentPage(eventComment: eventComment,)));
+      },
+      image: NetworkImage("https://cdn0.iconfinder.com/data/icons/avatar-15/512/ninja-512.png"),
+      userName: "Ninja",
+      messsage: "test comment",
+      postTime: DateTime.now().subtract(Duration(hours: 3, days: 7)),
+    );
+  }
+
   List<Widget> _buildListViewContent() {
     List<Widget> result = List<Widget>();
 
-    if (Dataset.currentUser.value.id != event.hostId) {
-      result.addAll([
-        _buildCoverImage(),
-        _buildHost(),
-        ListTile(
-          title: Text('Name: ${event.name}'),
-        ),
-        ListTile(
-          title: Text('Description: ${event.description}'),
-        ),
-        ListTile(
-          title: Text('Category: ${event.category}'),
-        ),
-      ]);
-    }
-    else {
-      result.addAll([
-        _buildCoverImage(),
-        _buildHost(),
-        ListTile(
-          title: Text('Name: ${event.name}'),
-        ),
-        ListTile(
-          title: Text('Description: ${event.description}'),
-        ),
-        ListTile(
-          title: Text('Category: ${event.category}'),
-        ),
-        IconButton(
-          icon: Icon(Icons.edit), 
-          onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateEventScreen(event)));
-          }
-        ),
-        IconButton(
-          icon: Icon(Icons.delete), 
-          onPressed: delete,
-        ),
-      ]);
-    }
+    result.addAll([
+      Column(
+        children: <Widget>[
+          _buildCoverImage(),
+          _buildHost(),
+          ListTile(
+            title: Text('Name: ${event.name}'),
+          ),
+          ListTile(
+            title: Text('Description: ${event.description}'),
+          ),
+          ListTile(
+            title: Text('Category: ${event.category}'),
+          ),
+          Divider(
+            height: 1,
+          ),
+          _buildCommentInput(),
+          Divider(
+            height: 1,
+          ),
+          _buildComment(),
+          Divider(
+            height: 1,
+          ),
+          _buildComment(),
+          Divider(
+            height: 1,
+          ),
+          _buildComment(),
+          Divider(
+            height: 1,
+          ),
+          _buildComment(),
+        ],
+      )
+    ]);
 
     return result;
   }

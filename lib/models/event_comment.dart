@@ -17,14 +17,17 @@ class EventComment {
     this.eventId = map['eventId'];
     this.authorId = map['authorId'];
     this.message = map['message'];
-    this.date = map['date'];
+    Timestamp temp = map['date'];
+    this.date = temp.toDate();
+    // this.date = map['date'];
     this.replies = _serializeReplies(map['replies']);
   }
   EventComment.fromSnapshot(DocumentSnapshot snapshot) {
     this.eventId = snapshot?.data['eventId'];
     this.authorId = snapshot?.data['authorId'];
     this.message = snapshot?.data['message'];
-    this.date = snapshot?.data['date'];
+    Timestamp temp = snapshot?.data['date'];
+    this.date = temp.toDate();
     this.replies = _serializeReplies(snapshot?.data['replies']);
   }
 
