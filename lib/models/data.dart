@@ -1,5 +1,6 @@
 import 'package:youroccasions/models/event.dart';
 import 'package:youroccasions/models/user.dart';
+import 'package:youroccasions/models/friend_list.dart';
 import 'package:youroccasions/models/user_attended_event.dart';
 import 'package:youroccasions/models/user_interested_event.dart';
 import 'package:youroccasions/models/user_shared_event.dart';
@@ -47,6 +48,11 @@ class FeedDataset {
   }
 }
 
+class FollowDataset {
+
+  static Data<List<User>> following = Data();
+  
+}
 
 class LeaderboardDataset {
   // values of topHost is a List of 5 hosts with highest total views from their events
