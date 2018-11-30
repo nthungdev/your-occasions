@@ -24,8 +24,9 @@ class _SocialTabView extends State<SocialTabView> {
   @override
   void initState() {
     super.initState();
-    following = FollowDataset.following.value;
     loadData();
+    following = FollowDataset.following.value;
+    // loadData();
   }
 
   void _refresh() async {
