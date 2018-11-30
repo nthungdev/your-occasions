@@ -75,6 +75,8 @@ class _SocialTabView extends State<SocialTabView> {
     for (var friend in following){
       cards.insert(1,_buildUser(friend));
     }
+    return cards;
+    
   }
 
   void onDragDown(DragDownDetails details) {
