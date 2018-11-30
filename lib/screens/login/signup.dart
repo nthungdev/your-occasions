@@ -130,9 +130,7 @@ class _SignUpWithEmailScreen extends State<SignUpWithEmailScreen> {
           this._emailKey.currentState.validate();
           break;
       }
-
     }
-    
   }
 
   Widget _buildSignUpButton() {

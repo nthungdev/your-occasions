@@ -71,7 +71,7 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
       }
     });
   }
-
+  
   // get hosts with the highest views
   Future<void> getTopHost() async {
     EventController ec = EventController();

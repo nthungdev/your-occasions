@@ -98,16 +98,16 @@ class ReplyTile extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(
-                width: 40,
-                height: 40,
-                child: IconButton(
-                  splashColor: Colors.red,
-                  onPressed: onTapReply,
-                  icon: Icon(Icons.message, color: Colors.black54,),
-                ),
-              ),
-              SizedBox(width: 10,),
+              // SizedBox(
+              //   width: 40,
+              //   height: 40,
+              //   child: IconButton(
+              //     splashColor: Colors.red,
+              //     onPressed: onTapReply,
+              //     icon: Icon(Icons.message, color: Colors.black54,),
+              //   ),
+              // ),
+              // SizedBox(width: 10,),
             ],
           ),
         ),
