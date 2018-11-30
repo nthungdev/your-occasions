@@ -39,10 +39,13 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
   bool _gotData;
   
   EventComment eventComment;
+  List<EventComment> eventComments;
 
   @override
   initState() {
     super.initState();
+
+    eventComments = List<EventComment>();
     _gotData = false;
     commentController = TextEditingController();
     commentNode = FocusNode();
@@ -136,17 +139,14 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
       ));
   }
 
-  Future<void> _getComments() async {;
-    DocumentReference ref = Firestore.instance.collection('EventThreads').document('0');
+  Future<void> _getComments() async {
+    DocumentReference ref = Firestore.instance.collection('EventThreads').document('2');
     DocumentSnapshot snapshot = await ref.get();
-    EventComment model = EventComment.fromSnapshot(snapshot);
-    print(model.replies[0]);
-    EventComment modelNested = model.replies[0];
-    print(modelNested.replies);
-    EventComment modelNested2 = modelNested.replies[0];
-    print(modelNested2.message);
-
-    eventComment = model;
+    Map<dynamic, dynamic> comments = snapshot.data;
+    List<dynamic> temp = comments['comments'];
+    temp.forEach((item) {
+      eventComments.add(EventComment.fromMap(item));
+    });
   }
 
   List<Widget> _buildActionButtons() {
@@ -181,7 +181,7 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
               fontSize: 20,
             ),
           ),
-          Text(eventComment.replies.length.toString(),
+          Text(eventComments.length.toString(),
             style: TextStyle(
               color: Colors.black54,
               fontSize: 20,
@@ -195,7 +195,8 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
   List<Widget> _buildCommentList() {
     List<Widget> result = List<Widget>();
 
-    eventComment.replies.forEach((comment) {
+    // eventComment.replies.forEach((comment) {
+    eventComments.forEach((comment) {
       result.add(
         CommentTile(
           onTap: () {

@@ -185,7 +185,7 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
         );
       });
     }
-    result = List.generate(LeaderboardDataset.mostFollowedUsers.value.sublist(0, 5).length, (index) {
+    result = List.generate(LeaderboardDataset.mostFollowedUsers.value.getRange(0, 5).length, (index) {
       return LeaderboardItem(
         rank: index + 1,
         content: (LeaderboardDataset.mostFollowedUsers.value[index]).name ?? "NoName",

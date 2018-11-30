@@ -68,11 +68,11 @@ class ReplyCommentPage extends StatelessWidget {
       result.add(
         ReplyTile(
           image: NetworkImage("https://cdn0.iconfinder.com/data/icons/avatar-15/512/ninja-512.png"),
-          messsage: "reply $count",
+          messsage: reply.message,
           onTap: () {},
           onTapReply: () {},
-          postTime: DateTime.now().subtract(Duration(days: 3)),
-          userName: "Ninja $count",
+          postTime: reply.date,
+          userName: reply.authorId,
         )
       );
       count++;
