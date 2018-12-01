@@ -7,10 +7,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="454ec42e-9685-454d-863e-47dcb55e4f1b" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_for_Android.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_for_Android.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/controllers/friend_list_controller.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/controllers/friend_list_controller.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/screens/user/user_profile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screens/user/user_profile.dart" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.dart_tool/" />
     <ignored path="$PROJECT_DIR$/.idea/" />
@@ -38,17 +37,15 @@
       <file leaf-file-name="category.dart" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/models/category.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1018" />
+            <state />
           </provider>
         </entry>
       </file>
       <file leaf-file-name="home.dart" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lib/screens/home/home.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1836">
-              <folding>
-                <element signature="e#0#20#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="272">
+              <caret line="16" column="41" selection-start-line="16" selection-start-column="41" selection-end-line="16" selection-end-column="41" />
             </state>
           </provider>
         </entry>
@@ -70,6 +67,8 @@
     </navigator>
     <panes>
       <pane id="Scope" />
+      <pane id="PackagesPane" />
+      <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -119,8 +118,6 @@
         </subPane>
         <option name="show-excluded-files" value="false" />
       </pane>
-      <pane id="AndroidView" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -203,6 +200,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="72" y="28" width="1400" height="776" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="Android Profiler" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -249,6 +247,23 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/lib/main.dart">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="27" column="45" selection-start-line="27" selection-start-column="45" selection-end-line="27" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/models/category.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/screens/home/home.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/main.dart">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
           <caret line="18" column="20" lean-forward="true" selection-start-line="18" selection-start-column="20" selection-end-line="18" selection-end-column="20" />
         </state>
@@ -287,7 +302,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/models/category.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1018" />
+        <state />
       </provider>
     </entry>
     <entry file="file://C:/flutter/packages/flutter/lib/src/widgets/framework.dart">
@@ -299,10 +314,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/screens/home/home.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1836">
-          <folding>
-            <element signature="e#0#20#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="272">
+          <caret line="16" column="41" selection-start-line="16" selection-start-column="41" selection-end-line="16" selection-end-column="41" />
         </state>
       </provider>
     </entry>

@@ -18,7 +18,7 @@ class Category {
       // this._id = item['id'];
       this._name = item['name'];
       this._description = item['description'];
-      this._isUsed = item['isUsed'];
+      this._isUsed = item['is_used'];
       this._creationDate = item['creation_date'];
     });
   }

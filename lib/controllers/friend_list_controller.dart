@@ -87,7 +87,7 @@ class FriendListController extends BaseController{
 
     await disconnect();
 
-    return result == [];
+    return result.isNotEmpty;
   }
 
   Future<List<FriendList>> getFriendList({int id, String userId, String friendId}) async{
@@ -108,7 +108,6 @@ class FriendListController extends BaseController{
       else if (friendId != null) { query += "friend_id = '$friendId' "; }
       else if(id != null) { query += "id = $id "; }
     }
-
 
     var queryResult = await connection.mappedResultsQuery(query);
 

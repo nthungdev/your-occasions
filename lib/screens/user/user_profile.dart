@@ -32,12 +32,11 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
   String id;
   List<Event> _eventList;
   User currentUser = Dataset.currentUser.value;
-  bool followed = true;
+  bool followed;
   FriendList friend;
-  // int following;
-  List<FriendList> following;
+  // List<FriendList> following;
   int follower;
-  int follow;
+  int follow = 0;
   Timer _queryTimer;
 
   @override
@@ -48,44 +47,58 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
     friend = FriendList();
     friend.userId = currentUser.id;
     friend.friendId = user.id;
-    friendController.getFriendList(userId: currentUser.id).then((value){
-      setState(() {
-        following = value;
-        follow = following.length;
-      });
-    });
-    _eventController.getEvent(hostId: user.id).then((value){
-      setState(() {
-        _eventList = value;
-      });
-    friendController.getFriend(currentUser.id, user.id).then((value){
-      setState(() {
-        followed = value;
-      });
-    });
-  });
+    _refresh();
+  }
+
 
     // getUserId().then((value){
     //   setState(() {
     //     id = value;
     //   });
     // });
+
+  Future<void> _refresh() async{
+    var temp = await friendController.getFriend(currentUser.id, widget.user.id);
+
+    var temp1 = await _eventController.getEvent(hostId: widget.user.id);
+
+    var temp2 = (await friendController.getFriendList(userId: widget.user.id)).length;
+
+    setState(() {
+          followed = temp;
+          _eventList = temp1;
+          follow = temp2;
+        });
   }
-
-
 
   void _handleTimer() {
     if(!followed) {
-      follower-=1;
-      friendController.deleteFriend(currentUser.id, widget.user.id);
-      _userController.decreaseFollowers(user.id);
+      // follower-=1;
+      _delete();
     }
     else{
-      follower+=1;
-      friendController.insert(friend);
-      _userController.increaseFollowers(user.id);
+      // follower+=1;
+      _add();
     }
     _queryTimer = null;
+  }
+
+  void _add() async{
+    var isFollowed = await friendController.getFriend(currentUser.id, user.id);
+    if (!isFollowed){
+      await _userController.increaseFollowers(widget.user.id);
+      await friendController.insert(friend);
+      // await _userController.increaseFollowers(user.id);
+    }
+  }
+
+  void _delete() async{
+    var isFollowed = await friendController.getFriend(currentUser.id, user.id);
+    if (isFollowed){
+      await _userController.decreaseFollowers(widget.user.id);
+      await friendController.deleteFriend(currentUser.id, widget.user.id);
+      
+    }
   }
   
   Widget _buildAvatar() {
@@ -201,7 +214,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
               followed = !followed;
 
               if(_queryTimer == null) {
-                _queryTimer = Timer(Duration(seconds: 1), _handleTimer);
+                _queryTimer = Timer(Duration(milliseconds: 500), _handleTimer);
               }
             });
           }
@@ -288,6 +301,13 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
       ),
     );
 
+    if (followed == null){
+      print(1);
+      return Container(
+        color: Colors.white,
+        child:Center(child: const CircularProgressIndicator())
+      );
+    }
     return new Scaffold(
       body: new Container(
         height: double.infinity,
