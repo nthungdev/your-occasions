@@ -41,7 +41,7 @@ class User {
       five = item['five'];
       rating = item['rating'];
       isUsed = item['isUsed'];
-      creationDate = item['creationDate'];
+      creationDate = item['creation_date'];
       followers = item['followers'];
       following = item['following'];
     });
