@@ -60,9 +60,7 @@ class _SocialTabView extends State<SocialTabView> {
       leading: Hero(
         tag: 0,
         child: CircleAvatar(
-          backgroundImage: user.picture != null
-          ? NetworkImage(user.picture)
-          : AssetImage("assets/images/no-image.jpg")
+          backgroundImage: NetworkImage(user.picture ?? "assets/images/no-image.jpg")
         ),
       ),
       title: Text(user.name),

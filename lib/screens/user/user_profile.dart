@@ -34,7 +34,10 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
   User currentUser = Dataset.currentUser.value;
   bool followed = true;
   FriendList friend;
+  // int following;
+  List<FriendList> following;
   int follower;
+  int follow;
   Timer _queryTimer;
 
   @override
@@ -43,13 +46,19 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
     user = widget.user;
     follower = user.followers;
     friend = FriendList();
+    friend.userId = currentUser.id;
+    friend.friendId = user.id;
+    friendController.getFriendList(userId: currentUser.id).then((value){
+      setState(() {
+        following = value;
+        follow = following.length;
+      });
+    });
     _eventController.getEvent(hostId: user.id).then((value){
       setState(() {
         _eventList = value;
-        friend.userId = currentUser.id;
-        friend.friendId = widget.user.id;
       });
-    friendController.getFriend(currentUser.id, widget.user.id).then((value){
+    friendController.getFriend(currentUser.id, user.id).then((value){
       setState(() {
         followed = value;
       });
@@ -63,12 +72,16 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
     // });
   }
 
+
+
   void _handleTimer() {
-    if(followed) {
+    if(!followed) {
+      follower-=1;
       friendController.deleteFriend(currentUser.id, widget.user.id);
       _userController.decreaseFollowers(user.id);
     }
     else{
+      follower+=1;
       friendController.insert(friend);
       _userController.increaseFollowers(user.id);
     }
@@ -160,7 +173,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
       child: new Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          new Text('90 Following', style: followerStyle),
+          new Text('$follow Following', style: followerStyle),
           new Text(
             ' | ',
             style: followerStyle.copyWith(
@@ -181,30 +194,29 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
         color: backgroundColor,
         textColor: textColor,
         onPressed: () async {
-          if (followed == true) { 
+          if (this.mounted) { 
             // friendController.deleteFriend(currentUser.id, id);
             // _userController.decreaseFollowers(user.id);
             setState((){
               followed = !followed;
-              follower-=1;
 
               if(_queryTimer == null) {
                 _queryTimer = Timer(Duration(seconds: 1), _handleTimer);
               }
             });
-          } 
-          else {
-            // friendController.insert(friend);
-            // _userController.increaseFollowers(user.id);
-            setState((){
-              followed = !followed;
-              follower+=1;
+          }
+          // else {
+          //   // friendController.insert(friend);
+          //   // _userController.increaseFollowers(user.id);
+          //   setState((){
+          //     followed = !followed;
+          //     follower+=1;
 
-              if(_queryTimer == null) {
-                _queryTimer = Timer(Duration(seconds: 1), _handleTimer);
-              }
-            });
-          }},
+          //     if(_queryTimer == null) {
+          //       _queryTimer = Timer(Duration(seconds: 1), _handleTimer);
+          //     }
+          //   });
+        },
         child: new Text(followed == false ? 'Follow' : 'Following'),
       );
   }
