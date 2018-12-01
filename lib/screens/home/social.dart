@@ -18,7 +18,8 @@ class SocialTabView extends StatefulWidget {
 }
 
 class _SocialTabView extends State<SocialTabView> {
-
+  
+  User currentUser = Dataset.currentUser.value;
   List<User> following;
 
   @override
@@ -38,7 +39,7 @@ class _SocialTabView extends State<SocialTabView> {
   }
 
   Future _getFollowing() async {
-      var data = await _friendController.getFriendList();
+      var data = await _friendController.getFriendList(userId: currentUser.id);
       List<User> users;
       for (var friend in data){
         User temp = await _userController.getUserWithId(friend.friendId);
@@ -75,6 +76,7 @@ class _SocialTabView extends State<SocialTabView> {
     for (var friend in following){
       cards.insert(1,_buildUser(friend));
     }
+
     return cards;
     
   }
