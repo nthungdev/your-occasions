@@ -87,8 +87,6 @@ class FriendListController extends BaseController{
 
     await disconnect();
 
-    print(result);
-
     return result.isNotEmpty;
   }
 
@@ -114,7 +112,6 @@ class FriendListController extends BaseController{
     var queryResult = await connection.mappedResultsQuery(query);
 
     for (var item in queryResult) {
-      print(item.values);
       result.add(FriendList.createFromMap(item.values));
     }
 
