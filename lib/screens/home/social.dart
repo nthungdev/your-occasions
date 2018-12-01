@@ -6,6 +6,7 @@ import 'package:youroccasions/models/user.dart';
 import 'package:youroccasions/controllers/user_controller.dart';
 import 'package:youroccasions/screens/user/user_profile.dart';
 
+import 'dart:async';
 
 import 'package:youroccasions/models/data.dart';
 
@@ -25,12 +26,12 @@ class _SocialTabView extends State<SocialTabView> {
   @override
   void initState() {
     super.initState();
-    loadData();
-    following = FollowDataset.following.value;
     // loadData();
+    following = FollowDataset.following.value;
+    loadData();
   }
 
-  void _refresh() async {
+  Future<void> _refresh() async {
       await _getFollowing();
   }
 
@@ -40,10 +41,10 @@ class _SocialTabView extends State<SocialTabView> {
 
   Future _getFollowing() async {
       var data = await _friendController.getFriendList(userId: currentUser.id);
-      List<User> users;
+      List<User> users = List<User>();
       for (var friend in data){
         User temp = await _userController.getUserWithId(friend.friendId);
-        users.insert(1,temp);
+        users.add(temp);
       };
       FollowDataset.following.value = users;
       if(this.mounted) {
@@ -70,8 +71,12 @@ class _SocialTabView extends State<SocialTabView> {
   }
 
   List<Widget> _buildFriends(){
-
     List<Widget> cards = List<Widget>();
+
+    if (following.length == 0 || following[0] == null){
+      return cards;
+    }
+
 
     for (var friend in following){
       cards.insert(1,_buildUser(friend));
@@ -84,6 +89,31 @@ class _SocialTabView extends State<SocialTabView> {
   void onDragDown(DragDownDetails details) {
     print(details.globalPosition);
     _refresh();
+  }
+
+  Widget _buildLoadingCard() {
+    final screen = MediaQuery.of(context).size;
+
+    return Material(
+      color: Colors.transparent,
+      child: SizedBox(
+        height: screen.height / 7,
+        child: Card(
+          clipBehavior: Clip.antiAlias,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          child: Row(
+            children: <Widget>[
+              AspectRatio(
+                aspectRatio: 4 / 3,
+                child: Container(
+                  color: Colors.grey[200],
+                )
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
   
   @override

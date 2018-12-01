@@ -47,9 +47,9 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
       setState(() {
         _eventList = value;
         friend.userId = currentUser.id;
-        friend.friendId = id;
+        friend.friendId = widget.user.id;
       });
-    friendController.getFriend(currentUser.id, id).then((value){
+    friendController.getFriend(currentUser.id, widget.user.id).then((value){
       setState(() {
         followed = value;
       });
@@ -65,7 +65,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
 
   void _handleTimer() {
     if(followed) {
-      friendController.deleteFriend(currentUser.id, id);
+      friendController.deleteFriend(currentUser.id, widget.user.id);
       _userController.decreaseFollowers(user.id);
     }
     else{
