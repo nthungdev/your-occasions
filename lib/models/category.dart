@@ -58,6 +58,20 @@ class Categories {
   // TODO write descriptions for each category of event
   // TODO document description for each category in comments
 
+  static final all = [music, 
+                      food, 
+                      festival, 
+                      party,
+                      business, 
+                      tech,
+                      charity, 
+                      sports, 
+                      politics, 
+                      comedy, 
+                      fashion,
+                      science,
+                      study];
+
   static final Category music = Category(name: "Music", description: "Music event");
   static final Category food = Category(name: "Food", description: "Food event");
   static final Category festival = Category(name: "Festival", description: "Festival event");

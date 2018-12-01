@@ -22,10 +22,12 @@ class _FeedTabView extends State<FeedTabView> {
   // and 1 of them is interested, the other ones' interest status are not updated.
   List<Event> _upcomingEvents;
   List<Event> _trendingEvents;
+  List<Event> _pastEvents;
 
   @override
   void initState() {
     super.initState();
+    _pastEvents = FeedDataset.pastEvents.value;
     _upcomingEvents = FeedDataset.upcomingEvents.value;
     _trendingEvents = FeedDataset.trendingEvents.value;
     loadData();
@@ -42,6 +44,7 @@ class _FeedTabView extends State<FeedTabView> {
     // setState(() {
     //   FeedDataset.clearData();      
     // });
+    await _getPastEventData();
     await _getUpcomingEventData();
     await _getTrendingMusicData();
   }
@@ -51,10 +54,22 @@ class _FeedTabView extends State<FeedTabView> {
     // _upcomingEventsController.add(FeedDataset.upcomingEvents.value);
 
   }
+  Future _getPastEventData() async {
+    EventController _eventController = EventController();
+    var data = await _eventController.getPastEvents();
+
+    FeedDataset.pastEvents.value = data;
+    if(this.mounted) {
+      setState(() {
+        _pastEvents = FeedDataset.pastEvents.value;
+      });
+    }
+    
+  }
 
   Future _getUpcomingEventData() async {
     EventController _eventController = EventController();
-    var data = await _eventController.getEvent();
+    var data = await _eventController.getUpcomingEvents();
     FeedDataset.upcomingEvents.value = data;
     if(this.mounted) {
       setState(() {
@@ -101,36 +116,34 @@ class _FeedTabView extends State<FeedTabView> {
       return cards;
     }
 
-    int counter = 0;
-
-    Widget e = Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
-      child: Text("Upcoming events", style: TextStyle(fontSize: 30.0, fontFamily: "Niramit")),
+    cards.add(
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+        child: Text("Upcoming events", style: TextStyle(fontSize: 30.0, fontFamily: "Niramit")),
+      )
     );
-
-    cards.add(e);
-
+    
     if(_upcomingEvents == null || _upcomingEvents.length == 0) {
       cards.add(Center(child: CircularProgressIndicator()));
       return cards;
     }
 
+    int counter = 0;
+
     _upcomingEvents.sort((b,a) => a.startTime.compareTo(b.startTime));
     _upcomingEvents.forEach((Event currentEvent) {
       counter++;
       if(counter > count) return cards;
-      if(currentEvent.startTime.compareTo(DateTime.now()) > 0) {
-        cards.insert(1, Padding(
-          padding: const EdgeInsets.only(bottom: 8.0),
-          child: SmallEventCard(
-            event: currentEvent,
-            imageURL: currentEvent.picture,
-            place: currentEvent.locationName ?? "Unname location",
-            time: currentEvent.startTime ?? DateTime.now(),
-            title: currentEvent.name ?? "Untitled event" ,
-          ),
-        ));
-      }
+      cards.insert(1, Padding(
+        padding: const EdgeInsets.only(bottom: 8.0),
+        child: SmallEventCard(
+          event: currentEvent,
+          imageURL: currentEvent.picture,
+          place: currentEvent.locationName ?? "Unname location",
+          time: currentEvent.startTime ?? DateTime.now(),
+          title: currentEvent.name ?? "Untitled event" ,
+        ),
+      ));
     });
 
     return cards;

@@ -157,25 +157,7 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
       : Image.asset("assets/images/no-image.jpg", fit: BoxFit.cover,) 
     );
   }
-
-  Widget _buildPostComment() {
-    var screen = MediaQuery.of(context).size;
-
-    return SizedBox(
-      width: screen.width / 1.5,
-      child: TextFormField(
-        key: commentKey,
-        focusNode: _commentNode,
-        controller: _commentController,
-        textInputAction: TextInputAction.done,
-        keyboardType: TextInputType.text,
-        validator: (text) => null,
-        autofocus: false,
-        decoration: InputDecoration(
-        ),
-      ));
-  }
-
+  
   Widget _buildCommentHeader() {
     return Container(
       alignment: Alignment.centerLeft,

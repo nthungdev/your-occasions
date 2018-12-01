@@ -39,10 +39,12 @@ class Dataset {
 }
 
 class FeedDataset {
+  static Data<List<Event>> pastEvents = Data();
   static Data<List<Event>> trendingEvents = Data();
   static Data<List<Event>> upcomingEvents = Data();
 
   static void clearData() {
+    pastEvents = Data();
     trendingEvents = Data();
     upcomingEvents = Data();
   }
