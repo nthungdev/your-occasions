@@ -87,7 +87,9 @@ class FriendListController extends BaseController{
 
     await disconnect();
 
-    return result == [];
+    print(result);
+
+    return result.isNotEmpty;
   }
 
   Future<List<FriendList>> getFriendList({int id, String userId, String friendId}) async{
@@ -109,10 +111,10 @@ class FriendListController extends BaseController{
       else if(id != null) { query += "id = $id "; }
     }
 
-
     var queryResult = await connection.mappedResultsQuery(query);
 
     for (var item in queryResult) {
+      print(item.values);
       result.add(FriendList.createFromMap(item.values));
     }
 

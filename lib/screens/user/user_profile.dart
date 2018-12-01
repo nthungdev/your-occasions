@@ -32,10 +32,9 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
   String id;
   List<Event> _eventList;
   User currentUser = Dataset.currentUser.value;
-  bool followed = true;
+  bool followed = false;
   FriendList friend;
-  // int following;
-  List<FriendList> following;
+  // List<FriendList> following;
   int follower;
   int follow;
   Timer _queryTimer;
@@ -48,10 +47,10 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
     friend = FriendList();
     friend.userId = currentUser.id;
     friend.friendId = user.id;
-    friendController.getFriendList(userId: currentUser.id).then((value){
+    friendController.getFriendList(userId: user.id).then((value){
       setState(() {
-        following = value;
-        follow = following.length;
+        // following = value;
+        follow = value.length;
       });
     });
     _eventController.getEvent(hostId: user.id).then((value){
@@ -61,6 +60,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
     friendController.getFriend(currentUser.id, user.id).then((value){
       setState(() {
         followed = value;
+        print(followed);
       });
     });
   });
@@ -76,16 +76,30 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
 
   void _handleTimer() {
     if(!followed) {
-      follower-=1;
-      friendController.deleteFriend(currentUser.id, widget.user.id);
-      _userController.decreaseFollowers(user.id);
+      // follower-=1;
+      _delete();
     }
     else{
-      follower+=1;
+      // follower+=1;
+      _add();
+    }
+    _queryTimer = null;
+  }
+
+  void _add() async{
+    var isFollowed = await friendController.getFriend(currentUser.id, user.id);
+    if (!isFollowed){
       friendController.insert(friend);
       _userController.increaseFollowers(user.id);
     }
-    _queryTimer = null;
+  }
+
+  void _delete() async{
+    var isFollowed = await friendController.getFriend(currentUser.id, user.id);
+    if (isFollowed){
+      friendController.deleteFriend(currentUser.id, widget.user.id);
+      _userController.decreaseFollowers(user.id);
+    }
   }
   
   Widget _buildAvatar() {
