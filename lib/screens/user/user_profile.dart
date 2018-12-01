@@ -86,16 +86,18 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
   void _add() async{
     var isFollowed = await friendController.getFriend(currentUser.id, user.id);
     if (!isFollowed){
-      friendController.insert(friend);
-      _userController.increaseFollowers(user.id);
+      await _userController.increaseFollowers(widget.user.id);
+      await friendController.insert(friend);
+      // await _userController.increaseFollowers(user.id);
     }
   }
 
   void _delete() async{
     var isFollowed = await friendController.getFriend(currentUser.id, user.id);
     if (isFollowed){
-      friendController.deleteFriend(currentUser.id, widget.user.id);
-      _userController.decreaseFollowers(user.id);
+      await _userController.decreaseFollowers(widget.user.id);
+      await friendController.deleteFriend(currentUser.id, widget.user.id);
+      
     }
   }
   
@@ -212,7 +214,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
               followed = !followed;
 
               if(_queryTimer == null) {
-                _queryTimer = Timer(Duration(seconds: 1), _handleTimer);
+                _queryTimer = Timer(Duration(milliseconds: 500), _handleTimer);
               }
             });
           }
@@ -299,6 +301,13 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
       ),
     );
 
+    if (followed == null){
+      print(1);
+      return Container(
+        color: Colors.white,
+        child:Center(child: const CircularProgressIndicator())
+      );
+    }
     return new Scaffold(
       body: new Container(
         height: double.infinity,
