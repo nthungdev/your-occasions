@@ -16,11 +16,19 @@ class UserSharedEvent {
   }
   UserSharedEvent.createFromMap(Iterable<Map<String, dynamic>> map){
     map.forEach((item) {
+<<<<<<< HEAD
       id = item['id'];
       userId = item['userId'];
       eventId= item['eventId'];
       sharerId = item['sharerId'];
       creationDate = item['creationDate'];
+=======
+      _id = item['id'];
+      _userId = item['user_id'];
+      _eventId= item['event_id'];
+      _sharerId = item['sharer_id'];
+      _creationDate = item['creation_date'];
+>>>>>>> c52c85a389ecbebd1f1596ec593e4b402f1aaa8e
     });
   }
 

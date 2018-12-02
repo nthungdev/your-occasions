@@ -27,6 +27,7 @@ class _SmallUserCardState extends State<SmallUserCard> {
   bool _isFollowed;
   bool _gotData;
   Timer _queryTimer;
+  User currentUser = Dataset.currentUser.value;
 
   @override
   void initState() {
@@ -48,13 +49,13 @@ class _SmallUserCardState extends State<SmallUserCard> {
   void getData() async {
     try {
       var userId = Dataset.userId.value;
-      var result = await _friendListController.getFriendList(userId: userId, friendId: widget.user.id);
+      var result = await _friendListController.getFriend(currentUser.id, widget.user.id);
 
       _gotData = true;
 
       if (this.mounted) {
         setState(() {
-          _isFollowed = !(result.isEmpty) ? true : false;
+          _isFollowed = result;
         });
       }
     } 

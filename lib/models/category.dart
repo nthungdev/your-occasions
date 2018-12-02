@@ -16,10 +16,17 @@ class Category {
   Category.createFromMap(Iterable<Map<String, dynamic>> map){
     map.forEach((item) {
       // this._id = item['id'];
+<<<<<<< HEAD
       this.name = item['name'];
       this.description = item['description'];
       this.isUsed = item['isUsed'];
       this.creationDate = item['creation_date'];
+=======
+      this._name = item['name'];
+      this._description = item['description'];
+      this._isUsed = item['is_used'];
+      this._creationDate = item['creation_date'];
+>>>>>>> c52c85a389ecbebd1f1596ec593e4b402f1aaa8e
     });
   }
 

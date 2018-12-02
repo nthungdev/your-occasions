@@ -42,10 +42,12 @@ class _SocialTabView extends State<SocialTabView> {
   Future _getFollowing() async {
       var data = await _friendController.getFriendList(userId: currentUser.id);
       List<User> users = List<User>();
+
       for (var friend in data){
         User temp = await _userController.getUserWithId(friend.friendId);
         users.add(temp);
-      };
+      }
+      
       FollowDataset.following.value = users;
       if(this.mounted) {
         setState(() {
@@ -55,14 +57,12 @@ class _SocialTabView extends State<SocialTabView> {
   }
 
   Widget _buildUser(User user){
+    var screenWidth = MediaQuery.of(context).size.width;
     return ListTile(
       onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => UserProfileScreen(user))),
-      leading: Hero(
-        tag: 0,
-        child: CircleAvatar(
+      leading: CircleAvatar(
           backgroundImage: NetworkImage(user.picture ?? "assets/images/no-image.jpg")
         ),
-      ),
       title: Text(user.name),
       subtitle: Text(user.email),
     );
@@ -70,14 +70,15 @@ class _SocialTabView extends State<SocialTabView> {
 
   List<Widget> _buildFriends(){
     List<Widget> cards = List<Widget>();
+    int tag = 0;
 
     if (following.length == 0 || following[0] == null){
       return cards;
     }
 
-
     for (var friend in following){
-      cards.insert(1,_buildUser(friend));
+      cards.add(_buildUser(friend));
+      tag+=1;
     }
 
     return cards;
@@ -143,8 +144,8 @@ class _SocialTabView extends State<SocialTabView> {
         // color: Colors.orange,
         // color: Colors.red,
         // padding: EdgeInsets.symmetric(horizontal: 10.0),
-        // color: Colors.red,
-        decoration: linearGradient,
+        color: Colors.white,
+        // decoration: linearGradient,
         child: following == null 
         ? const Center(child: const CircularProgressIndicator()) 
         : RefreshIndicator(
