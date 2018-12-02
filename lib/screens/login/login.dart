@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
 
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:youroccasions/models/data.dart';
 
+import 'package:http/http.dart' as http;
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:youroccasions/screens/home/home.dart';
 import 'package:youroccasions/screens/login/signup.dart';
 import 'package:youroccasions/models/user.dart';
@@ -197,6 +200,69 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
         child: Text('LOGIN', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
       ),
     );
+  }
+
+  void _facebookLogin() async {
+    var userName, email, picture;
+    FacebookLogin facebookSignIn = new FacebookLogin();
+    final FacebookLoginResult result =
+    await facebookSignIn.logInWithReadPermissions(['email','public_profile','user_posts']);
+    //,publish_actions,manage_pages,publish_pages,user_status,user_videos,user_work_history
+
+    switch (result.status) {
+      case FacebookLoginStatus.loggedIn:
+        final FacebookAccessToken accessToken = result.accessToken;
+        accessToken.permissions;
+
+        var graphResponse = await http.get(
+            'https://graph.facebook.com/v2.12/me?fields=name,first_name,picture,last_name,email&access_token=${accessToken.token}');
+        Map<String, dynamic> user = json.decode(graphResponse.body);
+        Map<String,dynamic> picture = user['picture'];
+        Map<String,dynamic> data = picture['data'];
+        userName = user['name'];
+        email = user['email'];
+        picture = data['url'];
+        var graphResponseFeed = await http.get('https://graph.facebook.com/v2.12/me/feed?fields=message&access_token=${accessToken.token}');
+        var data1 = json.decode(graphResponseFeed.body);
+      // print(data1);
+
+      // me?fields=id,name,feed{message,attachments}
+        var graphResponseFeed1 = await http.get('https://graph.facebook.com/v2.12/me?fields=id,name,feed{attachments,message}&access_token=${accessToken.token}');
+        var data1l = json.decode(graphResponseFeed1.body);
+        Map<String,dynamic> root = json.decode(graphResponseFeed1.body);
+        Map <String,dynamic> feed = root['feed'];
+        var fdata = feed['data'];
+
+        for (var i = 0; i < fdata.length; i++) {
+          var qq = fdata[i];
+        // var pp = qq['attachments'];
+          if(qq['attachments']==null){
+            i++;
+          }else{
+            Map <String,dynamic> pp = qq['attachments'];
+            var nn = pp['data'];
+            for(var j =0; j< nn.length; j++){
+              var mm = nn[j];
+              var jj = mm['media'];
+              var img = jj['image'];
+              var src = img['src'];
+              print(src);
+              // Util.descriptionList.add(mm['description']);
+              // Util.mediaList.add(img['src']);
+            // Util.listItems.add(new ListItem(mm['description'], img['src']));
+            }
+          }
+          // NavigationRouter.switchToHome(context);
+        }
+        break;
+      case FacebookLoginStatus.cancelledByUser:
+        // _showMessage('Login cancelled by the user.');
+        break;
+      case FacebookLoginStatus.error:
+        // _showMessage('Something went wrong with the login process.\n'
+        //     'Here\'s the error Facebook gave us: ${result.errorMessage}');
+        break;
+    }
   }
 
   Widget _loginWithGoogleButton() {
