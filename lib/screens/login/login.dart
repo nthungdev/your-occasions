@@ -203,7 +203,7 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
   }
 
   void _facebookLogin() async {
-    var userName, email, picture;
+    var userName, email, pic, id;
     FacebookLogin facebookSignIn = new FacebookLogin();
     final FacebookLoginResult result =
     await facebookSignIn.logInWithReadPermissions(['email','public_profile','user_posts']);
@@ -221,9 +221,10 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
         Map<String,dynamic> data = picture['data'];
         userName = user['name'];
         email = user['email'];
-        picture = data['url'];
-        var graphResponseFeed = await http.get('https://graph.facebook.com/v2.12/me/feed?fields=message&access_token=${accessToken.token}');
-        var data1 = json.decode(graphResponseFeed.body);
+        pic = data['url'];
+        id = user['id'];
+        // var graphResponseFeed = await http.get('https://graph.facebook.com/v2.12/me/feed?fields=message&access_token=${accessToken.token}');
+        // var profile = json.decode(graphResponseFeed.body);
       // print(data1);
 
       // me?fields=id,name,feed{message,attachments}
@@ -233,27 +234,50 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
         Map <String,dynamic> feed = root['feed'];
         var fdata = feed['data'];
 
-        for (var i = 0; i < fdata.length; i++) {
-          var qq = fdata[i];
-        // var pp = qq['attachments'];
-          if(qq['attachments']==null){
-            i++;
-          }else{
-            Map <String,dynamic> pp = qq['attachments'];
-            var nn = pp['data'];
-            for(var j =0; j< nn.length; j++){
-              var mm = nn[j];
-              var jj = mm['media'];
-              var img = jj['image'];
-              var src = img['src'];
-              print(src);
-              // Util.descriptionList.add(mm['description']);
-              // Util.mediaList.add(img['src']);
-            // Util.listItems.add(new ListItem(mm['description'], img['src']));
+        User userFromDB = await _userController.getUserWithFacebook(email);
+
+        if (userFromDB == null) {
+          User newUser = User(id: id, name: userName, email: email, picture: pic, provider: "facebook");
+          await _userController.insert(newUser)
+          .then((value) {
+            print("DEBUG name is : ${newUser.name}");
+            print("Your account is created successfully!");
+            }, onError: (e) {
+            print("Sign up with Google failed");
+            print("error $e");
             }
-          }
-          // NavigationRouter.switchToHome(context);
+          );
         }
+        await setUserId(id);
+        await setUserEmail(email);
+        await setUserName(userName);
+
+        Dataset.currentUser.value = await _userController.getUserWithEmail(email);
+        Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()),);
+
+        // for (var i = 0; i < fdata.length; i++) {
+        //   var qq = fdata[i];
+        // // var pp = qq['attachments'];
+        //   if(qq['attachments']==null){
+        //     i++;
+        //   }else{
+        //     Map <String,dynamic> pp = qq['attachments'];
+        //     var nn = pp['data'];
+        //     for(var j =0; j< nn.length; j++){
+        //       var mm = nn[j];
+        //       var jj = mm['media'];
+        //       var img = jj['image'];
+        //       var src = img['src'];
+        //       print(src);
+        //       // Util.descriptionList.add(mm['description']);
+        //       // Util.mediaList.add(img['src']);
+        //     // Util.listItems.add(new ListItem(mm['description'], img['src']));
+        //     }
+        //   }
+        //   // NavigationRouter.switchToHome(context);
+        // }
+
+        
         break;
       case FacebookLoginStatus.cancelledByUser:
         // _showMessage('Login cancelled by the user.');
