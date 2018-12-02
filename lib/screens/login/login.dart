@@ -327,7 +327,7 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
       child: FlatButton(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(45))),
         color: Color(0xff3b5998),
-        onPressed: () {},
+        onPressed: () {_facebookLogin();},
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
