@@ -14,7 +14,6 @@ import 'package:youroccasions/utilities/config.dart';
 import 'package:youroccasions/utilities/validator..dart';
 
 final UserController _userController = UserController();
-bool _isLogging = false;
 
 const String ERROR_CODE_00 = "User is not registered";
 const String ERROR_CODE_01 = "The password is invalid or the user does not have a password";

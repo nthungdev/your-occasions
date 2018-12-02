@@ -1,16 +1,7 @@
 import 'package:youroccasions/models/event.dart';
 import 'package:youroccasions/models/user.dart';
-import 'package:youroccasions/models/friend_list.dart';
-import 'package:youroccasions/models/user_attended_event.dart';
-import 'package:youroccasions/models/user_interested_event.dart';
-import 'package:youroccasions/models/user_shared_event.dart';
-import 'package:youroccasions/models/event_category.dart';
-import 'package:youroccasions/models/event_review.dart';
-import 'package:youroccasions/models/user_shared_event.dart';
 
-import 'package:youroccasions/controllers/event_category_controller.dart';
-import 'package:youroccasions/controllers/event_controller.dart';
-import 'package:youroccasions/controllers/user_shared_event_controller.dart';
+
 
 class Data<T> {
   T _value;
@@ -39,10 +30,12 @@ class Dataset {
 }
 
 class FeedDataset {
+  static Data<List<Event>> pastEvents = Data();
   static Data<List<Event>> trendingEvents = Data();
   static Data<List<Event>> upcomingEvents = Data();
 
   static void clearData() {
+    pastEvents = Data();
     trendingEvents = Data();
     upcomingEvents = Data();
   }

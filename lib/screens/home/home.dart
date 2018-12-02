@@ -8,11 +8,9 @@ import 'package:youroccasions/screens/home/social.dart';
 import 'package:youroccasions/screens/home/drawer.dart';
 import 'package:youroccasions/screens/home/bottom_menu.dart';
 import 'package:youroccasions/screens/search/search.dart';
-import 'package:youroccasions/utilities/config.dart';
 import 'package:youroccasions/models/data.dart';
 import 'package:youroccasions/models/user.dart';
 import 'package:youroccasions/controllers/user_controller.dart';
-import 'package:youroccasions/models/data.dart';
 
 class HomeScreen extends StatefulWidget {
   @override

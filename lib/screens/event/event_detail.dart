@@ -7,7 +7,6 @@ import 'package:youroccasions/screens/event/reply_comment_page.dart';
 
 import 'package:youroccasions/screens/home/home.dart';
 import 'package:youroccasions/screens/event/update_event.dart';
-import 'package:youroccasions/utilities/config.dart';
 import 'package:youroccasions/models/event.dart';
 import 'package:youroccasions/controllers/event_controller.dart';
 import 'package:youroccasions/screens/user/user_profile.dart';
@@ -32,7 +31,7 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
   final GlobalKey<FormFieldState> commentKey = GlobalKey<FormFieldState>();
   Event _event;
   User _host;
-  User _currentUser = Dataset.currentUser.value;
+  // User _currentUser = Dataset.currentUser.value;
   TextEditingController _commentController;
   FocusNode _commentNode;
   DocumentReference _eventReference;
@@ -60,7 +59,6 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _commentNode.dispose();
     _commentController.dispose();
@@ -157,25 +155,7 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
       : Image.asset("assets/images/no-image.jpg", fit: BoxFit.cover,) 
     );
   }
-
-  Widget _buildPostComment() {
-    var screen = MediaQuery.of(context).size;
-
-    return SizedBox(
-      width: screen.width / 1.5,
-      child: TextFormField(
-        key: commentKey,
-        focusNode: _commentNode,
-        controller: _commentController,
-        textInputAction: TextInputAction.done,
-        keyboardType: TextInputType.text,
-        validator: (text) => null,
-        autofocus: false,
-        decoration: InputDecoration(
-        ),
-      ));
-  }
-
+  
   Widget _buildCommentHeader() {
     return Container(
       alignment: Alignment.centerLeft,
@@ -267,7 +247,7 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
   Widget _buildDescription() {
     return Column(
       children: <Widget>[
-
+        /// TODO this
       ],
     );
   }
@@ -362,10 +342,6 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text("Event Details"),
-      //   actions: _buildActionButtons(),
-      // ),
       body: SafeArea(
         child: Container(
           child: !_gotData

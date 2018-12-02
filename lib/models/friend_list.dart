@@ -1,38 +1,38 @@
 class FriendList {
   // PROPERTIES //
-  int _id;
-  String _userId;
-  String _friendId;
-  DateTime _creationDate;
+  int id;
+  String userId;
+  String friendId;
+  DateTime creationDate;
   
 
   // CONSTRUCTORS //
   FriendList.create();
   FriendList({String userId, String friendId}){
-    _userId = userId;
-    _friendId = friendId;
-    _creationDate = DateTime.now();
+    userId = userId;
+    friendId = friendId;
+    creationDate = DateTime.now();
   }
   FriendList.createFromMap(Iterable<Map<String, dynamic>> map){
     map.forEach((item) {
       id = item['id'];
-      _userId = item['userID'];
-      _friendId= item ['friendId'];
-      _creationDate = item['creationDate'];
+      userId = item['userID'];
+      friendId= item ['friendId'];
+      creationDate = item['creationDate'];
     });
   }
 
   // GETTERS //
-  int get id => _id;
-  String get userId => _userId;
-  String get friendId => _friendId;
-  DateTime get creationDate => _creationDate;
+  // int get id => _id;
+  // String get userId => _userId;
+  // String get friendId => _friendId;
+  // DateTime get creationDate => _creationDate;
 
   // SETTERS //
-  set id(int id) => _id = id;
-  set userId(String userId) => _userId = userId;
-  set friendId(String friendId) => _friendId = friendId;
-  set creationDate(DateTime creationDate) => _creationDate = creationDate;
+  // set id(int id) => _id = id;
+  // set userId(String userId) => _userId = userId;
+  // set friendId(String friendId) => _friendId = friendId;
+  // set creationDate(DateTime creationDate) => _creationDate = creationDate;
 
   // METHODS //
 

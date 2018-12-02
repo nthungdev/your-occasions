@@ -1,14 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'dart:async';
 
 import 'package:youroccasions/models/user.dart';
-import 'package:youroccasions/screens/event/event_detail.dart';
-import 'package:youroccasions/models/event.dart';
-import 'package:youroccasions/models/user_interested_event.dart';
-import 'package:youroccasions/controllers/event_controller.dart';
-import 'package:youroccasions/controllers/user_interested_event_controller.dart';
-import 'package:youroccasions/utilities/config.dart';
 import 'package:youroccasions/screens/user/user_profile.dart';
 
 const Color _favoriteColor = Colors.red;
@@ -40,7 +32,6 @@ class _LeaderboardItemState extends State<LeaderboardItem> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -61,8 +52,6 @@ class _LeaderboardItemState extends State<LeaderboardItem> {
 
 
   Widget _buildLoadingCard() {
-    final screen = MediaQuery.of(context).size;
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
       child: SizedBox(
@@ -261,7 +250,6 @@ class _LeaderboardState extends State<Leaderboard> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 

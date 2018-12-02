@@ -91,26 +91,26 @@ class ReplyCommentPageState extends State<ReplyCommentPage> {
     _refresh();
   }
 
-  String _getTimeAway() {
-    Duration period = DateTime.now().difference(_eventComment.date);
-    String result = "";
-    if (period.inDays != 0) {
-      if (period.inDays < 7 ) {
-        result += "${period.inDays} day" + ((period.inDays > 1) ? "s ago" : " ago");
-      }
-      else {
-        result += "${(period.inDays / 7).round()} week" + ((period.inDays / 7 > 1) ? "s ago" : " ago");
-      }
-    }
-    else if (period.inHours != 0) {
-      result += "${period.inHours} hour" + ((period.inHours > 1) ? "s ago" : " ago");
-    }
-    else {
-      result += "${period.inMinutes} minute" + ((period.inMinutes > 1) ? "s ago" :  " ago");
-    }
+  // String _getTimeAway() {
+  //   Duration period = DateTime.now().difference(_eventComment.date);
+  //   String result = "";
+  //   if (period.inDays != 0) {
+  //     if (period.inDays < 7 ) {
+  //       result += "${period.inDays} day" + ((period.inDays > 1) ? "s ago" : " ago");
+  //     }
+  //     else {
+  //       result += "${(period.inDays / 7).round()} week" + ((period.inDays / 7 > 1) ? "s ago" : " ago");
+  //     }
+  //   }
+  //   else if (period.inHours != 0) {
+  //     result += "${period.inHours} hour" + ((period.inHours > 1) ? "s ago" : " ago");
+  //   }
+  //   else {
+  //     result += "${period.inMinutes} minute" + ((period.inMinutes > 1) ? "s ago" :  " ago");
+  //   }
 
-    return result;
-  }
+  //   return result;
+  // }
 
   List<Widget> _buildListViewContent() {
     List<Widget> result = List<Widget>();

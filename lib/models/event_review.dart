@@ -1,13 +1,13 @@
 class EventReview {
   // PROPERTIES //
-  int _id;
-  int _eventId;
-  String _reviewerId;
-  String _hostId;
-  int _score;
-  String _description;
-  bool _isUsed;
-  DateTime _creationDate;
+  int id;
+  int eventId;
+  String reviewerId;
+  String hostId;
+  int score;
+  String description;
+  bool isUsed;
+  DateTime creationDate;
 
   // CONSTRUCTORS //
   EventReview.create();
@@ -21,33 +21,33 @@ class EventReview {
   }
   EventReview.createFromMap(Iterable<Map<String, dynamic>> map){
     map.forEach((item) {
-      _id = item['id'];
-      _eventId = item['eventId'];
-      _reviewerId = item['reviewId'];
-      _hostId = item['host_id'];
-      _description = item['description'];
-      _isUsed = item['is_used'];
-      _creationDate = item['creationDate'];
+      id = item['id'];
+      eventId = item['eventId'];
+      reviewerId = item['reviewId'];
+      hostId = item['host_id'];
+      description = item['description'];
+      isUsed = item['is_used'];
+      creationDate = item['creationDate'];
     });
   }
 
   // GETTERS //
-  int get id => _id;
-  int get eventId => _eventId;
-  String get reviewerId => _reviewerId;
-  String get hostId => _hostId;
-  String get description => _description;
-  bool get isUsed => _isUsed;
-  DateTime get creationDate => _creationDate;
+  // int get id => _id;
+  // int get eventId => _eventId;
+  // String get reviewerId => _reviewerId;
+  // String get hostId => _hostId;
+  // String get description => _description;
+  // bool get isUsed => _isUsed;
+  // DateTime get creationDate => _creationDate;
 
   // SETTERS //
-  set id(int id) => _id = id;
-  set eventId(int eventId) => _eventId = eventId;
-  set reviewerId(String reviewerId) => reviewerId = reviewerId;
-  set hostId(String hostId) => _hostId = hostId;
-  set description(String description) => _description = description;
-  set isUsed(bool isUsed) => _isUsed = isUsed;
-  set creationDate(DateTime creationDate) => _creationDate = creationDate;
+  // set id(int id) => _id = id;
+  // set eventId(int eventId) => _eventId = eventId;
+  // set reviewerId(String reviewerId) => reviewerId = reviewerId;
+  // set hostId(String hostId) => _hostId = hostId;
+  // set description(String description) => _description = description;
+  // set isUsed(bool isUsed) => _isUsed = isUsed;
+  // set creationDate(DateTime creationDate) => _creationDate = creationDate;
 
   // METHODS //
   /// Return a Map<String, dynamic> with keys are the properties of User, values are the properties' values.

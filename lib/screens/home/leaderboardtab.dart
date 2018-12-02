@@ -14,16 +14,16 @@ class LeaderboardTabView extends StatefulWidget {
 class _LeaderboardTabView extends State<LeaderboardTabView> {
   bool _hasData1;
   bool _hasData2;
-  bool _hasData3;
-  bool _hasData4;
+  // bool _hasData3;
+  // bool _hasData4;
   
   @override
   void initState() {
     super.initState();
     _hasData1 = false;
     _hasData2 = false;
-    _hasData3 = false;
-    _hasData4 = false;
+    // _hasData3 = false;
+    // _hasData4 = false;
     // getData();
     _refresh();
   }
@@ -31,7 +31,6 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
   
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 

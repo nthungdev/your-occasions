@@ -9,8 +9,6 @@ import 'package:youroccasions/controllers/user_controller.dart';
 import 'package:youroccasions/models/data.dart';
 import 'package:youroccasions/screens/user/user_profile.dart';
 
-const Color _favoriteColor = Colors.red;
-
 class SmallUserCard extends StatefulWidget {
   final User user;
   final int userId;

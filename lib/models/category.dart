@@ -1,41 +1,41 @@
 class Category {
   // PROPERTIES //
   // int _id;
-  String _name;
-  String _description;
-  bool _isUsed;
-  DateTime _creationDate;
+  String name;
+  String description;
+  bool isUsed;
+  DateTime creationDate;
 
   // CONSTRUCTORS //
   Category({String name, String description}) {
-    this._name = name;
-    this._description = description;
-    this._isUsed = true;
-    this._creationDate = DateTime.now();
+    this.name = name;
+    this.description = description;
+    this.isUsed = true;
+    this.creationDate = DateTime.now();
   }
   Category.createFromMap(Iterable<Map<String, dynamic>> map){
     map.forEach((item) {
       // this._id = item['id'];
-      this._name = item['name'];
-      this._description = item['description'];
-      this._isUsed = item['isUsed'];
-      this._creationDate = item['creation_date'];
+      this.name = item['name'];
+      this.description = item['description'];
+      this.isUsed = item['isUsed'];
+      this.creationDate = item['creation_date'];
     });
   }
 
   // GETTERS //
   // int get id => _id;
-  String get name => _name;
-  String get description => _description;
-  bool get isUsed => _isUsed;
-  DateTime get creationDate => _creationDate;
+  // String get name => _name;
+  // String get description => _description;
+  // bool get isUsed => _isUsed;
+  // DateTime get creationDate => _creationDate;
 
   // SETTERS //
   // set id(int id) => _id = id;
-  set name(String name) => _name = name;
-  set description(String description) => _description = description;
-  set isUsed(bool isUsed) => _isUsed = isUsed;
-  set creationDate(DateTime creationDate) => _creationDate = creationDate;
+  // set name(String name) => _name = name;
+  // set description(String description) => _description = description;
+  // set isUsed(bool isUsed) => _isUsed = isUsed;
+  // set creationDate(DateTime creationDate) => _creationDate = creationDate;
 
   // METHODS //
   /// Return a Map<String, dynamic> with keys are the properties of User, values are the properties' values.
@@ -57,6 +57,20 @@ class Category {
 class Categories {
   // TODO write descriptions for each category of event
   // TODO document description for each category in comments
+
+  static final all = [music, 
+                      food, 
+                      festival, 
+                      party,
+                      business, 
+                      tech,
+                      charity, 
+                      sports, 
+                      politics, 
+                      comedy, 
+                      fashion,
+                      science,
+                      study];
 
   static final Category music = Category(name: "Music", description: "Music event");
   static final Category food = Category(name: "Food", description: "Food event");

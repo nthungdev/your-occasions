@@ -35,8 +35,6 @@ class ReplyTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String timeAway = DateTime.now().difference(postTime).inHours.toString() + " hours ago";
-
     return GestureDetector(
       onTap: onTap,
       child: Material(

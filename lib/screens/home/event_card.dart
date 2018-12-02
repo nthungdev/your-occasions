@@ -28,7 +28,6 @@ class SmallEventCard extends StatefulWidget {
 
 class _SmallEventCardState extends State<SmallEventCard> {
   UserInterestedEventController _interestedEventController;
-  EventController _eventController;
   bool _isInterested;
   String _time;
   bool _gotData;
@@ -37,7 +36,6 @@ class _SmallEventCardState extends State<SmallEventCard> {
   @override
   void initState() {
     super.initState();
-    _eventController = EventController();
     _gotData = false;
     _interestedEventController = UserInterestedEventController();
     _isInterested = false;
@@ -47,7 +45,6 @@ class _SmallEventCardState extends State<SmallEventCard> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _interestedEventController = null;
   }

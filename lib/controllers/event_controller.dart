@@ -119,4 +119,35 @@ class EventController extends BaseController {
 
     await disconnect();
   }
+  
+
+  Future<List<Event>> getPastEvents() async {
+    await connect();
+    var query = """
+SELECT *
+FROM events
+WHERE start_time < NOW();
+""";
+    var queryResult = await connection.mappedResultsQuery(query);
+    print(queryResult);
+    await disconnect();
+    return List<Event>.generate(queryResult.length, (index) {
+      return Event.createFromMap(queryResult[index].values);
+    });
+  }
+
+  Future<List<Event>> getUpcomingEvents() async {
+    await connect();
+    var query = """
+SELECT *
+FROM events
+WHERE start_time < NOW();
+""";
+    var queryResult = await connection.mappedResultsQuery(query);
+    print(queryResult);
+    await disconnect();
+    return List<Event>.generate(queryResult.length, (index) {
+      return Event.createFromMap(queryResult[index].values);
+    });
+  }
 }

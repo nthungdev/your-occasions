@@ -1,18 +1,13 @@
-//import 'dart:io';
-import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:youroccasions/screens/home/home.dart';
 import 'package:youroccasions/models/user.dart';
 import 'package:youroccasions/controllers/user_controller.dart';
-import 'package:youroccasions/screens/login/login.dart';
-//import 'package:youroccasions/utilities/config.dart';
 import 'package:youroccasions/utilities/validator..dart';
 
 final UserController _userController = UserController();
-bool _isSigningUp = false;
 List<User> userList = [];
 
 class SignUpWithEmailScreen extends StatefulWidget {

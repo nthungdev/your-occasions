@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:meta/meta.dart';
 import 'package:youroccasions/controllers/base_controller.dart';
 import 'package:youroccasions/models/event_category.dart';
 import 'package:youroccasions/exceptions/UpdateQueryException.dart';

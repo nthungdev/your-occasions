@@ -4,12 +4,10 @@ import 'dart:io';
 
 import 'package:image_picker/image_picker.dart';
 
-import 'package:youroccasions/screens/home/home.dart';
 import 'package:youroccasions/models/event.dart';
 import 'package:youroccasions/controllers/event_controller.dart';
 import 'package:youroccasions/utilities/config.dart';
 import 'package:youroccasions/utilities/secret.dart';
-import 'package:youroccasions/utilities/validator..dart';
 import 'package:youroccasions/screens/event/event_detail.dart';
 
 import 'package:youroccasions/utilities/cloudinary.dart';
@@ -58,7 +56,6 @@ class _UpdateEventScreen extends State<UpdateEventScreen> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     nameController.dispose();
     descriptionController.dispose();
