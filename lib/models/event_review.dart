@@ -11,12 +11,7 @@ class EventReview {
 
   // CONSTRUCTORS //
   EventReview.create();
-  EventReview({int eventId, String reviewerId, String hostId, String description, bool isUsed}) {
-    eventId = eventId;
-    reviewerId = reviewerId;
-    hostId = hostId;
-    description = description;
-    isUsed = isUsed;
+  EventReview({this.eventId, this.reviewerId, this.hostId, this.description, this.isUsed}) {
     creationDate = DateTime.now();
   }
   EventReview.createFromMap(Iterable<Map<String, dynamic>> map){

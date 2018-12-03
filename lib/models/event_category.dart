@@ -8,10 +8,7 @@ class EventCategory {
   
   // CONSTRUCTORS //
   EventCategory.create();
-  EventCategory({int categoryId, int eventId, String category}){
-    // this._categoryId = categoryId;
-    this.eventId = eventId;
-    this.category = category;
+  EventCategory({this.eventId, this.category}){
     this.creationDate = DateTime.now();
   }
   EventCategory.createFromMap(Iterable<Map<String, dynamic>> map){

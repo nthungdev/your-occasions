@@ -71,7 +71,7 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
       /// Hide the on screen keyboard
       SystemChannels.textInput.invokeMethod('TextInput.hide');
 
-      ec.getEvent(name: _searchController.text).then((value) {
+      ec.getEvents(name: _searchController.text).then((value) {
         _events = value;
         print("DEBUG: event list: ");
         _generateSmallEventCards();

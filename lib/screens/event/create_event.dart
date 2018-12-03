@@ -3,10 +3,12 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:image_picker/image_picker.dart';
+import 'package:youroccasions/controllers/event_category_controller.dart';
 import 'package:youroccasions/models/category.dart';
 import 'package:youroccasions/models/data.dart';
 import 'package:youroccasions/models/event.dart';
 import 'package:youroccasions/controllers/event_controller.dart';
+import 'package:youroccasions/models/event_category.dart';
 import 'package:youroccasions/utilities/secret.dart';
 import 'package:youroccasions/utilities/cloudinary.dart';
 import 'package:youroccasions/screens/event/event_detail.dart';
@@ -21,19 +23,22 @@ class CreateEventScreen extends StatefulWidget {
 
 class _CreateEventScreen extends State<CreateEventScreen> {
   GlobalKey<FormState> formKey;
+  GlobalKey<ScaffoldState> _scaffoldKey;
   FocusNode _eventTitleNode;
   FocusNode _descriptionNode;
+
   TextEditingController nameController;
   TextEditingController descriptionController;
   TextEditingController categoryController;
+
   DateTime startDate;
   TimeOfDay startTime;
   DateTime endDate;
   TimeOfDay endTime;
-  String start;
-  String end;
+  
   File _image;
   bool _noImageError;
+
   bool _isSigningUp;
 
   bool _invalidStart;
@@ -52,6 +57,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
   initState() {
     super.initState();
     formKey = GlobalKey<FormState>();
+    _scaffoldKey = GlobalKey<ScaffoldState>();
     _eventTitleNode = FocusNode();
     _descriptionNode = FocusNode();
     nameController = TextEditingController();
@@ -145,6 +151,17 @@ class _CreateEventScreen extends State<CreateEventScreen> {
     _invalidStart = false;
     _invalidEnd = false;
 
+    if (startDate == null || startTime == null) {
+      _invalidStart = true;
+      print("false here 4");
+      return false;
+    }
+
+    // if (endDate == null && endTime == null) {
+    //   _invalidEnd = true;
+    //   print("false here 3");
+    //   return false;
+    // }
     if (startDate != null && endDate != null && startDate.compareTo(endDate) > 0) {
       _invalidStart = true;
       print("false here");
@@ -153,7 +170,27 @@ class _CreateEventScreen extends State<CreateEventScreen> {
     if (startDate != null && endDate != null &&  startDate.compareTo(endDate) == 0) {
       if (endTime != null && startTime != null && endTime.hour - startTime.hour < 0) {
         _invalidEnd = true;
-      print("false here 2");
+        print("false here 2");
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  bool _autoValidateDateTime() {
+    _invalidStart = false;
+    _invalidEnd = false;
+
+    if (startDate != null && endDate != null && startDate.compareTo(endDate) > 0) {
+      _invalidStart = true;
+      print("false here");
+      return false;
+    }
+    if (startDate != null && endDate != null &&  startDate.compareTo(endDate) == 0) {
+      if (endTime != null && startTime != null && endTime.hour - startTime.hour < 0) {
+        _invalidEnd = true;
+        print("false here 2");
         return false;
       }
     }
@@ -188,7 +225,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
 
     setState(() {
       startDate = picked;
-      _validateDateTime();
+      _autoValidateDateTime();
     });
   }
 
@@ -200,21 +237,21 @@ class _CreateEventScreen extends State<CreateEventScreen> {
 
     setState(() {
       startTime = picked;
-      _validateDateTime();
+      _autoValidateDateTime();
     });
   }
 
   Future<void> selectEndDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
       context: context,
-      initialDate:  endDate == null ? DateTime.now() : endDate,
+      initialDate: endDate == null ? DateTime.now() : endDate,
       firstDate: DateTime.now().subtract(Duration(days: 1)),
       lastDate: DateTime(DateTime.now().year + 2)
     );
 
     setState(() {
       endDate = picked;
-      _validateDateTime();
+      _autoValidateDateTime();
     });
   }
 
@@ -226,40 +263,39 @@ class _CreateEventScreen extends State<CreateEventScreen> {
 
     setState(() {
       endTime = picked;
-      _validateDateTime();
+      _autoValidateDateTime();
     });
   }
 
   void _submit() async {
+    String message = "";
+    
     if (_image == null) {
-      setState(() {
-        _noImageError = true;
-      });
-    }
-    else {
-      setState(() {
-        _noImageError = false;
-      });
+      message += "Please add an image for the event\n";
     }
 
     if (_selectCategoryName.length == 0) {
-      setState(() {
-        _invalidCategory = true;
-      });
-    }
-    else {
-      setState(() {
-        _invalidCategory = false;
-      });
+      message += "Please select category for the event";
     }
 
+    if (message.isNotEmpty) {
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text(message),
+      ));
+    }
+
+
     print("before validate");
-    if (formKey.currentState.validate()) {
+    bool validateTime = _validateDateTime();
+    bool validateForm = formKey.currentState.validate();
+    // formKey.currentState.validate();
+    if (validateForm && validateTime) {
       print("inside validate");
       formKey.currentState.save();
 
       bool result = await create();
       print(result);
+
       // if(result) {
       //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => EventDetailScreen()));
       // }
@@ -268,7 +304,87 @@ class _CreateEventScreen extends State<CreateEventScreen> {
       print("validate fail");
     }
 
-    setState(() { });
+    // setState(() { });
+  }
+
+  Future<bool> create() async {
+    String url;
+    Cloudinary cl = Cloudinary(CLOUDINARY_API_KEY, API_SECRET);
+
+    print("DEBUG: creating event");
+    if (!_isSigningUp) {
+      _isSigningUp = true;
+
+      startDate = DateTime(
+        startDate.year, 
+        startDate.month, 
+        startDate.day,
+        startTime.hour, 
+        startTime.minute
+      );
+
+      if (endDate != null) {
+        endDate = DateTime(
+          endDate.year, 
+          endDate.month, 
+          endDate.day,
+          endTime.hour, 
+          endTime.minute);
+      }
+
+      String name = nameController.text;
+      String description = descriptionController.text;
+      // String category = categoryController.text;
+      String hostId = Dataset.currentUser.value.id;
+      
+      // if (_image == null) {
+      //   _isSigningUp = false;
+      //   print("Please select an event image");
+      // }
+      Event newEvent = Event(
+        hostId: hostId,
+        name: name,
+        description: description,
+        // category: category,
+        startTime: startDate,
+        endTime: endDate,
+      );
+
+      
+      print("DEBUG new event is : $newEvent");
+      Event createdEvent = await _eventController.insert(newEvent);
+
+      EventCategoryController ec = EventCategoryController();
+      await ec.bulkInsert(_selectCategoryName, createdEvent.id);
+      
+      print("DEBUG name is : ${newEvent.name}");
+      print("Your event is created successfully!");
+      // print("Create failed");
+
+      // Event createdEvent =
+      //     (await _eventController.getEvents(hostId: hostId, name: name))[0];
+      // print("DEBUG: $createdEvent");
+
+      url = await cl.upload(
+        file: toDataURL(file: _image),
+        preset: Presets.eventCover,
+        path: "${createdEvent.id}/cover"
+      );
+      print("DEBUG url: $url");
+      await _eventController.update(createdEvent.id, picture: url);
+      createdEvent.picture = url;
+
+      _isSigningUp = false;
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => EventDetailScreen(createdEvent)));
+
+      return true;
+    }
+    _isSigningUp = false;
+    return false;
   }
 
   Widget createButton() {
@@ -286,65 +402,6 @@ class _CreateEventScreen extends State<CreateEventScreen> {
           child: Text('Create', style: TextStyle(color: Colors.black)),
         ),
       ));
-  }
-
-  Future<bool> create() async {
-    print("DEBUG: creating event");
-    if (!_isSigningUp) {
-      _isSigningUp = true;
-
-      final start = new DateTime(startDate.year, startDate.month, startDate.day,
-          startTime.hour, startTime.minute);
-      if (endDate != null) {
-        endDate = new DateTime(endDate.year, endDate.month, endDate.day,
-            endTime.hour, endTime.minute);
-      }
-      String name = nameController.text;
-      String description = descriptionController.text;
-      String category = categoryController.text;
-      String hostId = Dataset.currentUser.value.id;
-      // String location = "Plattsburgh";
-      if (_image == null) {
-        _isSigningUp = false;
-        print("Please select an event image");
-      }
-      Event newEvent = Event(
-          hostId: hostId,
-          name: name,
-          description: description,
-          category: category,
-          startTime: start,
-          endTime: endDate);
-      print("DEBUG new event is : $newEvent");
-      await _eventController.insert(newEvent);
-      print("DEBUG name is : ${newEvent.name}");
-      print("Your event is created successfully!");
-      // print("Create failed");
-
-      Event createdEvent =
-          (await _eventController.getEvent(hostId: hostId, name: name))[0];
-      print("DEBUG: $createdEvent");
-
-      if (_image != null) {
-        String url;
-        Cloudinary cl = Cloudinary(CLOUDINARY_API_KEY, API_SECRET);
-        url = await cl.upload(
-            file: toDataURL(file: _image),
-            preset: Presets.eventCover,
-            path: "${createdEvent.id}/cover");
-        print("DEBUG url: $url");
-        await _eventController.update(createdEvent.id, picture: url);
-        newEvent.picture = url;
-      }
-
-      _isSigningUp = false;
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => EventDetailScreen(createdEvent)));
-      return true;
-    }
-    return false;
   }
 
   Widget _buildSelectImageSection() {
@@ -370,17 +427,16 @@ class _CreateEventScreen extends State<CreateEventScreen> {
         alignment: AlignmentDirectional.bottomEnd,
         children: <Widget>[
           SizedBox(
-              width: screen.width,
-              child: Image.file(
-                _image,
-                fit: BoxFit.fitWidth,
-              )),
+            width: screen.width,
+            child: Image.file(
+              _image,
+              fit: BoxFit.fitWidth,
+            )),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Container(
               padding: EdgeInsets.all(0),
-              decoration:
-                  BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+              decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white),
               child: SizedBox(
                 width: 30,
                 height: 30,
@@ -416,7 +472,10 @@ class _CreateEventScreen extends State<CreateEventScreen> {
         controller: nameController,
         textInputAction: TextInputAction.next,
         keyboardType: TextInputType.text,
-        validator: (name) => (nameController.text.length < 6 || nameController.text.isEmpty) ? "Event title has at least 6 characters" : null,
+        validator: (name) {
+          print("name is $name");
+          return (nameController.text.length < 6 || nameController.text.isEmpty) ? "Event title has at least 6 characters" : null;
+        },
         autofocus: false,
         onFieldSubmitted: (term) {
           _eventTitleNode.unfocus();
@@ -528,7 +587,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
                         style: TextStyle(
                           letterSpacing: 2,
                           fontSize: 14,
-                          color: _invalidStart ? Colors.red : Colors.grey[500],
+                          color: _invalidStart ? Colors.red : startTime == null ? Colors.grey[500] : Colors.black,
                           fontFamily: "Monaco"),
                       ),
                     ),
@@ -609,7 +668,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
                         style: TextStyle(
                           letterSpacing: 2,
                           fontSize: 14,
-                          color: _invalidEnd ? Colors.red : Colors.grey[500],
+                          color: _invalidEnd ? Colors.red : endTime == null ? Colors.grey[500] : Colors.black,
                           fontFamily: "Monaco"),
                       ),
                     ),
@@ -661,7 +720,8 @@ class _CreateEventScreen extends State<CreateEventScreen> {
                   ? "Select the category for this event" 
                   : _getCategoryInput(),
                 style: TextStyle(
-                  fontSize: 15
+                  fontSize: 15,
+                  color: _selectCategoryName.isEmpty ? Colors.black45 : Colors.black
                 ),  
               ),
               itemBuilder: (context) => _selectCategoryOptions,
@@ -720,6 +780,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text(
           "CREATE EVENTS",

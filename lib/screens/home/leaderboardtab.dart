@@ -85,7 +85,7 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
     // print("DEBUG Diff in minutes ${LeaderboardDataset.topHost.lastModified.difference(DateTime.now()).inMinutes}");
     if (LeaderboardDataset.topHost.lastModified != null && (DateTime.now()).difference(LeaderboardDataset.topHost.lastModified).inSeconds < 30) return;
     
-    var temp = await ec.getEvent();
+    var temp = await ec.getEvents();
     Map<String,int> topHostMap = Map();
     var hostIds = List();
     // List<List> result = List();

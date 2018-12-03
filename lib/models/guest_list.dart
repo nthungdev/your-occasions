@@ -8,10 +8,8 @@ class GuestList {
 
   // CONSTRUCTORS //
   GuestList.create();
-  GuestList({String userId, int eventId, DateTime creationDate}){
-    userId = userId;
-    eventId = eventId;
-    creationDate = creationDate;
+  GuestList({this.userId, this.eventId}){
+    creationDate = DateTime.now();
   }
   GuestList.createFromMap(Iterable<Map<String, dynamic>> map){
     map.forEach((item) {

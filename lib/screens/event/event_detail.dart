@@ -104,6 +104,8 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
       // });
       eventComments = [];
     }
+
+    print("DEBUG eventComments : $eventComments");
   }
 
   Future<void> _postComment() async {
@@ -116,10 +118,12 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
     );
 
     // _eventReference.
+    print("eventRef: ${_eventReference.documentID}");
     _eventReference.collection("Comments").add(comment.toJson());
     _commentController.clear();
     _commentNode.unfocus();
 
+    _eventReference.setData({}); // Without this. New document on FireStore won't save
     _refresh();
   }
 
@@ -182,6 +186,7 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
     List<Widget> result = List<Widget>();
 
     // eventComment.replies.forEach((comment) {
+    eventComments.sort((b,a) => a.date.compareTo(b.date));
     eventComments.forEach((comment) {
       result.addAll([
         CommentTile(

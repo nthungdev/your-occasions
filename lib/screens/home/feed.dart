@@ -93,7 +93,7 @@ class _FeedTabView extends State<FeedTabView> {
 
     for(int i = 0 ; i < eventCategoryList.length ; i++ ) {
       // print("DEBUG: i = $i");
-      var event = (await _ec.getEvent(id: eventCategoryList[i].eventId))[0];
+      var event = (await _ec.getEvents(id: eventCategoryList[i].eventId))[0];
       // print("DEBUG: $event");
       temp.add(event);
     }
@@ -107,6 +107,46 @@ class _FeedTabView extends State<FeedTabView> {
         _trendingEvents = FeedDataset.trendingEvents.value;
       });
     }
+  }
+
+  List<Widget> _buildPastEventsCardList(int count) {
+    List<Widget> cards = List<Widget>();
+
+    if (_pastEvents == null || _pastEvents.length == 0) {
+      return cards;
+    }
+
+    cards.add(
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+        child: Text("Past events", style: TextStyle(fontSize: 30.0, fontFamily: "Niramit")),
+      )
+    );
+    
+    if(_pastEvents == null || _pastEvents.length == 0) {
+      cards.add(Center(child: CircularProgressIndicator()));
+      return cards;
+    }
+
+    int counter = 0;
+
+    _pastEvents.sort((b,a) => a.startTime.compareTo(b.startTime));
+    _pastEvents.forEach((Event currentEvent) {
+      counter++;
+      if(counter > count) return cards;
+      cards.insert(1, Padding(
+        padding: const EdgeInsets.only(bottom: 8.0),
+        child: SmallEventCard(
+          event: currentEvent,
+          imageURL: currentEvent.picture,
+          place: currentEvent.locationName ?? "Unname location",
+          time: currentEvent.startTime ?? DateTime.now(),
+          title: currentEvent.name ?? "Untitled event" ,
+        ),
+      ));
+    });
+
+    return cards;
   }
 
   List<Widget> _buildUpcomingEventsCardList(int count) {
@@ -199,6 +239,7 @@ class _FeedTabView extends State<FeedTabView> {
 
     alist.addAll(_buildUpcomingEventsCardList(5));
     alist.addAll(_buildTrendingMusicEventsCardList(5));
+    alist.addAll(_buildPastEventsCardList(5));
     
     return alist;
   }

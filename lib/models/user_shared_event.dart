@@ -8,11 +8,8 @@ class UserSharedEvent {
 
   // CONSTRUCTORS //
   UserSharedEvent.create();
-  UserSharedEvent({String userId, int eventId, int sharerId, DateTime creationDate}){
-    userId = userId;
-    eventId = eventId;
-    sharerId = sharerId;
-    creationDate = creationDate;
+  UserSharedEvent({this.userId, this.eventId, this.sharerId}){
+    creationDate = DateTime.now();
   }
   UserSharedEvent.createFromMap(Iterable<Map<String, dynamic>> map){
     map.forEach((item) {

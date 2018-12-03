@@ -8,7 +8,7 @@ class UserAttendedEvent {
 
   // CONSTRUCTORS //
   UserAttendedEvent.create();
-  UserAttendedEvent({String userId, int eventId, DateTime creationDate}){
+  UserAttendedEvent({this.userId, this.eventId, this.creationDate}){
     userId = userId;
     eventId = eventId;
     creationDate = creationDate;

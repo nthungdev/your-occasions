@@ -7,11 +7,9 @@ class Category {
   DateTime creationDate;
 
   // CONSTRUCTORS //
-  Category({String name, String description}) {
-    this.name = name;
-    this.description = description;
-    this.isUsed = true;
-    this.creationDate = DateTime.now();
+  Category({this.name, this.description}) {
+    isUsed = true;
+    creationDate = DateTime.now();
   }
   Category.createFromMap(Iterable<Map<String, dynamic>> map){
     map.forEach((item) {

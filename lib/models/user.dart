@@ -22,8 +22,7 @@ class User {
   // CONSTRUCTORS //
   User.create();
   User({@required this.id, this.name, this.email, @required this.provider, this.birthday, this.picture, 
-  this.one, this.two, this.three, this.four, this.five, this.rating, bool isUsed=true}) {
-    this.isUsed = isUsed;
+  this.one, this.two, this.three, this.four, this.five, this.rating, this.isUsed=true}) {
     this.creationDate = DateTime.now();
   }
   User.createFromMap(Iterable<Map<String, dynamic>> map){

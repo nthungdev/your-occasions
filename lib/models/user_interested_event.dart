@@ -7,9 +7,7 @@ class UserInterestedEvent {
   
   // CONSTRUCTORS //
   UserInterestedEvent.create();
-  UserInterestedEvent({String userId, int eventId}){
-    userId = userId;
-    eventId = eventId;
+  UserInterestedEvent({this.userId, this.eventId}){
     creationDate = DateTime.now();
   }
   UserInterestedEvent.createFromMap(Iterable<Map<String, dynamic>> map){

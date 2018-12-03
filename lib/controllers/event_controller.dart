@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:meta/meta.dart';
 import 'package:youroccasions/controllers/base_controller.dart';
 import 'package:youroccasions/models/event.dart';
 import 'package:youroccasions/exceptions/UpdateQueryException.dart';
@@ -21,14 +22,19 @@ class EventController extends BaseController {
 
   // METHODS //
   /// Insert a new row into Events table.
-  Future<void> insert(Event model) async {
+  /// Return the Event object if insert successful.
+  Future<Event> insert(Event model) async {
     await connect();
 
     await connection.query("""INSERT INTO events (host_id, name, description, location_name, start_time, end_time, age, price, picture, is_used, creation_date)
       VALUES (@hostId, @name, @description, @locationName, @startTime, @endTime, @age, @price, @picture, @isUsed, @creationDate)""",
       substitutionValues: model.getProperties());
 
+    Event result = await getEvent(hostId: model.hostId, name: model.name, startTime: model.startTime);
+
     await disconnect();
+
+    return result;
   }
 
   /// Delete an existing row from Events table.
@@ -79,7 +85,7 @@ class EventController extends BaseController {
   }
 
   /// Select rows from users table and return a list of User objects.
-  Future<List<Event>> getEvent({int id, String hostId, String name, String category, DateTime startTime, DateTime endTime}) async {
+  Future<List<Event>> getEvents({int id, String hostId, String name, String category, DateTime startTime, DateTime endTime}) async {
     await connect();
 
     List<Event> result = [];
@@ -108,6 +114,36 @@ class EventController extends BaseController {
     await disconnect();
 
     return result;
+  }
+
+  
+  /// Select rows from users table and return a list of User objects.
+  Future<Event> getEvent({@required String hostId, @required String name, @required DateTime startTime}) async {
+    await connect();
+
+    List<Event> result = [];
+
+    String query = "SELECT * FROM events ";
+
+    if(hostId == null && name == null) {
+
+    }
+    else {
+      query += "WHERE ";
+      if (name != null) { query += "LOWER(name) LIKE LOWER('%$name%') "; }
+      else if (hostId != null) { query += "host_id = '$hostId' "; }
+      else if (startTime != null) { query += "start_time = '$startTime' "; }
+    }
+
+    var queryResult = await connection.mappedResultsQuery(query);
+
+    for (var item in queryResult) {
+      result.add(Event.createFromMap(item.values));
+    }
+
+    await disconnect();
+
+    return result.first;
   }
 
   Future<void> increaseView(int id) async {
@@ -141,7 +177,7 @@ WHERE start_time < NOW();
     var query = """
 SELECT *
 FROM events
-WHERE start_time < NOW();
+WHERE start_time > NOW();
 """;
     var queryResult = await connection.mappedResultsQuery(query);
     print(queryResult);

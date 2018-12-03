@@ -34,19 +34,19 @@ class HomeDrawer extends StatelessWidget {
           ListTile (
             title: Text (" Create Events"),
             onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => CreateEventScreen())),
-              ),
+          ),
           ListTile (
             title: Text (" My Events"),
             onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new OtherPage(" My Events"))),
-              ),
+          ),
           ListTile (
             title: Text (" Shared Events"),
             onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new OtherPage(" Shared Events"))),
           ),   
           ListTile (
-              title: Text (" Location"),
-              onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new OtherPage(" Location"))),
-            ),   
+            title: Text (" Location"),
+            onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new OtherPage(" Location"))),
+          ),   
           ListTile (
             title: Text (" Settings"),
             onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new OtherPage(" Settings"))),

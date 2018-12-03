@@ -20,13 +20,29 @@ class EventCategoryController extends BaseController{
   Future<void> insert(EventCategory model) async {
     await connect();
 
-    await connection.query("""INSERT INTO event_category (event_id, category, creation_date)
+    await connection.query("""INSERT INTO event_categories (event_id, category, creation_date)
       VALUES (@eventId, @category, @creationDate)""",
       substitutionValues: model.getProperties());
 
     await disconnect();
   }
 
+  /// Insert a new row into user_interesteded_events table.
+  Future<void> bulkInsert(List<String> models, int eventId) async {
+    await connect();
+
+    for (String model in models) {
+      EventCategory ec = EventCategory(
+        category: model,
+        eventId: eventId,
+      );
+      await connection.query("""INSERT INTO event_categories (event_id, category, creation_date)
+        VALUES (@eventId, @category, @creationDate)""",
+        substitutionValues: ec.getProperties());
+    }
+
+    await disconnect();
+  }
   /// Delete an existing row from user_interested_events table.
   Future<void> delete(eventId, String category) async {
     await connect();
