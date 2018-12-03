@@ -206,7 +206,7 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
     var userName, email, pic, id;
     FacebookLogin facebookSignIn = new FacebookLogin();
     final FacebookLoginResult result =
-    await facebookSignIn.logInWithReadPermissions(['email','public_profile','user_posts']);
+    await facebookSignIn.logInWithReadPermissions(['email']);
     //,publish_actions,manage_pages,publish_pages,user_status,user_videos,user_work_history
 
     switch (result.status) {
@@ -216,7 +216,7 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
 
         var graphResponse = await http.get(
             'https://graph.facebook.com/v2.12/me?fields=name,first_name,picture,last_name,email&access_token=${accessToken.token}');
-        Map<String, dynamic> user = json.decode(graphResponse.body);
+        Map<String,dynamic> user = json.decode(graphResponse.body);
         Map<String,dynamic> picture = user['picture'];
         Map<String,dynamic> data = picture['data'];
         userName = user['name'];
@@ -228,19 +228,19 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
       // print(data1);
 
       // me?fields=id,name,feed{message,attachments}
-        var graphResponseFeed1 = await http.get('https://graph.facebook.com/v2.12/me?fields=id,name,feed{attachments,message}&access_token=${accessToken.token}');
-        var data1l = json.decode(graphResponseFeed1.body);
-        Map<String,dynamic> root = json.decode(graphResponseFeed1.body);
-        Map <String,dynamic> feed = root['feed'];
-        var fdata = feed['data'];
+        // var graphResponseFeed1 = await http.get('https://graph.facebook.com/v2.12/me?fields=id,name,feed{attachments,message}&access_token=${accessToken.token}');
+        // var data1l = json.decode(graphResponseFeed1.body);
+        // Map<String,dynamic> root = json.decode(graphResponseFeed1.body);
+        // Map <String,dynamic> feed = root['feed'];
+        // var fdata = feed['data'];
 
         User userFromDB = await _userController.getUserWithFacebook(email);
 
         if (userFromDB == null) {
-          User newUser = User(id: id, name: userName, email: email, picture: pic, provider: "facebook");
-          await _userController.insert(newUser)
+          userFromDB = User(id: id, name: userName, email: email, picture: pic, provider: "facebook");
+          await _userController.insert(userFromDB)
           .then((value) {
-            print("DEBUG name is : ${newUser.name}");
+            print("DEBUG name is : ${userFromDB.name}");
             print("Your account is created successfully!");
             }, onError: (e) {
             print("Sign up with Google failed");
@@ -248,11 +248,11 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
             }
           );
         }
-        await setUserId(id);
-        await setUserEmail(email);
-        await setUserName(userName);
+        // await setUserId(id);
+        // await setUserEmail(email);
+        // await setUserName(userName);
 
-        Dataset.currentUser.value = await _userController.getUserWithEmail(email);
+        Dataset.currentUser.value = userFromDB;
         Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()),);
 
         // for (var i = 0; i < fdata.length; i++) {
@@ -327,7 +327,7 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
       child: FlatButton(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(45))),
         color: Color(0xff3b5998),
-        onPressed: () {_facebookLogin();},
+        onPressed: _facebookLogin,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
