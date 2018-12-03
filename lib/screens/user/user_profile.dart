@@ -57,7 +57,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
     //   });
     // });
 
-  Future<void> _refresh() async{
+  void _refresh() async{
     var temp = await friendController.getFriend(currentUser.id, widget.user.id);
 
     var temp1 = await _eventController.getEvent(hostId: widget.user.id);

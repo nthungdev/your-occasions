@@ -1,3 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="facebook_app_id">2331483853531772</string> <string name="fb_login_protocol_scheme">fb2331483853531772</string>
+    <string name="app_name">Your Occasions</string>
+
+    <!-- Replace "000000000000" with your Facebook App ID here. -->
+    <string name="facebook_app_id">2331483853531772</string>
+    
+    <!-- Replace "000000000000" with your Facebook App ID here. -->
+    <string name="fb_login_protocol_scheme">fb2331483853531772</string>
 </resources>

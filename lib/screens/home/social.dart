@@ -28,15 +28,11 @@ class _SocialTabView extends State<SocialTabView> {
     super.initState();
     // loadData();
     following = FollowDataset.following.value;
-    loadData();
+    _refresh();
   }
 
   Future<void> _refresh() async {
       await _getFollowing();
-  }
-
-  void loadData() async {
-      await _refresh();
   }
 
   Future _getFollowing() async {

@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
+import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:youroccasions/models/data.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
@@ -202,17 +205,49 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
     );
   }
 
+  Future<Stream<String>> _server() async {
+    final StreamController<String> onCode = new StreamController();
+    HttpServer server =
+        await HttpServer.bind(InternetAddress.LOOPBACK_IP_V4, 8080);
+    server.listen((HttpRequest request) async {
+      final String code = request.uri.queryParameters["code"];
+      request.response
+        ..statusCode = 200
+        ..headers.set("Content-Type", ContentType.HTML.mimeType)
+        ..write("<html><h1>You can now close this window</h1></html>");
+      await request.response.close();
+      await server.close(force: true);
+      onCode.add(code);
+      await onCode.close();
+    });
+    return onCode.stream;
+  }
+
   void _facebookLogin() async {
+
+    // String appId = '2331483853531772';
+    // String appSecret = '8d424fae6aa100809d67cc45e7f75393';
+    // Stream<String> onCode = await _server();
+    // String url =
+    //     "https://www.facebook.com/dialog/oauth?client_id=$appId&redirect_uri=http://localhost:8080/&scope=public_profile";
+    // await launch(url);
+    // final String code = await onCode.first;
+    // final http.Response response = await http.get(
+    //     "https://graph.facebook.com/v2.2/oauth/access_token?client_id=$appId&redirect_uri=http://localhost:8080/&client_secret=$appSecret&code=$code");
+    // Map<String,dynamic> user = json.decode(response.body);
+    // print(user);
+
     var userName, email, pic, id;
-    FacebookLogin facebookSignIn = new FacebookLogin();
-    final FacebookLoginResult result =
-    await facebookSignIn.logInWithReadPermissions(['email']);
+    var facebookSignIn = new FacebookLogin();
+    var result = await facebookSignIn.logInWithReadPermissions(['email']);
+    print(result.accessToken);
     //,publish_actions,manage_pages,publish_pages,user_status,user_videos,user_work_history
 
     switch (result.status) {
       case FacebookLoginStatus.loggedIn:
-        final FacebookAccessToken accessToken = result.accessToken;
-        accessToken.permissions;
+        print("LoggedIn");
+        var accessToken = result.accessToken;
+        // accessToken.permissions;
 
         var graphResponse = await http.get(
             'https://graph.facebook.com/v2.12/me?fields=name,first_name,picture,last_name,email&access_token=${accessToken.token}');
@@ -253,6 +288,7 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
         // await setUserName(userName);
 
         Dataset.currentUser.value = userFromDB;
+        print(1);
         Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()),);
 
         // for (var i = 0; i < fdata.length; i++) {
@@ -283,6 +319,7 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
         // _showMessage('Login cancelled by the user.');
         break;
       case FacebookLoginStatus.error:
+        print(2);
         // _showMessage('Something went wrong with the login process.\n'
         //     'Here\'s the error Facebook gave us: ${result.errorMessage}');
         break;
