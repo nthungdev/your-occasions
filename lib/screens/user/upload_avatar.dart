@@ -19,6 +19,7 @@ class UploadAvatarPage extends StatefulWidget {
 
 
 class UploadAvatarPageState extends State<UploadAvatarPage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   File _image;
   List<PopupMenuItem> _selectImageOptions = 
     [
@@ -55,8 +56,22 @@ class UploadAvatarPageState extends State<UploadAvatarPage> {
       path: "${Dataset.currentUser.value.id}/cover"
     );
     
-    print("DEBUG url: $url");
     await uc.update(Dataset.currentUser.value.id, picture: url);
+    User u = await uc.getUserWithEmail(Dataset.currentUser.value.email);
+    
+    Dataset.currentUser.value = u;
+    
+    Future.delayed(Duration(seconds: 3), () {
+      Navigator.of(context).pop();
+    });
+
+    _scaffoldKey.currentState.showSnackBar(
+      SnackBar(
+        content: Text("New profile picture saved"),
+        duration: Duration(seconds: 3),
+      )
+    );
+
   }
 
   Widget _buildImageFrame() {
@@ -111,6 +126,7 @@ class UploadAvatarPageState extends State<UploadAvatarPage> {
     var screen = MediaQuery.of(context).size;
 
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         elevation: 0,
         title: Text("UPLOAD AVATAR",
