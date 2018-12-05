@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:youroccasions/controllers/event_category_controller.dart';
 import 'package:youroccasions/models/event_comment.dart';
 import 'package:youroccasions/screens/event/comment_input.dart';
 import 'package:youroccasions/screens/event/comment_tile.dart';
@@ -36,6 +37,7 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
   FocusNode _commentNode;
   DocumentReference _eventReference;
   bool _gotData;
+  List<String> _categories;
   
   EventComment eventComment;
   List<EventComment> eventComments;
@@ -44,6 +46,7 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
   @override
   initState() {
     super.initState();
+    _categories = List<String>();
     _event = widget.event;
     _eventReference = Firestore.instance.collection('EventThreads').document(_event.id.toString());
     descriptionMaxLine = 10;
@@ -55,6 +58,7 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
 
     EventController ec = EventController();
     ec.increaseView(_event.id);
+
   }
 
   @override
@@ -74,12 +78,23 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
     });
 
     await _getComments();
+    await _getEventCategories();
 
     if(this.mounted) {
       setState(() { 
         _gotData = true;
       });
     }
+    
+  }
+
+  Future<void> _getEventCategories() async {
+    EventCategoryController ecc = EventCategoryController();
+    var temp = await ecc.getEventCategory(eventId: _event.id);
+    _categories = List<String>.generate(temp.length, (index) {
+      return temp[index].category;
+    });
+    print("Categories : $_categories");
   }
 
   Future<void> _getComments() async {
@@ -224,6 +239,9 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
             padding: const EdgeInsets.all(3.0),
             child: Column(
               children: <Widget>[
+                SizedBox(
+                  height: 5,
+                ),
                 Text("DEC",
                   style: TextStyle(
                     fontSize: 18,
@@ -234,6 +252,9 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
                   style: TextStyle(
                     fontSize: 20
                   ),
+                ),
+                SizedBox(
+                  height: 5,
                 ),
               ],
             ),
@@ -250,10 +271,18 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
   }
 
   Widget _buildDescription() {
-    return Column(
-      children: <Widget>[
-        /// TODO this
-      ],
+    return ListTile(
+      contentPadding: EdgeInsets.symmetric(horizontal: 20),
+      title: Text('Description: ${_event.description}'),
+    );
+  }
+
+  Widget _buildCategory() {
+    String categoryList = _categories.toString().substring(1, _categories.toString().length - 1);
+
+    return ListTile(
+      contentPadding: EdgeInsets.symmetric(horizontal: 20),
+      title: Text('Category: $categoryList'),
     );
   }
 
@@ -268,21 +297,10 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
           Divider(height: 1,),
           _buildHost(),
           Divider(height: 1,),
-          // ListTile(
-          //   contentPadding: EdgeInsets.symmetric(horizontal: 20),
-          //   title: Text('Name: ${event.name}'),
-          // ),
-          ListTile(
-            contentPadding: EdgeInsets.symmetric(horizontal: 20),
-            title: Text('Description: ${_event.description}'),
-          ),
-          ListTile(
-            contentPadding: EdgeInsets.symmetric(horizontal: 20),
-            title: Text('Category: ${_event.category}'),
-          ),
-          Divider(
-            height: 1,
-          ),
+          _buildDescription(),
+          Divider(height: 1),
+          _buildCategory(),
+          Divider(height: 1),
           Container(
             height: 10,
             color: Colors.grey[200],

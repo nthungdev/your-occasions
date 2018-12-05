@@ -16,7 +16,7 @@ class EventCategory {
       // this._id = item['id'];
       // this._categoryId = item['category_id'];
       this.eventId = item['event_id'];
-      this.category = item['category_id'];
+      this.category = item['category'];
       this.creationDate = item['creation_date'];
     });
   }
