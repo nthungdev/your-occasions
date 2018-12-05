@@ -24,7 +24,7 @@ class FriendListController extends BaseController{
     await connection.query("""INSERT INTO friend_lists (user_id, friend_id, creation_date)
       VALUES (@userId, @friendId, @creationDate)""",
       substitutionValues: model.getProperties());
-    print(model.getProperties());
+    // print(model.getProperties());
     await disconnect();
   }
 
@@ -113,12 +113,11 @@ class FriendListController extends BaseController{
     }
 
     var queryResult = await connection.mappedResultsQuery(query);
+    
     print(queryResult);
     for (var item in queryResult) {
       result.add(FriendList.createFromMap(item.values));
     }
-    print(result[0].userId);
-
 
     await disconnect();
 
