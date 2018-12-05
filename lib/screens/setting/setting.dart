@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-class OtherPage extends StatelessWidget {
+class SettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Padding(
@@ -13,10 +13,27 @@ class OtherPage extends StatelessWidget {
               children: <Widget>[
                 new Padding(
                   padding: const EdgeInsets.only(top: 22.0, bottom: 8.0),
-                  child: new Text("Terms of Service", style: new TextStyle(color: new Color.fromARGB(255, 117, 117, 117), fontSize: 32.0, fontWeight: FontWeight.bold)),
+                  child: new Text("Edit Profile Picture", style: new TextStyle(color: new Color.fromARGB(255, 117, 117, 117), fontSize: 32.0, fontWeight: FontWeight.bold)),
                 ),
+
+                new Padding(
+                  padding: const EdgeInsets.only(top: 22.0, bottom: 8.0),
+                  child: new Text("Suggest Improvements", style: new TextStyle(color: new Color.fromARGB(255, 117, 117, 117), fontSize: 32.0, fontWeight: FontWeight.bold)),
+                ),new Padding(
+                  
+                  padding: const EdgeInsets.only(top: 22.0, bottom: 8.0),
+                  child: new Text("About", style: new TextStyle(color: new Color.fromARGB(255, 117, 117, 117), fontSize: 32.0, fontWeight: FontWeight.bold)),
+                ),new Padding(
+                  padding: const EdgeInsets.only(top: 22.0, bottom: 8.0),
+                  child: new Text("Log out", style: new TextStyle(color: new Color.fromARGB(255, 117, 117, 117), fontSize: 32.0, fontWeight: FontWeight.bold)),
+                ),
+
+
+
+                
                 new Divider(),
-                new Text("lifeofib")
+                new Text("Ibrahim Diallo")
+
               ],
             ),
           ],
@@ -27,6 +44,5 @@ class OtherPage extends StatelessWidget {
     );
   }
 }
-
 
 

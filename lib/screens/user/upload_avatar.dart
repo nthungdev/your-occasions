@@ -1,5 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:youroccasions/controllers/user_controller.dart';
+import 'package:youroccasions/models/data.dart';
 import 'package:youroccasions/models/user.dart';
+import 'package:youroccasions/utilities/cloudinary.dart';
+import 'package:youroccasions/utilities/secret.dart';
 
 class UploadAvatarPage extends StatefulWidget {
   final User user;
@@ -12,30 +19,145 @@ class UploadAvatarPage extends StatefulWidget {
 
 
 class UploadAvatarPageState extends State<UploadAvatarPage> {
+  File _image;
+  List<PopupMenuItem> _selectImageOptions = 
+    [
+      PopupMenuItem(
+        child: Text("Choose from gallery"),
+      ),
+      PopupMenuItem(
+        child: Text("From camera"),
+      ),
+    ];
+  
+  @override
+  initState() {
+    super.initState();
+  }
+
+
+  void _getImage(ImageSource source) {
+    ImagePicker.pickImage(source: source).then((image) {
+      setState(() {
+        _image = image;
+      });
+    });
+  }
+
+  void _saveImage() async {
+    String url;
+    Cloudinary cl = Cloudinary(CLOUDINARY_API_KEY, API_SECRET);
+    UserController uc = UserController();
+
+    url = await cl.upload(
+      file: toDataURL(file: _image),
+      preset: Presets.profilePicture,
+      path: "${Dataset.currentUser.value.id}/cover"
+    );
+    
+    print("DEBUG url: $url");
+    await uc.update(Dataset.currentUser.value.id, picture: url);
+  }
+
+  Widget _buildImageFrame() {
+    var screen = MediaQuery.of(context).size;
+
+    Image image;
+    if (_image == null) {
+      image = Image.asset("assets/images/no-image-avatar.jpg", fit: BoxFit.cover,);
+    }
+    else {
+      image = Image.file(_image, fit: BoxFit.fitWidth,);
+    }
+    
+    return SizedBox(
+      height: screen.height * 0.50,
+      width: screen.height * 0.50,
+      child: image,
+    );
+  }
+
+  Widget _buildButtons() {
+    var screen = MediaQuery.of(context).size;
+
+    return Column(
+      children: <Widget>[
+        SizedBox(
+          width: screen.width * 0.5,
+          child: RaisedButton(
+            onPressed: () {
+              _getImage(ImageSource.camera);
+            },
+            child: Text("Select image from camera"),
+          ),
+        ),
+        SizedBox(
+          width: screen.width * 0.5,
+          child: RaisedButton(
+            onPressed: () {
+              _getImage(ImageSource.gallery);
+            },
+            child: Text("Select image from gallery"),
+          ),
+        )
+      ],
+    );
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
-    return new Padding(
-      padding: const EdgeInsets.only(top: 16.0, bottom: 16.0, left: 12.0, right: 12.0),
-      child: new Card(
-        child: new Row(
-          children: <Widget>[
-            new Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                new Padding(
-                  padding: const EdgeInsets.only(top: 22.0, bottom: 8.0),
-                  child: new Text("Terms of Service", style: new TextStyle(color: new Color.fromARGB(255, 117, 117, 117), fontSize: 32.0, fontWeight: FontWeight.bold)),
-                ),
-                new Divider(),
-                new Text("lifeofib")
-              ],
+    var screen = MediaQuery.of(context).size;
+
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        title: Text("UPLOAD AVATAR",
+          style: TextStyle(
+            color: Colors.black
+          ),
+        ),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: Icon(Icons.arrow_back,
+            color: Colors.black,
+          ),
+        ),
+        actions: <Widget>[
+          SizedBox(
+            // width: 30,
+            height: 10,
+            child: FlatButton(
+              padding: EdgeInsets.all(0),
+              onPressed: _saveImage,
+              child: Text("SAVE"),
             ),
-          ],
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-        )
-      )
+          )
+        ],
+        backgroundColor: Colors.white,
+      ),
+      body: Container(
+        padding: EdgeInsets.all(0),
+        color: Colors.white,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: screen.height * 0.05,
+              ),
+              _buildImageFrame(),
+              SizedBox(
+                height: screen.height * 0.05,
+              ),
+              _buildButtons(),
+            ]
+          ),
+        ),
+      ),
     );
   }
 }

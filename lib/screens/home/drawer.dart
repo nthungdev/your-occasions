@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:youroccasions/screens/setting/setting.dart';
+import 'package:youroccasions/screens/user/upload_avatar.dart';
 import './other_page.dart';
 
 import 'package:youroccasions/screens/user/user_profile.dart';
@@ -32,24 +34,28 @@ class HomeDrawer extends StatelessWidget {
             ),
           ),
           ListTile (
-            title: Text (" Create Events"),
+            title: Text ("Create Event"),
             onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => CreateEventScreen())),
           ),
           ListTile (
-            title: Text (" My Events"),
+            title: Text ("My Events"),
             onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new OtherPage(" My Events"))),
           ),
           ListTile (
-            title: Text (" Shared Events"),
+            title: Text ("Shared Events"),
             onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new OtherPage(" Shared Events"))),
           ),   
           ListTile (
-            title: Text (" Location"),
+            title: Text ("Location"),
             onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new OtherPage(" Location"))),
-          ),   
+          ),
           ListTile (
-            title: Text (" Settings"),
-            onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new OtherPage(" Settings"))),
+            title: Text ("Settings"),
+            onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new SettingPage())),
+          ), 
+          ListTile (
+            title: Text ("Change Avatar"),
+            onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => UploadAvatarPage(Dataset.currentUser.value))),
           ),   
           Container(
           alignment: Alignment.center,
