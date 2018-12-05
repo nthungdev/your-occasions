@@ -238,8 +238,8 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
     // print(user);
 
     var userName, email, pic, id;
-    var facebookSignIn = new FacebookLogin();
-    var result = await facebookSignIn.logInWithReadPermissions(['email']);
+    FacebookLogin facebookSignIn = new FacebookLogin();
+    FacebookLoginResult result = await facebookSignIn.logInWithReadPermissions(['email','public_profile']);
     print(result.accessToken);
     //,publish_actions,manage_pages,publish_pages,user_status,user_videos,user_work_history
 

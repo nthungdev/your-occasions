@@ -16,9 +16,9 @@ class UserAttendedEvent {
   UserAttendedEvent.createFromMap(Iterable<Map<String, dynamic>> map){
     map.forEach((item) {
       id = item['id'];
-      userId = item['userId'];
-      eventId= item['eventId'];
-      creationDate = item['creationDate'];
+      userId = item['user_id'];
+      eventId= item['event_id'];
+      creationDate = item['creation_date'];
     });
   }
 

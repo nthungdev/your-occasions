@@ -24,7 +24,7 @@ class FriendListController extends BaseController{
     await connection.query("""INSERT INTO friend_lists (user_id, friend_id, creation_date)
       VALUES (@userId, @friendId, @creationDate)""",
       substitutionValues: model.getProperties());
-
+    print(model.getProperties());
     await disconnect();
   }
 
@@ -40,7 +40,10 @@ class FriendListController extends BaseController{
   Future<void> deleteFriend(String userId, String friendId) async {
     await connect();
 
-    await connection.query("""DELETE FROM friend_lists WHERE user_id = @userId AND friend_id = @friendId""", substitutionValues: { 'userId': userId,'friendId': friendId });  
+    await connection.query("""DELETE FROM friend_lists WHERE user_id = @userId AND friend_id = @friendId""", substitutionValues: { 
+    'userId': userId,
+    'friendId': friendId, 
+    });  
 
     await disconnect();
   }
@@ -110,10 +113,12 @@ class FriendListController extends BaseController{
     }
 
     var queryResult = await connection.mappedResultsQuery(query);
-
+    print(queryResult);
     for (var item in queryResult) {
       result.add(FriendList.createFromMap(item.values));
     }
+    print(result[0].userId);
+
 
     await disconnect();
 

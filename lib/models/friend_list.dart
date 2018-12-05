@@ -14,9 +14,9 @@ class FriendList {
   FriendList.createFromMap(Iterable<Map<String, dynamic>> map){
     map.forEach((item) {
       id = item['id'];
-      userId = item['userID'];
-      friendId= item ['friendId'];
-      creationDate = item['creationDate'];
+      userId = item['user_id'];
+      friendId= item ['friend_id'];
+      creationDate = item['creation_date'];
     });
   }
 
@@ -40,7 +40,7 @@ class FriendList {
     map['id'] = id;
     map['userId'] = userId;
     map['creationDate'] = creationDate;
-    map ['friendId'] = friendId;
+    map['friendId'] = friendId;
 
     return map;
   }
