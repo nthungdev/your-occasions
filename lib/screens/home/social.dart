@@ -69,11 +69,11 @@ class _SocialTabView extends State<SocialTabView> {
   List<Widget> _buildFriends(){
     List<Widget> cards = List<Widget>();
     int tag = 0;
-    print(following[0]);
+    // print(following[0]);
     if (following.length == 0 || following[0] == null){
       return cards;
     }
-    print(1);
+    // print(1);
     for (var friend in following){
       cards.add(_buildUser(friend));
       tag+=1;
@@ -84,7 +84,7 @@ class _SocialTabView extends State<SocialTabView> {
   }
 
   void onDragDown(DragDownDetails details) {
-    print(details.globalPosition);
+    // print(details.globalPosition);
     _refresh();
   }
 
