@@ -20,27 +20,35 @@ class UploadAvatarPage extends StatefulWidget {
 
 class UploadAvatarPageState extends State<UploadAvatarPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  File _image;
-  List<PopupMenuItem> _selectImageOptions = 
-    [
-      PopupMenuItem(
-        child: Text("Choose from gallery"),
-      ),
-      PopupMenuItem(
-        child: Text("From camera"),
-      ),
-    ];
+  File _imageFile;
+  Image _image;
+  String _imageURL;
+  // List<PopupMenuItem> _selectImageOptions = 
+  //   [
+  //     PopupMenuItem(
+  //       child: Text("Choose from gallery"),
+  //     ),
+  //     PopupMenuItem(
+  //       child: Text("From camera"),
+  //     ),
+  //   ];
   
   @override
   initState() {
     super.initState();
+    _imageURL = Dataset.currentUser.value.picture;
+
+    
+    if (_imageURL != null) {
+      _image = Image.network(_imageURL);
+    }
   }
 
 
   void _getImage(ImageSource source) {
     ImagePicker.pickImage(source: source).then((image) {
       setState(() {
-        _image = image;
+        _imageFile = image;
       });
     });
   }
@@ -51,7 +59,7 @@ class UploadAvatarPageState extends State<UploadAvatarPage> {
     UserController uc = UserController();
 
     url = await cl.upload(
-      file: toDataURL(file: _image),
+      file: toDataURL(file: _imageFile),
       preset: Presets.profilePicture,
       path: "${Dataset.currentUser.value.id}/cover"
     );
@@ -60,7 +68,7 @@ class UploadAvatarPageState extends State<UploadAvatarPage> {
     User u = await uc.getUserWithEmail(Dataset.currentUser.value.email);
     
     Dataset.currentUser.value = u;
-    
+
     Future.delayed(Duration(seconds: 3), () {
       Navigator.of(context).pop();
     });
@@ -77,18 +85,19 @@ class UploadAvatarPageState extends State<UploadAvatarPage> {
   Widget _buildImageFrame() {
     var screen = MediaQuery.of(context).size;
 
-    Image image;
-    if (_image == null) {
-      image = Image.asset("assets/images/no-image-avatar.jpg", fit: BoxFit.cover,);
-    }
-    else {
-      image = Image.file(_image, fit: BoxFit.fitWidth,);
+    if (_imageURL == null) {
+      if (_imageFile == null) {
+        _image = Image.asset("assets/images/no-image-avatar.jpg", fit: BoxFit.cover,);
+      }
+      else {
+        _image = Image.file(_imageFile, fit: BoxFit.fitWidth,);
+      }
     }
     
     return SizedBox(
       height: screen.height * 0.50,
       width: screen.height * 0.50,
-      child: image,
+      child: _image,
     );
   }
 
