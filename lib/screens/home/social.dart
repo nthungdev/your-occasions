@@ -37,8 +37,6 @@ class _SocialTabView extends State<SocialTabView> {
 
   Future<void> _getFollowing() async {
       var data = await _friendController.getFriendList(userId: currentUser.id);
-      print(data);
-      print(data[0].userId);
       List<User> users = List<User>();
 
       for (var friend in data){
@@ -47,8 +45,8 @@ class _SocialTabView extends State<SocialTabView> {
       }
       
       FollowDataset.following.value = users;
-      print(data[0].userId);
-      print(users);
+      // print(data[0].userId);
+      // print(users);
       if(this.mounted) {
         setState(() {
           following = FollowDataset.following.value;
