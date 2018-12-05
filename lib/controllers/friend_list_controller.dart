@@ -24,6 +24,8 @@ class FriendListController extends BaseController{
     await connection.query("""INSERT INTO friend_lists (user_id, friend_id, creation_date)
       VALUES (@userId, @friendId, @creationDate)""",
       substitutionValues: model.getProperties());
+    
+    await connection.query("""UPDATE users SET followers = followers + 1 WHERE id = @id""", substitutionValues: { 'id': model.friendId, });
     // print(model.getProperties());
     await disconnect();
   }
@@ -44,6 +46,8 @@ class FriendListController extends BaseController{
     'userId': userId,
     'friendId': friendId, 
     });  
+    await connection.query("""UPDATE users SET followers = followers - 1 WHERE id = @id""", substitutionValues: { 'id': friendId, });
+
 
     await disconnect();
   }
@@ -113,7 +117,7 @@ class FriendListController extends BaseController{
     }
 
     var queryResult = await connection.mappedResultsQuery(query);
-    
+
     print(queryResult);
     for (var item in queryResult) {
       result.add(FriendList.createFromMap(item.values));

@@ -91,7 +91,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
     if (!isFollowed){
       print(friend.friendId);
       await friendController.insert(friend);      
-      await _userController.increaseFollowers(widget.user.id);
+      // await _userController.increaseFollowers(widget.user.id);
       // await friendController.insert(friend);
       // await _userController.increaseFollowers(user.id);
     }
@@ -101,7 +101,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
     var isFollowed = await friendController.getFriend(currentUser.id, user.id);
     if (isFollowed){
       await friendController.deleteFriend(currentUser.id, widget.user.id);
-      await _userController.decreaseFollowers(widget.user.id);
+      // await _userController.decreaseFollowers(widget.user.id);
       // await friendController.deleteFriend(currentUser.id, widget.user.id);
       
     }
