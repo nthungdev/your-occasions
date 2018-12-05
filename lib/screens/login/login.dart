@@ -225,8 +225,6 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
 
   void _facebookLogin() async {
 
-    // String appId = '2331483853531772';
-    // String appSecret = '8d424fae6aa100809d67cc45e7f75393';
     // Stream<String> onCode = await _server();
     // String url =
     //     "https://www.facebook.com/dialog/oauth?client_id=$appId&redirect_uri=http://localhost:8080/&scope=public_profile";
