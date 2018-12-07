@@ -31,12 +31,17 @@ class UserController extends BaseController {
 
   Future<void> updateUser(String id, String name, String email) async{
     await connect();
-    String query = "UPDATE users SET";
+    String query = """UPDATE users SET """;
     
-    query += "name = '$name', email = '$email'";
-    query += "WHERE id = '$id'";
+    query += """name = '$name', email = '$email' """;
+    query += """WHERE id = '$id';""";
 
-    await connection.query(query);
+    await connection.query("""UPDATE users SET name = @name, email = @email WHERE id = @id""", 
+    substitutionValues: {
+      'name': name,
+      'email': email,
+      'id': id, 
+      });
 
     await disconnect();
 
@@ -88,7 +93,7 @@ class UserController extends BaseController {
       if(rating != null) { query += "rating = $rating "; }
       if(isUsed != null) { query += "is_used = '$isUsed' "; }
 
-      query += " WHERE id = '$id' ";
+      query += "WHERE id = '$id' ";
       await connection.query(query);  
       await disconnect();
     }

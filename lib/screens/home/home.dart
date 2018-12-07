@@ -63,9 +63,8 @@ class _HomeScreen extends State<HomeScreen> with SingleTickerProviderStateMixin 
     _accountEmail = Dataset.currentUser.value.email;
 
     print("User's picture: \n");
-    print(Dataset.currentUser.value.picture);
-    
-    
+    print(Dataset.currentUser.value.picture);   
+
   }
 
   @override
@@ -116,8 +115,8 @@ class _HomeScreen extends State<HomeScreen> with SingleTickerProviderStateMixin 
         actions: _buildActions(),
       ),
       drawer: HomeDrawer(
-        accountName: _accountName == null ? "" : _accountName, 
-        accountEmail: _accountEmail == null ? "" : _accountEmail,
+        accountName: Dataset.currentUser.value.name,
+        accountEmail: Dataset.currentUser.value.email,
         accountPicture: Dataset.currentUser.value.picture,
       ),
       bottomNavigationBar: BottomMenu(pageController: _pageController, currentIndex: this._currentPage,),

@@ -1,5 +1,6 @@
 import 'package:youroccasions/models/event.dart';
 import 'package:youroccasions/models/user.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 
 
@@ -20,6 +21,7 @@ class Data<T> {
 class Dataset {
   // static List<Event> _allEvents;
   static Data<User> currentUser = Data();
+  static Data<FirebaseUser> firebaseUser = Data();
   static Data allEventCategories = Data();
   static Data<List<User>> allUsers = Data<List<User>>();
   static Data allUserInterestedEvents = Data();

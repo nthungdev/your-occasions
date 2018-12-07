@@ -87,7 +87,8 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
       // print("User firebase is : $userFirebase");
       // await userFirebase.getIdToken().then((idToken) => id = idToken);
       // print("Id is : $id");
-
+      
+      Dataset.firebaseUser.value = userFirebase;
       await setUserId(userFirebase.uid);
       await setIsLogin(true);
       await setUserEmail(userFirebase.email);

@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:youroccasions/controllers/user_controller.dart';
 import 'package:youroccasions/models/data.dart';
 import 'package:youroccasions/models/user.dart';
+import 'dart:async';
 
 import 'package:youroccasions/screens/login/login.dart';
 import 'package:youroccasions/utilities/config.dart';
 import 'package:youroccasions/screens/home/home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 
 void main() async {
   final Firestore firestore = Firestore();
@@ -18,6 +21,10 @@ void main() async {
   if(id != null){
     UserController uc = UserController();
     User userFromDB = await uc.getUserWithId(id);
+    // var userFirebase = await FirebaseAuth.instance.signInWithEmailAndPassword(email: userFromDB.email, password: '123456');
+
+    // var user = await FirebaseAuth.instance.currentUser();
+    // Dataset.firebaseUser.value = userFirebase;
     if (userFromDB == null) {
       print("Getting user error");
     }

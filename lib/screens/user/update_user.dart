@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:youroccasions/models/data.dart';
 import 'package:youroccasions/screens/home/home.dart';
 import 'package:youroccasions/models/user.dart';
 import 'package:youroccasions/controllers/user_controller.dart';
@@ -38,12 +39,13 @@ class _UpdateUserScreen extends State<UpdateUserScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<FormFieldState> _emailKey = GlobalKey<FormFieldState>();
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  var firebaseUser = Dataset.firebaseUser.value;
   
   bool _isDuplicatedEmail;
 
 
   @override
-  void initState() {
+  void initState(){
     super.initState();
     List<String> name = widget.user.name.split(" ");
     firstNameController = TextEditingController();
@@ -51,6 +53,7 @@ class _UpdateUserScreen extends State<UpdateUserScreen> {
     emailController = TextEditingController();
     passwordController = TextEditingController();
     password2Controller = TextEditingController();
+    // var user = Dataset.firebaseUser.value;
 
     firstNameController.text = name[0];
     lastNameController.text = name[1];
@@ -95,6 +98,11 @@ class _UpdateUserScreen extends State<UpdateUserScreen> {
     return null;
   }
 
+  
+  // Future<void> getUser(var user) async{
+  //   user = await _auth.currentUser();
+  // }
+
   void _submit() async {
     String name = "${firstNameController.text} ${lastNameController.text}";
     if (!this._formKey.currentState.validate()) {
@@ -106,7 +114,26 @@ class _UpdateUserScreen extends State<UpdateUserScreen> {
 
     this._formKey.currentState.save();
 
+  //   firebaseUser.updateProfile({
+  //     displayName: name,
+  //     }).then(function() {
+  // // Update successful.
+  //     }).catch(function(error) {
+  //       // An error happened.
+  //     });
+    if (firebaseUser!=null){
+      if (firebaseUser.email != emailController.text){
+        firebaseUser.updateEmail(emailController.text);
+      }
+    }
+    // user.updateEmail(emailController.text);
     await _userController.updateUser(widget.user.id, name, emailController.text);
+    setState(() {
+      Dataset.currentUser.value.name = name;
+      Dataset.currentUser.value.email = emailController.text;
+    });
+    
+
     Navigator.of(context).pop();
 
     // try {
