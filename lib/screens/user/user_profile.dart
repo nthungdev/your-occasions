@@ -291,6 +291,29 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
     );
   }
 
+  Widget info(var textTheme){
+    return new Padding(
+      padding: const EdgeInsets.all(24.0),
+      child: new Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          new Text(
+            user.name,
+            style: textTheme.headline.copyWith(color: Colors.white),
+          ),
+          new Text(
+            user.email,
+            style: TextStyle(color: Colors.white, fontSize: 14.0)
+          ),
+          new Padding(
+            padding: const EdgeInsets.only(top: 6.0),
+            child: _buildLocationInfo(textTheme),
+          ),
+        ],
+      )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
@@ -343,26 +366,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
                   ),
                 ],
               ),
-              new Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: new Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    new Text(
-                      user.name,
-                      style: textTheme.headline.copyWith(color: Colors.white),
-                    ),
-                    new Text(
-                      user.email,
-                      style: TextStyle(color: Colors.white, fontSize: 14.0)
-                    ),
-                    new Padding(
-                      padding: const EdgeInsets.only(top: 6.0),
-                      child: _buildLocationInfo(textTheme),
-                    ),
-                  ],
-                )
-              ),
+              info(textTheme),
               new Container(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -394,26 +398,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
                   ),
                 ],
               ),
-              new Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: new Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    new Text(
-                      user.name,
-                      style: textTheme.headline.copyWith(color: Colors.white),
-                    ),
-                    new Text(
-                      user.email,
-                      style: TextStyle(color: Colors.white, fontSize: 14.0)
-                    ),
-                    new Padding(
-                      padding: const EdgeInsets.only(top: 6.0),
-                      child: _buildLocationInfo(textTheme),
-                    ),
-                  ],
-                )
-              ),
+              info(textTheme),
               new Container(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
