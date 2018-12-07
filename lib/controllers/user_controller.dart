@@ -29,6 +29,19 @@ class UserController extends BaseController {
     await disconnect();
   }
 
+  Future<void> updateUser(String id, String name, String email) async{
+    await connect();
+    String query = "UPDATE users SET";
+    
+    query += "name = '$name', email = '$email'";
+    query += "WHERE id = '$id'";
+
+    await connection.query(query);
+
+    await disconnect();
+
+  }
+
   /// Delete an existing row from users table.
   Future<void> delete(int id) async {
     await connect();

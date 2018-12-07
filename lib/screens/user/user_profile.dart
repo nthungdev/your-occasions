@@ -11,6 +11,7 @@ import 'package:youroccasions/screens/home/event_card.dart';
 import 'package:youroccasions/models/data.dart';
 import 'package:youroccasions/controllers/friend_list_controller.dart';
 import 'package:youroccasions/models/friend_list.dart';
+import 'package:youroccasions/screens/user/update_user.dart';
 
 final UserController _userController = UserController();
 final EventController _eventController = EventController();
@@ -253,16 +254,6 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
           _createFollowButton(
             backgroundColor: Colors.blue,
           ),
-          // new DecoratedBox(
-          //   decoration: new BoxDecoration(
-          //     border: new Border.all(color: Colors.white30),
-          //     borderRadius: new BorderRadius.circular(30.0),
-          //   ),
-          //   child: _createPillButton(
-          //     'FOLLOW',
-          //     textColor: Colors.white70,
-          //   ),
-          // ),
         ],
       ),
     );
@@ -363,6 +354,15 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
                     top: 26.0,
                     left: 4.0,
                     child: new BackButton(color: Colors.white),
+                  ),
+                  new Positioned(
+                    top: 26.0,
+                    right: 4.0,
+                    child: new IconButton(
+                      icon: Icon(Icons.edit),
+                      color: Colors.white,
+                      onPressed: () { Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateUserScreen(user)));}
+                    ),
                   ),
                 ],
               ),

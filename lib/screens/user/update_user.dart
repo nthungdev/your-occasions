@@ -15,12 +15,15 @@ final UserController _userController = UserController();
 bool _isSigningUp = false;
 List<User> userList = [];
 
-class SignUpWithEmailScreen extends StatefulWidget {
+class UpdateUserScreen extends StatefulWidget {
+  final User user;
+  UpdateUserScreen(User user) : this.user = user;
+
   @override
-  _SignUpWithEmailScreen createState() => _SignUpWithEmailScreen();
+  _UpdateUserScreen createState() => _UpdateUserScreen();
 }
 
-class _SignUpWithEmailScreen extends State<SignUpWithEmailScreen> {
+class _UpdateUserScreen extends State<UpdateUserScreen> {
   TextEditingController firstNameController;
   TextEditingController lastNameController;
   TextEditingController emailController;
@@ -35,18 +38,23 @@ class _SignUpWithEmailScreen extends State<SignUpWithEmailScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<FormFieldState> _emailKey = GlobalKey<FormFieldState>();
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
+  
   bool _isDuplicatedEmail;
 
 
   @override
   void initState() {
     super.initState();
+    List<String> name = widget.user.name.split(" ");
     firstNameController = TextEditingController();
     lastNameController = TextEditingController();
     emailController = TextEditingController();
     passwordController = TextEditingController();
     password2Controller = TextEditingController();
+
+    firstNameController.text = name[0];
+    lastNameController.text = name[1];
+    emailController.text = widget.user.email;
 
     firstNameNode = FocusNode();
     lastNameNode = FocusNode();
@@ -88,6 +96,7 @@ class _SignUpWithEmailScreen extends State<SignUpWithEmailScreen> {
   }
 
   void _submit() async {
+    String name = "${firstNameController.text} ${lastNameController.text}";
     if (!this._formKey.currentState.validate()) {
       this._formKey.currentState.save();
       // Validate failed
@@ -97,43 +106,46 @@ class _SignUpWithEmailScreen extends State<SignUpWithEmailScreen> {
 
     this._formKey.currentState.save();
 
-    try {
-      var userFirebase = await _auth.createUserWithEmailAndPassword(
-        email: emailController.text, 
-        password: passwordController.text);
+    await _userController.updateUser(widget.user.id, name, emailController.text);
+    Navigator.of(context).pop();
 
-      String name = "${firstNameController.text} ${lastNameController.text}";
+    // try {
+    //   var userFirebase = await _auth.createUserWithEmailAndPassword(
+    //     email: emailController.text, 
+    //     password: passwordController.text);
 
-      User newUser = User(id: userFirebase.uid, email: userFirebase.email, provider: "password", name: name);
-      await _userController.insert(newUser)
-        .then((value) {
-          print("Your account is created successfully!");
-        }, onError: (e) {
-          print("Sign up with email failed");
-          print("error $e");
-        }
-      );
-      // String id = userFirebase.uid;
+    //   // String name = "${firstNameController.text} ${lastNameController.text}";
 
-      Navigator.of(context).pop();
+    //   User newUser = User(id: userFirebase.uid, email: userFirebase.email, provider: "password", name: name);
+    //   await _userController.insert(newUser)
+    //     .then((value) {
+    //       print("Your account is created successfully!");
+    //     }, onError: (e) {
+    //       print("Sign up with email failed");
+    //       print("error $e");
+    //     }
+    //   );
+    //   // String id = userFirebase.uid;
 
-      print(_auth.currentUser());
+    //   Navigator.of(context).pop();
 
-    } on PlatformException catch (e) {
-      print("Error occurs: \n${e.toString()}");
+    //   print(_auth.currentUser());
+
+    // } on PlatformException catch (e) {
+    //   print("Error occurs: \n${e.toString()}");
       
-      switch (e.message) {
-        case "The email address is already in use by another account.":
-          print("The email address is already in use by another account.");
-          FocusScope.of(context).requestFocus(emailNode);
-          _isDuplicatedEmail = true;
-          this._emailKey.currentState.validate();
-          break;
-      }
-    }
+    //   switch (e.message) {
+    //     case "The email address is already in use by another account.":
+    //       print("The email address is already in use by another account.");
+    //       FocusScope.of(context).requestFocus(emailNode);
+    //       _isDuplicatedEmail = true;
+    //       this._emailKey.currentState.validate();
+    //       break;
+    //   }
+    // }
   }
 
-  Widget _buildSignUpButton() {
+  Widget _buildUpdateButton() {
     final screen = MediaQuery.of(context).size;
 
     return SizedBox(
@@ -144,7 +156,22 @@ class _SignUpWithEmailScreen extends State<SignUpWithEmailScreen> {
         color: Colors.blue,
         onPressed: _submit,
         // color: Colors.lightBlueAccent,
-        child: Text('SIGN UP', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        child: Text('UPDATE', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+      ),
+    );
+  }
+
+  Widget _buildCancelButton() {
+    final screen = MediaQuery.of(context).size;
+
+    return SizedBox(
+      width: screen.width / 1.5 + 10,
+      height: 40,
+      child: FlatButton(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(45))),
+        color: Colors.blue,
+        onPressed: (){Navigator.pop(context,true);},
+        child: Text('Cancel', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
       ),
     );
   }
@@ -288,10 +315,10 @@ class _SignUpWithEmailScreen extends State<SignUpWithEmailScreen> {
                 _buildFirstNameInput(),
                 _buildLastNameInput(),
                 _buildEmailInput(),
-                _buildPasswordInput(),
-                _buildPassword2Input(),
                 SizedBox(height: screen.height * 0.05,),
-                _buildSignUpButton(),
+                _buildUpdateButton(),
+                SizedBox(height: screen.height * 0.025,),
+                _buildCancelButton(),
               ],
             ),
           ),
