@@ -79,6 +79,14 @@ class _SocialTabView extends State<SocialTabView> {
       tag+=1;
     }
 
+    if (following.isEmpty){
+      cards.add(
+        Center(
+          child: new Text('You currently have no friends', style: TextStyle(color: Colors.black, fontSize: 20)),
+          )
+      );
+    }
+    
     return cards;
     
   }
@@ -136,7 +144,13 @@ class _SocialTabView extends State<SocialTabView> {
     //    ),
     //  )
     // );
-
+    // if (following.isEmpty){
+    //   return new Scaffold(
+    //     body: new Container(
+    //       child: new Text('You currently have no friends', style: TextStyle(color: Colors.black, fontSize: 20))
+    //     )
+    //   );
+    // }
     return Material(
       child: new Container(
         // color: Colors.orange,
