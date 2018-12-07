@@ -68,25 +68,20 @@ class _SocialTabView extends State<SocialTabView> {
 
   List<Widget> _buildFriends(){
     List<Widget> cards = List<Widget>();
-    int tag = 0;
     // print(following[0]);
     if (following.length == 0 || following[0] == null){
+      cards.add(
+        Center(
+          child: new Text('You currently have no friends', style: TextStyle(color: Colors.black, fontSize: 20)),
+        )
+      );
       return cards;
     }
     // print(1);
     for (var friend in following){
       cards.add(_buildUser(friend));
-      tag+=1;
     }
 
-    if (following.isEmpty){
-      cards.add(
-        Center(
-          child: new Text('You currently have no friends', style: TextStyle(color: Colors.black, fontSize: 20)),
-          )
-      );
-    }
-    
     return cards;
     
   }
@@ -158,9 +153,7 @@ class _SocialTabView extends State<SocialTabView> {
         // padding: EdgeInsets.symmetric(horizontal: 10.0),
         color: Colors.white,
         // decoration: linearGradient,
-        child: following == null 
-        ? const Center(child: const CircularProgressIndicator()) 
-        : RefreshIndicator(
+        child: RefreshIndicator(
             onRefresh: _refresh,
             child: ListView(
               physics: AlwaysScrollableScrollPhysics(),
