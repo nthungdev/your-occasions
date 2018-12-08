@@ -8,7 +8,6 @@ import 'package:youroccasions/models/category.dart';
 import 'package:youroccasions/models/data.dart';
 import 'package:youroccasions/models/event.dart';
 import 'package:youroccasions/controllers/event_controller.dart';
-import 'package:youroccasions/models/event_category.dart';
 import 'package:youroccasions/utilities/secret.dart';
 import 'package:youroccasions/utilities/cloudinary.dart';
 import 'package:youroccasions/screens/event/event_detail.dart';
@@ -289,7 +288,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
     bool validateTime = _validateDateTime();
     bool validateForm = formKey.currentState.validate();
     // formKey.currentState.validate();
-    if (validateForm && validateTime) {
+    if (validateForm && validateTime && _selectCategoryName.length != 0) {
       print("inside validate");
       formKey.currentState.save();
 
@@ -772,7 +771,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
       );
     }
 
-    result.add(createButton());
+    // result.add(createButton());
 
     return result;
   }
@@ -795,6 +794,16 @@ class _CreateEventScreen extends State<CreateEventScreen> {
             color: Colors.black,
           ),
         ),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: _submit,
+            child: Text("SAVE",
+              style: TextStyle(
+                color: Colors.blueAccent
+              ),
+            ),
+          )
+        ],
         backgroundColor: Colors.white,
       ),
       body: SafeArea(
