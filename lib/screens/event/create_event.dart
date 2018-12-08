@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:io';
 
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:youroccasions/controllers/event_category_controller.dart';
 import 'package:youroccasions/models/category.dart';
@@ -25,10 +26,14 @@ class _CreateEventScreen extends State<CreateEventScreen> {
   GlobalKey<ScaffoldState> _scaffoldKey;
   FocusNode _eventTitleNode;
   FocusNode _descriptionNode;
+  FocusNode _addressNode;
 
   TextEditingController nameController;
   TextEditingController descriptionController;
   TextEditingController categoryController;
+  TextEditingController addressController;
+  
+  GoogleMapController mapController;
 
   DateTime startDate;
   TimeOfDay startTime;
@@ -62,6 +67,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
     nameController = TextEditingController();
     descriptionController = TextEditingController();
     categoryController = TextEditingController();
+    addressController = TextEditingController();
 
     _isSigningUp = false;
     _invalidStart = false;
@@ -92,6 +98,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
     nameController.dispose();
     descriptionController.dispose();
     categoryController.dispose();
+    addressController.dispose();
   }
 
   void _generateCategoryContent() {
@@ -731,6 +738,29 @@ class _CreateEventScreen extends State<CreateEventScreen> {
     );
   }
 
+  Widget _buildAddressInput() {
+    final screen = MediaQuery.of(context).size;
+
+    return SizedBox(
+      width: screen.width * _contentWidth,
+      child: TextFormField(
+        focusNode: _addressNode,
+        controller: addressController,
+        textInputAction: TextInputAction.next,
+        keyboardType: TextInputType.text,
+        validator: (name) => (name.length < 6) ? "Please provide an address with at least 6 characters" : null,
+        autofocus: false,
+        maxLines: null, /// Extend as type
+        onFieldSubmitted: (term) {
+          _descriptionNode.unfocus();
+        },
+        maxLengthEnforced: false,
+        decoration: InputDecoration(
+          labelText: "Address",
+          labelStyle: TextStyle(fontWeight: FontWeight.bold)),
+      ));
+  }
+
   List<Widget> _buildListViewContent() {
     List<Widget> result = List<Widget>();
 
@@ -756,6 +786,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
       _buildDescriptionInput(),
       _buildStartDateInput(),
       _buildCategoryInput(),
+      _buildAddressInput()
     ]);
 
     if (_invalidCategory) {

@@ -33,6 +33,8 @@ dependencies:
   google_sign_in: ^3.2.4
   url_launcher: ^4.0.2
   mailer: ^2.1.1
+  google_maps_flutter: ^0.0.3+3
+
 
 
 

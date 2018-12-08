@@ -7,6 +7,8 @@ class Event {
   String name;
   String description;
   String locationName;
+  String address;
+  String placeId;
   DateTime startTime;
   DateTime endTime;
   int views;
@@ -26,7 +28,7 @@ class Event {
 
   // CONSTRUCTORS //
   Event.create();
-  Event({this.hostId, this.name, this.description, this.locationName, this.startTime, this.endTime, 
+  Event({this.hostId, this.name, this.description, this.locationName, this.address, this.placeId, this.startTime, this.endTime, 
       this.views, this.age, this.price, this.category, this.picture, this.one, this.two, this.three, this.four, this.five, this.rating, 
       this.isUsed=true}) {
     this.creationDate = DateTime.now();
@@ -38,6 +40,8 @@ class Event {
       this.name = item['name'];
       this.description = item['description'];
       this.locationName = item['location_name'];
+      this.address = item['address'];
+      this.placeId = item['place_id'];
       this.startTime= item['start_time'];
       this.endTime = item['end_time'];
       this.views = item['views'];
@@ -109,6 +113,8 @@ class Event {
     map['name'] = name;
     map['description'] = description;
     map['locationName'] = locationName;
+    map['address'] = address;
+    map['placeId'] = placeId;
     map['startTime'] = startTime;
     map['endTime'] = endTime;
     map['views'] = views;

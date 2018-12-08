@@ -17,17 +17,17 @@ void main() async {
 
   var id = await getUserId();
   // var email = await getUserEmail();
-  var password = await getPassword();
+  // var password = await getPassword();
 
   print("Id : $id");
 
   if(id != null){
     UserController uc = UserController();
     User userFromDB = await uc.getUserWithId(id);
-    var userFirebase = await FirebaseAuth.instance.signInWithEmailAndPassword(email: userFromDB.email, password: password);
+    // var userFirebase = await FirebaseAuth.instance.signInWithEmailAndPassword(email: userFromDB.email, password: password);
 
     // var user = await FirebaseAuth.instance.currentUser();
-    Dataset.firebaseUser.value = userFirebase;
+    // Dataset.firebaseUser.value = userFirebase;
     if (userFromDB == null) {
       print("Getting user error");
     }
