@@ -301,11 +301,16 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
           ),
           new Text(
             user.email,
-            style: TextStyle(color: Colors.pink[200], fontSize: 16.0)
+            style: TextStyle(color: Colors.white, fontSize: 14.0)
           ),
+          user.birthday != null?
           new Text(
             _getDateFormatted(user.birthday),
-            style: TextStyle(color: Colors.white, fontSize: 16.0),
+            style: TextStyle(color: Colors.white, fontSize: 14.0),
+          )
+          : new Text(
+            "", 
+            style: TextStyle(color: Colors.white, fontSize: 0.0),
           ),
           new Padding(
             padding: const EdgeInsets.only(top: 6.0),
