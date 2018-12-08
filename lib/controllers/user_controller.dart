@@ -29,16 +29,17 @@ class UserController extends BaseController {
     await disconnect();
   }
 
-  Future<void> updateUser(String id, String name) async{
+  Future<void> updateUser(String id, String name, DateTime birthday) async{
     await connect();
     String query = """UPDATE users SET """;
     
     query += """name = '$name' """;
     query += """WHERE id = '$id';""";
 
-    await connection.query("""UPDATE users SET name = @name WHERE id = @id""", 
+    await connection.query("""UPDATE users SET name = @name, birthday = @birthday WHERE id = @id""", 
     substitutionValues: {
       'name': name,
+      'birthday': birthday,
       'id': id, 
       });
 
