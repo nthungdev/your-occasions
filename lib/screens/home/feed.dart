@@ -85,20 +85,14 @@ class _FeedTabView extends State<FeedTabView> {
     EventCategoryController _ecc = EventCategoryController();
     List<Event> temp = List<Event>();
 
-    // print("DEBUG is getting trending music");
-
     var eventCategoryList = await _ecc.getEventCategory(category: Categories.music.name);
     print(eventCategoryList);
-    // print("DEBUG: eventCategoryList length ${eventCategoryList.length}");
 
     for(int i = 0 ; i < eventCategoryList.length ; i++ ) {
-      // print("DEBUG: i = $i");
       var event = (await _ec.getEvents(id: eventCategoryList[i].eventId))[0];
-      // print("DEBUG: $event");
       temp.add(event);
     }
-    // print("DEBUG: temp: $temp");
-
+    
     temp.sort((a,b) => a.views.compareTo(b.views));
 
     FeedDataset.trendingEvents.value = temp;

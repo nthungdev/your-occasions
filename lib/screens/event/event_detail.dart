@@ -5,6 +5,7 @@ import 'package:youroccasions/models/event_comment.dart';
 import 'package:youroccasions/screens/event/comment_input.dart';
 import 'package:youroccasions/screens/event/comment_tile.dart';
 import 'package:youroccasions/screens/event/reply_comment_page.dart';
+import 'package:youroccasions/screens/event/share_event.dart';
 
 import 'package:youroccasions/screens/home/home.dart';
 import 'package:youroccasions/screens/event/update_event.dart';
@@ -114,9 +115,6 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
       }
     }
     else {
-      // _eventReference.setData({
-      //   'comments': [],
-      // });
       eventComments = [];
     }
 
@@ -171,7 +169,7 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
       height: size.width * 3 / 4,
       child: widget.event.picture != null
       ? Image.network(widget.event.picture, fit: BoxFit.cover,)
-      : Image.asset("assets/images/no-image.jpg", fit: BoxFit.cover,) 
+      : Image.asset("assets/images/no-image.jpg", fit: BoxFit.cover,)
     );
   }
   
@@ -200,7 +198,6 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
   List<Widget> _buildCommentList() {
     List<Widget> result = List<Widget>();
 
-    // eventComment.replies.forEach((comment) {
     eventComments.sort((b,a) => a.date.compareTo(b.date));
     eventComments.forEach((comment) {
       result.addAll([
@@ -231,42 +228,108 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
   Widget _buildTitle() {
     var screen = MediaQuery.of(context).size;
 
-    return Row(
-      children: <Widget>[
-        SizedBox(
-          width: screen.width * 0.25,
-          child: Padding(
-            padding: const EdgeInsets.all(3.0),
-            child: Column(
-              children: <Widget>[
-                SizedBox(
-                  height: 5,
-                ),
-                Text("DEC",
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.redAccent,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Row(
+        children: <Widget>[
+          SizedBox(
+            width: screen.width * 0.17,
+            child: Padding(
+              padding: const EdgeInsets.all(3),
+              child: Column(
+                children: <Widget>[
+                  SizedBox(
+                    height: 5,
                   ),
-                ),
-                Text("12",
-                  style: TextStyle(
-                    fontSize: 20
+                  Text("DEC",
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.redAccent,
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-              ],
+                  Text("12",
+                    style: TextStyle(
+                      fontSize: 20
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-        Text(widget.event.name,
-          maxLines: 2,
-          style: TextStyle(
-            fontSize: 24
+          SizedBox(
+            width: screen.width * 0.80,
+            child: Text(widget.event.name,
+              maxLines: 2,
+              style: TextStyle(
+                fontSize: 24
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildButtons() {
+    var screen = MediaQuery.of(context).size;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          InkWell(
+            onTap: () {},
+            child: SizedBox(
+              width: (screen.width - 40) / 3,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: <Widget>[
+                    Icon(Icons.star),
+                    Text("Interested"),
+                  ],
+                ),
+              ),
+            ),
           ),
-        )
-      ],
+          InkWell(
+            onTap: () {},
+            child: SizedBox(
+              width: (screen.width - 40) / 3,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: <Widget>[
+                    Icon(Icons.check_circle_outline,),
+                    Text("Going"),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => ShareEventScreen(_event)));
+            },
+            child: Container(
+              width: (screen.width - 40) / 3,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: <Widget>[
+                    Icon(Icons.share),
+                    Text("Share"),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -294,6 +357,8 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
         children: <Widget>[
           _buildCoverImage(),
           _buildTitle(),
+          Divider(height: 1,),
+          _buildButtons(),
           Divider(height: 1,),
           _buildHost(),
           Divider(height: 1,),
