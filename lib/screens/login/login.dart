@@ -271,7 +271,7 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
 
         User userFromDB = await _userController.getUserWithEmail(email);
 
-        if (userFromDB != null) { 
+        if (userFromDB != null && userFromDB.provider != "facebook") { 
           showSnackbar("Email is used");
           print("Email is used");
           return;
