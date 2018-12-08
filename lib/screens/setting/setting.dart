@@ -28,7 +28,7 @@ class SettingPage extends StatelessWidget {
           ),
           ListTile (
             title: Text ("About"),
-            onTap:  () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new AboutPage())),
+            onTap:  () {Navigator.push(context, MaterialPageRoute(builder: (context) => AboutPage()));},
           ),
           ListTile (
             title: Text ("Logout"),
@@ -37,7 +37,6 @@ class SettingPage extends StatelessWidget {
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginWithEmailScreen()));
             },
           ),
-         
         ],
       ),
     );
