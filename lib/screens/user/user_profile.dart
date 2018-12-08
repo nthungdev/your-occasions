@@ -135,32 +135,32 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
   List<Widget> _buildUserEventsCardList() {
     List<Widget> cards = List<Widget>();
 
+    // print(_eventList);
+
+    if (_eventList == null || _eventList.length == 0){
+      return cards;
+    }
+
     Widget e = Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
-      child: Text("User's Events", style: TextStyle(color: Colors.white, fontSize: 30.0, fontFamily: "Niramit")),
+      child: Text(user == currentUser? "My Events":"User's Events", style: TextStyle(color: Colors.white, fontSize: 30.0, fontFamily: "Niramit")),
     );
 
     cards.add(e);
 
-    if (_eventList == null){
-      return cards;
-    }
-
     _eventList.sort((b,a) => a.startTime.compareTo(b.startTime));
     _eventList.forEach((Event currentEvent) {
-      if(currentEvent.startTime.compareTo(DateTime.now()) > 0) {
-        cards.insert(1, Padding(
-          padding: const EdgeInsets.only(bottom: 8.0),
-          child: SmallEventCard(
-            // color: Colors.blue[100],
-            event: currentEvent,
-            imageURL: currentEvent.picture,
-            place: currentEvent.locationName ?? "Unname location",
-            time: currentEvent.startTime ?? DateTime.now(),
-            title: currentEvent.name ?? "Untitled event" ,
-          ),
-        ));
-      }
+      cards.insert(1, Padding(
+        padding: const EdgeInsets.only(bottom: 8.0),
+        child: SmallEventCard(
+          // color: Colors.blue[100],
+          event: currentEvent,
+          imageURL: currentEvent.picture,
+          place: currentEvent.locationName ?? "Unname location",
+          time: currentEvent.startTime ?? DateTime.now(),
+          title: currentEvent.name ?? "Untitled event" ,
+        ),
+      ));
     });
     return cards;
   }
