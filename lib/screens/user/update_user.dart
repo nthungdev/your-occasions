@@ -116,12 +116,15 @@ class _UpdateUserScreen extends State<UpdateUserScreen> {
     UserUpdateInfo u;
     u.displayName = name;
 
-    await firebaseUser.updateProfile(u);
+    // await firebaseUser.updateProfile(u);
+
     if (firebaseUser!=null){
       if (firebaseUser.email != emailController.text){
         firebaseUser.updateEmail(emailController.text);
+        firebaseUser.updateProfile(u);
       }
     }
+    
     // user.updateEmail(emailController.text);
     await _userController.updateUser(widget.user.id, name, emailController.text);
     setState(() {
