@@ -282,6 +282,13 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
     );
   }
 
+  String _getDateFormatted(DateTime date) {
+    if (date == null) {
+      return "";
+    }
+    return "${date.month.toString().padLeft(2, "0")}/${date.day.toString().padLeft(2, "0")}/${date.year}";
+  }
+
   Widget info(var textTheme){
     return new Padding(
       padding: const EdgeInsets.all(24.0),
@@ -294,7 +301,11 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
           ),
           new Text(
             user.email,
-            style: TextStyle(color: Colors.white, fontSize: 14.0)
+            style: TextStyle(color: Colors.pink[200], fontSize: 16.0)
+          ),
+          new Text(
+            _getDateFormatted(user.birthday),
+            style: TextStyle(color: Colors.white, fontSize: 16.0),
           ),
           new Padding(
             padding: const EdgeInsets.only(top: 6.0),

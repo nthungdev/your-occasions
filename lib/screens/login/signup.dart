@@ -30,6 +30,7 @@ class _SignUpWithEmailScreen extends State<SignUpWithEmailScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<FormFieldState> _emailKey = GlobalKey<FormFieldState>();
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  DateTime birthday;
 
   bool _isDuplicatedEmail;
 
@@ -99,7 +100,7 @@ class _SignUpWithEmailScreen extends State<SignUpWithEmailScreen> {
 
       String name = "${firstNameController.text} ${lastNameController.text}";
 
-      User newUser = User(id: userFirebase.uid, email: userFirebase.email, provider: "password", name: name);
+      User newUser = User(id: userFirebase.uid, email: userFirebase.email, provider: "password", name: name, birthday: birthday);
       await _userController.insert(newUser)
         .then((value) {
           print("Your account is created successfully!");
@@ -112,7 +113,7 @@ class _SignUpWithEmailScreen extends State<SignUpWithEmailScreen> {
 
       Navigator.of(context).pop();
 
-      print(_auth.currentUser());
+      // print(_auth.currentUser());
 
     } on PlatformException catch (e) {
       print("Error occurs: \n${e.toString()}");
@@ -127,6 +128,106 @@ class _SignUpWithEmailScreen extends State<SignUpWithEmailScreen> {
       }
     }
   }
+
+  String _getDateFormatted(DateTime date) {
+    if (date == null) {
+      return "MM/DD/YYYY";
+    }
+    return "${date.month.toString().padLeft(2, "0")}/${date.day.toString().padLeft(2, "0")}/${date.year}";
+  }
+
+   String _getTimeFormatted(TimeOfDay time) {
+    if (time == null) {
+      return "HH:MM AM/PM";
+    }
+    String hour = (time.hour > 12)
+      ? (time.hour - 12).toString().padLeft(2, "0")
+      : time.hour.toString().padLeft(2, "0");
+    String period = (time.hour > 12) ? 'PM' : 'AM';
+    return "$hour:${time.minute.toString().padLeft(2, "0")} $period";
+  }
+
+  Future<void> popUpSelectStartDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+      context: context,
+      initialDate: birthday == null ? DateTime.now() : birthday,
+      firstDate: DateTime(DateTime.now().year - 100),
+      lastDate: DateTime(DateTime.now().year + 2));
+
+      setState(() {
+        birthday = picked;
+      });
+  }
+
+  // Future<void> selectStartTime(BuildContext context) async {
+  //   final TimeOfDay picked = await showTimePicker(
+  //     context: context,
+  //     initialTime: birthday == null ? TimeOfDay.now() : birthday
+  //   );
+
+  //   setState(() {
+  //     birthday = picked;
+  //     _autoValidateDateTime();
+  //   });
+  // }
+
+  Widget _buildBirthdayInput() {
+    final screen = MediaQuery.of(context).size;
+
+    return SizedBox(
+        width: screen.width / 1.5,
+        child: Column(
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 10),
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: Colors.black54,
+                    width: 1
+                  )
+                )
+              ),
+              child: Row(
+                children: <Widget>[
+                  SizedBox(
+                    child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Text(
+                          "Birthday",
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Color(0xFF757575),
+                            fontWeight: FontWeight.bold
+                          )
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          popUpSelectStartDate(context);
+                        },
+                        child: Text(
+                          _getDateFormatted(birthday),
+                          style: TextStyle(
+                            letterSpacing: 2,
+                            fontSize: 14,
+                            color: Colors.grey[500],
+                            fontFamily: "Monaco"
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
+                ]
+              )
+            )
+          ]
+        )
+      );
+    }
 
   Widget _buildSignUpButton() {
     final screen = MediaQuery.of(context).size;
@@ -283,6 +384,7 @@ class _SignUpWithEmailScreen extends State<SignUpWithEmailScreen> {
                 _buildFirstNameInput(),
                 _buildLastNameInput(),
                 _buildEmailInput(),
+                _buildBirthdayInput(),
                 _buildPasswordInput(),
                 _buildPassword2Input(),
                 SizedBox(height: screen.height * 0.05,),
