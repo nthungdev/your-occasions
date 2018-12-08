@@ -370,7 +370,8 @@ class _CreateEventScreen extends State<CreateEventScreen> {
         startTime: startDate,
         endTime: endDate,
         address: _placeData?.address,
-        locationName: _placeData?.name
+        locationName: _placeData?.name,
+        placeId: _placeData?.placeId,
       );
 
       
@@ -873,7 +874,6 @@ class _CreateEventScreen extends State<CreateEventScreen> {
         ),
       ),
     );
- 
   }
 
   List<Widget> _buildListViewContent() {

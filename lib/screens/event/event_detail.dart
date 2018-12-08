@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:youroccasions/controllers/event_category_controller.dart';
 import 'package:youroccasions/models/event_comment.dart';
 import 'package:youroccasions/screens/event/comment_input.dart';
@@ -15,9 +17,12 @@ import 'package:youroccasions/screens/user/user_profile.dart';
 import 'package:youroccasions/models/user.dart';
 import 'package:youroccasions/controllers/user_controller.dart';
 import 'package:youroccasions/models/data.dart';
+import 'package:youroccasions/utilities/places.dart';
 
 final EventController _eventController = EventController();
 final UserController _userController = UserController();
+
+List<String> _months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
 
 class EventDetailScreen extends StatefulWidget {
   final Event event;
@@ -44,6 +49,9 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
   List<EventComment> eventComments;
   int descriptionMaxLine;
 
+  GoogleMapController mapController;
+  PlaceData _placeData;
+
   @override
   initState() {
     super.initState();
@@ -69,6 +77,32 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
     _commentController.dispose();
   }
 
+  void _onMapCreated(GoogleMapController controller) async {
+    setState(() { mapController = controller; });
+
+    mapController.clearMarkers();
+    mapController.addMarker(MarkerOptions(
+      position: LatLng(_placeData.latitude, _placeData.longitude)
+    ));
+  }
+
+  _launchURL() async {
+    // 44.691171,-73.467087
+    // 44.693532,-73.467489
+    // 44.6911032,-73.46672079999999
+    String url2 = "google.navigation:q=44.691171,-73.467087";
+    String url3 = "http://maps.google.com/?q=44.691171,-73.467087";
+    String url4 = "https://www.google.com/maps/@?api=1&map_action=map&q=44.693532,-73.467489";
+    String url = "https://www.google.com/maps/search/?api=1&query=${_placeData.latitude},${_placeData.longitude}&query_place_id=${_placeData.placeId}";
+    // String url6 = "https://www.google.com/maps/search/?api=1&query=${_placeData.latitude},${_placeData.longitude}";
+    // const url = 'https://flutter.io';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   Future<void> _refresh() async {
     await _userController.getUserWithId(_event.hostId).then((value){
       if(this.mounted) {
@@ -80,6 +114,10 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
 
     await _getComments();
     await _getEventCategories();
+
+    
+    PlaceSearch ps = PlaceSearch.instance;
+    _placeData = await ps.search(_event.address);
 
     if(this.mounted) {
       setState(() { 
@@ -241,13 +279,13 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
                   SizedBox(
                     height: 5,
                   ),
-                  Text("DEC",
+                  Text(_months[_event.startTime.month - 1],
                     style: TextStyle(
                       fontSize: 18,
                       color: Colors.redAccent,
                     ),
                   ),
-                  Text("12",
+                  Text(_event.startTime.day.toString(),
                     style: TextStyle(
                       fontSize: 20
                     ),
@@ -334,18 +372,95 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
   }
 
   Widget _buildDescription() {
-    return ListTile(
-      contentPadding: EdgeInsets.symmetric(horizontal: 20),
-      title: Text('Description: ${_event.description}'),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text("Details",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 20, bottom: 10),
+            child: Text(_event.description,
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
+          ),
+          _buildCategory(),
+        ],
+      ),
     );
   }
 
   Widget _buildCategory() {
-    String categoryList = _categories.toString().substring(1, _categories.toString().length - 1);
+    List<Widget> chips = List<Widget>();
+    _categories.forEach((item) {
+      chips.add(
+        Chip(
+          label: Text(item),
+        )
+      );
+    });
 
-    return ListTile(
-      contentPadding: EdgeInsets.symmetric(horizontal: 20),
-      title: Text('Category: $categoryList'),
+    return Wrap(
+      spacing: 8.0, // gap between adjacent chips
+      runSpacing: 4.0, // gap between lines
+      children: chips,
+    );
+  }
+
+  Widget _buildLocationInfo() {
+    var screen = MediaQuery.of(context).size;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(top: 5, bottom: 20),
+            child: Text("Location",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () {
+              _launchURL();
+            },
+            child: Column(
+              children: <Widget>[
+                SizedBox(
+                  width: screen.width - 20,
+                  child: Text(_event.locationName,
+                    maxLines: 3,
+                    style: TextStyle(
+                      fontSize: 16
+                    ),
+                  )
+                ),
+                SizedBox(
+                  width: screen.width - 20,
+                  child: Text(_event.address,
+                    maxLines: 3,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey[600]
+                    ),
+                  ),
+                )
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 
@@ -354,6 +469,7 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
 
     result.addAll([
       Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           _buildCoverImage(),
           _buildTitle(),
@@ -364,8 +480,9 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
           Divider(height: 1,),
           _buildDescription(),
           Divider(height: 1),
-          _buildCategory(),
+          _buildLocationInfo(),
           Divider(height: 1),
+          _buildGoogleMap(),
           Container(
             height: 10,
             color: Colors.grey[200],
@@ -383,6 +500,26 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
     }
 
     return result;
+  }
+
+  Widget _buildGoogleMap() {
+    final screen = MediaQuery.of(context).size;
+
+    return SizedBox(
+      height: 150,
+      width: screen.width * 0.8,
+      child: GoogleMap(
+        onMapCreated: _onMapCreated,
+        options: GoogleMapOptions(
+          rotateGesturesEnabled: false,
+          scrollGesturesEnabled: false,
+          cameraPosition: CameraPosition(
+            target: LatLng(_placeData.latitude, _placeData.longitude),
+            zoom: 17
+          )
+        ),
+      ),
+    );
   }
 
   Widget _buildAppBar() {
