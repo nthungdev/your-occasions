@@ -22,6 +22,7 @@ class _SocialTabView extends State<SocialTabView> {
   
   User currentUser = Dataset.currentUser.value;
   List<User> following;
+  var data;
 
   @override
   void initState() {
@@ -36,7 +37,10 @@ class _SocialTabView extends State<SocialTabView> {
   }
 
   Future<void> _getFollowing() async {
-      var data = await _friendController.getFriendList(userId: currentUser.id);
+      var temp = await _friendController.getFriendList(userId: currentUser.id);
+      setState(() {
+        data = temp;
+      });
       List<User> users = List<User>();
 
       for (var friend in data){
@@ -77,7 +81,7 @@ class _SocialTabView extends State<SocialTabView> {
       );
       return cards;
     }
-    
+
     if (following.isEmpty || following[0] == null){
       cards.add(
         Center(
