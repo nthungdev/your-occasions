@@ -271,6 +271,12 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
 
         User userFromDB = await _userController.getUserWithEmail(email);
 
+        if (userFromDB != null) { 
+          showSnackbar("Email is used");
+          print("Email is used");
+          return;
+        }
+
         if (userFromDB == null) {
           userFromDB = User(id: id, name: userName, email: email, picture: pic, provider: "facebook");
           await _userController.insert(userFromDB)
@@ -290,7 +296,7 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
         Dataset.currentUser.value = userFromDB;
         await setUserId(id);
         await setUserEmail(email);
-        await setUserName(id);
+        await setUserName(userName);
         // print(1);
         Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()),);
 
