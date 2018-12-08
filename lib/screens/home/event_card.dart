@@ -5,7 +5,6 @@ import 'dart:async';
 import 'package:youroccasions/screens/event/event_detail.dart';
 import 'package:youroccasions/models/event.dart';
 import 'package:youroccasions/models/user_interested_event.dart';
-import 'package:youroccasions/controllers/event_controller.dart';
 import 'package:youroccasions/controllers/user_interested_event_controller.dart';
 import 'package:youroccasions/utilities/config.dart';
 

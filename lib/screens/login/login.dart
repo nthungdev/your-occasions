@@ -137,7 +137,7 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
       print("googleUser User's picture: ${googleUser.photoUrl}");
       /// Check email is used on any other user or not.
       /// If yes, stop. 
-      User userFromDB = await _userController.getUserWithGoogle(googleUser.email);
+      User userFromDB = await _userController.getUserWithEmail(googleUser.email);
       if (userFromDB != null && userFromDB.provider != "google") { 
         showSnackbar("Email is used");
         print("Email is used");
@@ -240,7 +240,7 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
     var userName, email, pic, id;
     FacebookLogin facebookSignIn = new FacebookLogin();
     FacebookLoginResult result = await facebookSignIn.logInWithReadPermissions(['email','public_profile']);
-    print(result.accessToken);
+    // print(result.accessToken);
     //,publish_actions,manage_pages,publish_pages,user_status,user_videos,user_work_history
 
     switch (result.status) {
@@ -269,7 +269,13 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
         // Map <String,dynamic> feed = root['feed'];
         // var fdata = feed['data'];
 
-        User userFromDB = await _userController.getUserWithFacebook(email);
+        User userFromDB = await _userController.getUserWithEmail(email);
+
+        if (userFromDB != null && userFromDB.provider != "facebook") { 
+          showSnackbar("Email is used");
+          print("Email is used");
+          return;
+        }
 
         if (userFromDB == null) {
           userFromDB = User(id: id, name: userName, email: email, picture: pic, provider: "facebook");
@@ -278,7 +284,7 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
             print("DEBUG name is : ${userFromDB.name}");
             print("Your account is created successfully!");
             }, onError: (e) {
-            print("Sign up with Google failed");
+            print("Sign up with Facebook failed");
             print("error $e");
             }
           );
@@ -288,7 +294,10 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
         // await setUserName(userName);
 
         Dataset.currentUser.value = userFromDB;
-        print(1);
+        await setUserId(id);
+        await setUserEmail(email);
+        await setUserName(userName);
+        // print(1);
         Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()),);
 
         // for (var i = 0; i < fdata.length; i++) {

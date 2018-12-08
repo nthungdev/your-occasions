@@ -35,6 +35,7 @@ class _UpdateUserScreen extends State<UpdateUserScreen> {
   FocusNode emailNode;
   FocusNode passwordNode;
   FocusNode password2Node;
+  DateTime birthday;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<FormFieldState> _emailKey = GlobalKey<FormFieldState>();
@@ -113,23 +114,24 @@ class _UpdateUserScreen extends State<UpdateUserScreen> {
     }
 
     this._formKey.currentState.save();
-    UserUpdateInfo u;
-    u.displayName = name;
+    // UserUpdateInfo u;
+    // u.displayName = name;
 
     // await firebaseUser.updateProfile(u);
 
-    if (firebaseUser!=null){
-      if (firebaseUser.email != emailController.text){
-        firebaseUser.updateEmail(emailController.text);
-        firebaseUser.updateProfile(u);
-      }
-    }
+    // if (firebaseUser!=null){
+      // if (firebaseUser.email != emailController.text){
+        // firebaseUser.updateEmail(emailController.text);
+        // firebaseUser.updateProfile(u);
+      // }
+    // }
     
     // user.updateEmail(emailController.text);
-    await _userController.updateUser(widget.user.id, name, emailController.text);
+    await _userController.updateUser(widget.user.id, name, birthday);
     setState(() {
       Dataset.currentUser.value.name = name;
-      Dataset.currentUser.value.email = emailController.text;
+      Dataset.currentUser.value.birthday = birthday;
+      // Dataset.currentUser.value.email = emailController.text;
     });
     
 
@@ -251,6 +253,7 @@ class _UpdateUserScreen extends State<UpdateUserScreen> {
   Widget _buildEmailInput() {
     final screen = MediaQuery.of(context).size;
 
+  
     return SizedBox(
       width: screen.width / 1.5,
       child: TextFormField(
@@ -272,6 +275,106 @@ class _UpdateUserScreen extends State<UpdateUserScreen> {
         ),
       ));
   }
+
+   String _getDateFormatted(DateTime date) {
+    if (date == null) {
+      return "MM/DD/YYYY";
+    }
+    return "${date.month.toString().padLeft(2, "0")}/${date.day.toString().padLeft(2, "0")}/${date.year}";
+  }
+
+   String _getTimeFormatted(TimeOfDay time) {
+    if (time == null) {
+      return "HH:MM AM/PM";
+    }
+    String hour = (time.hour > 12)
+      ? (time.hour - 12).toString().padLeft(2, "0")
+      : time.hour.toString().padLeft(2, "0");
+    String period = (time.hour > 12) ? 'PM' : 'AM';
+    return "$hour:${time.minute.toString().padLeft(2, "0")} $period";
+  }
+
+  Future<void> popUpSelectStartDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+      context: context,
+      initialDate: birthday == null ? DateTime.now() : birthday,
+      firstDate: DateTime(DateTime.now().year - 100),
+      lastDate: DateTime(DateTime.now().year + 2));
+
+      setState(() {
+        birthday = picked;
+      });
+  }
+
+  // Future<void> selectStartTime(BuildContext context) async {
+  //   final TimeOfDay picked = await showTimePicker(
+  //     context: context,
+  //     initialTime: birthday == null ? TimeOfDay.now() : birthday
+  //   );
+
+  //   setState(() {
+  //     birthday = picked;
+  //     _autoValidateDateTime();
+  //   });
+  // }
+
+  Widget _buildBirthdayInput() {
+    final screen = MediaQuery.of(context).size;
+
+    return SizedBox(
+        width: screen.width / 1.5,
+        child: Column(
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 10),
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: Colors.black54,
+                    width: 1
+                  )
+                )
+              ),
+              child: Row(
+                children: <Widget>[
+                  SizedBox(
+                    child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Text(
+                          "Birthday",
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Color(0xFF757575),
+                            fontWeight: FontWeight.bold
+                          )
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          popUpSelectStartDate(context);
+                        },
+                        child: Text(
+                          _getDateFormatted(birthday),
+                          style: TextStyle(
+                            letterSpacing: 2,
+                            fontSize: 14,
+                            color: Colors.grey[500],
+                            fontFamily: "Monaco"
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
+                ]
+              )
+            )
+          ]
+        )
+      );
+    }
 
   Widget _buildPasswordInput() {
     final screen = MediaQuery.of(context).size;
@@ -340,7 +443,8 @@ class _UpdateUserScreen extends State<UpdateUserScreen> {
                 SizedBox(height: screen.height * 0.1,),
                 _buildFirstNameInput(),
                 _buildLastNameInput(),
-                _buildEmailInput(),
+                // _buildEmailInput(),
+                _buildBirthdayInput(),
                 SizedBox(height: screen.height * 0.05,),
                 _buildUpdateButton(),
                 SizedBox(height: screen.height * 0.025,),

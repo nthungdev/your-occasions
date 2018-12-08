@@ -8,18 +8,22 @@ class EventComment {
   String parentId;
   int eventId;
   String authorId;
+  String authorName;
+  String authorPicture;
   String message;
   DateTime date;
   List<EventComment> replies;
   
   // CONSTRUCTORS //
   EventComment.create();
-  EventComment({this.eventId, this.authorId, this.message, this.date, this.parentId, this.id, this.replies});
+  EventComment({this.eventId, this.authorId, this.authorName, this.authorPicture, this.message, this.date, this.parentId, this.id, this.replies});
   EventComment.fromMap(Map<dynamic, dynamic> map){
     this.id = map['id'];
     this.id = map['parentId'];
     this.eventId = map['eventId'];
+    this.authorName = map['authorName'];
     this.authorId = map['authorId'];
+    this.authorPicture = map['authorPicture'];
     this.message = map['message'];
     Timestamp temp = map['date'];
     this.date = temp.toDate();
@@ -30,7 +34,9 @@ class EventComment {
     this.id = snapshot.documentID;
     this.parentId = snapshot?.data['parentId'];
     this.eventId = snapshot?.data['eventId'];
+    this.authorName = snapshot?.data['authorName'];
     this.authorId = snapshot?.data['authorId'];
+    this.authorPicture = snapshot?.data['authorPicture'];
     this.message = snapshot?.data['message'];
     Timestamp temp = snapshot?.data['date'];
     this.date = temp.toDate();
@@ -45,7 +51,9 @@ class EventComment {
       "id": id,
       "parentId": parentId,
       "eventId": eventId,
+      "authorName": authorName,
       "authorId": authorId,
+      "authorPicture": authorPicture,
       "message": message,
       "date": date,
     };

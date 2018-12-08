@@ -22,6 +22,7 @@ class _SocialTabView extends State<SocialTabView> {
   
   User currentUser = Dataset.currentUser.value;
   List<User> following;
+  var data;
 
   @override
   void initState() {
@@ -36,7 +37,10 @@ class _SocialTabView extends State<SocialTabView> {
   }
 
   Future<void> _getFollowing() async {
-      var data = await _friendController.getFriendList(userId: currentUser.id);
+      var temp = await _friendController.getFriendList(userId: currentUser.id);
+      setState(() {
+        data = temp;
+      });
       List<User> users = List<User>();
 
       for (var friend in data){
@@ -69,7 +73,16 @@ class _SocialTabView extends State<SocialTabView> {
   List<Widget> _buildFriends(){
     List<Widget> cards = List<Widget>();
     // print(following[0]);
-    if (following.length == 0 || following[0] == null){
+    if (following == null){
+      cards.add(
+        Center(
+          child: new Text('You currently have no friends', style: TextStyle(color: Colors.black, fontSize: 20)),
+        )
+      );
+      return cards;
+    }
+
+    if (following.isEmpty || following[0] == null){
       cards.add(
         Center(
           child: new Text('You currently have no friends', style: TextStyle(color: Colors.black, fontSize: 20)),
