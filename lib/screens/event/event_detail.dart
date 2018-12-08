@@ -165,6 +165,7 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
       authorId: Dataset.currentUser.value.id,
       date: DateTime.now(),
       eventId: widget.event.id,
+      authorPicture: widget.event.picture,
       message: _commentController.text.trim(),
     );
 
@@ -248,7 +249,7 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
             Navigator.push(context, MaterialPageRoute(builder: (context) => ReplyCommentPage(eventComment: comment,)));
             // print("back to event details");
           },
-          image: NetworkImage("https://cdn0.iconfinder.com/data/icons/avatar-15/512/ninja-512.png"),
+          image: NetworkImage(comment.authorPicture),
           userName: comment.authorId,
           messsage: comment.message,
           postTime: comment.date,
