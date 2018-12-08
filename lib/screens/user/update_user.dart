@@ -118,18 +118,18 @@ class _UpdateUserScreen extends State<UpdateUserScreen> {
 
     // await firebaseUser.updateProfile(u);
 
-    if (firebaseUser!=null){
-      if (firebaseUser.email != emailController.text){
-        firebaseUser.updateEmail(emailController.text);
-        firebaseUser.updateProfile(u);
-      }
-    }
+    // if (firebaseUser!=null){
+      // if (firebaseUser.email != emailController.text){
+        // firebaseUser.updateEmail(emailController.text);
+        // firebaseUser.updateProfile(u);
+      // }
+    // }
     
     // user.updateEmail(emailController.text);
-    await _userController.updateUser(widget.user.id, name, emailController.text);
+    await _userController.updateUser(widget.user.id, name);
     setState(() {
       Dataset.currentUser.value.name = name;
-      Dataset.currentUser.value.email = emailController.text;
+      // Dataset.currentUser.value.email = emailController.text;
     });
     
 
@@ -340,7 +340,7 @@ class _UpdateUserScreen extends State<UpdateUserScreen> {
                 SizedBox(height: screen.height * 0.1,),
                 _buildFirstNameInput(),
                 _buildLastNameInput(),
-                _buildEmailInput(),
+                // _buildEmailInput(),
                 SizedBox(height: screen.height * 0.05,),
                 _buildUpdateButton(),
                 SizedBox(height: screen.height * 0.025,),
