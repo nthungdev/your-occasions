@@ -94,16 +94,24 @@ class _SmallUserCardState extends State<SmallUserCard> {
   }
   
   void _followUser() async {
-    var userId = Dataset.userId.value;
-    FriendList newModel = FriendList(userId: userId);
+    var userId = Dataset.currentUser.value.id;
+    FriendList newModel = FriendList(userId: userId, friendId: widget.user.id);
     var result = await _friendListController.getFriendList(userId: userId, friendId: widget.user.id);
-    if (result.isEmpty) _friendListController.insert(newModel);
+    var isFollowed = await friendController.getFriend(userId, widget.user.id);
+    if (!isFollowed){
+      await friendController.insert(newModel);      
+    }
+    // if (result.isEmpty) _friendListController.insert(newModel);
   }
 
   void _unfollowUser() async {
-    var userId = await getUserId();
-    var friend = await _friendListController.getFriendList(userId: userId, friendId: widget.user.id);
-    if (!(friend.isEmpty)) _friendListController.delete(friend[0].id);
+    // var userId = await getUserId();
+    // var friend = await _friendListController.getFriendList(userId: userId, friendId: widget.user.id);
+    // if (!(friend.isEmpty)) _friendListController.delete(friend[0].id);
+    var isFollowed = await friendController.getFriend(currentUser.id, widget.user.id);
+    if (isFollowed){
+      await friendController.deleteFriend(currentUser.id, widget.user.id);
+    }
   }
 
   Widget _buildFollowButton() {

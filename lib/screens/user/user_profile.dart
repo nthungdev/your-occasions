@@ -77,10 +77,16 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
 
   void _handleTimer() {
     if(!followed) {
+      setState(() {
+        follower-=1;
+      });
       // follower-=1;
       _delete();
     }
     else{
+      setState(() {
+        follower+=1;
+      });
       // follower+=1;
       _add();
     }
@@ -90,7 +96,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
   void _add() async{
     var isFollowed = await friendController.getFriend(currentUser.id, user.id);
     if (!isFollowed){
-      print(friend.friendId);
+      // print(friend.friendId);
       await friendController.insert(friend);      
       // await _userController.increaseFollowers(widget.user.id);
       // await friendController.insert(friend);
@@ -143,7 +149,10 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
 
     Widget e = Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
-      child: Text(user == currentUser? "My Events":"User's Events", style: TextStyle(color: Colors.white, fontSize: 30.0, fontFamily: "Niramit")),
+      child: Text(
+        user == currentUser? "My Events" : "User's Events",
+        style: TextStyle(color: Colors.white, fontSize: 30.0, fontFamily: "Niramit")
+      ),
     );
 
     cards.add(e);
@@ -323,6 +332,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
 
   @override
   Widget build(BuildContext context) {
+    final screen = MediaQuery.of(context).size;
     var screenHeight = MediaQuery.of(context).size.height;
     var theme = Theme.of(context);
     var textTheme = theme.textTheme;
@@ -362,6 +372,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
                       children: <Widget>[
                         _buildAvatar(),
                         _buildFollowerInfo(textTheme),
+                        // SizedBox(height: screen.height * 0.4,),
                         // _buildActionButtons(theme),
                       ],
                     ),

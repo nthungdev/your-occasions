@@ -109,7 +109,7 @@ class UserController extends BaseController {
     }
     else {
       query += "WHERE ";
-      if(name != null) { query += "name LIKE '%$name%' "; }
+      if(name != null) { query += "upper(name) LIKE upper('%$name%') "; }
       else if(email != null) { query += "email = @email "; }
       else if(provider != null) { query += "provider = @provider "; }
       else if(id != null) { query += "id = @id ";}
