@@ -36,7 +36,7 @@ class UserController extends BaseController {
     query += """name = '$name' """;
     query += """WHERE id = '$id';""";
 
-    await connection.query("""UPDATE users SET name = @name, email = @email WHERE id = @id""", 
+    await connection.query("""UPDATE users SET name = @name WHERE id = @id""", 
     substitutionValues: {
       'name': name,
       'id': id, 

@@ -113,8 +113,8 @@ class _UpdateUserScreen extends State<UpdateUserScreen> {
     }
 
     this._formKey.currentState.save();
-    UserUpdateInfo u;
-    u.displayName = name;
+    // UserUpdateInfo u;
+    // u.displayName = name;
 
     // await firebaseUser.updateProfile(u);
 
