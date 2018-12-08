@@ -288,6 +288,9 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
         // await setUserName(userName);
 
         Dataset.currentUser.value = userFromDB;
+        await setUserId(id);
+        await setUserEmail(email);
+        await setUserName(id);
         // print(1);
         Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()),);
 
