@@ -23,7 +23,7 @@ class PlaceSearch {
           return null;
         }
         else {
-          print(json.decode(response.body)["candidates"][0]["place_id"]);
+          // print(json.decode(response.body)["candidates"][0]["place_id"]);
           return PlaceData.fromJson(json.decode(response.body));
         }
         
@@ -49,16 +49,23 @@ main() {
   // ps.search("Kent Hall, Plattsburgh");
   ps.search("fdsfsdfsdf");
 
-
-
-
 }
 
 
 class PlaceData {
   String placeId;
-  
+  double latitude;
+  double longitude;
+  String name;
+  String address;
+
   PlaceData.fromJson(Map json) {
     placeId = json["candidates"][0]["place_id"];
+    latitude = json["candidates"][0]["geometry"]["location"]["lat"];
+    longitude = json["candidates"][0]["geometry"]["location"]["lng"];
+    // latitude = double.parse(json["candidates"][0]["geometry"]["location"]["lat"]);
+    // longitude = double.parse(json["candidates"][0]["geometry"]["location"]["lng"]);
+    name = json["candidates"][0]["name"];
+    address = json["candidates"][0]["formatted_address"];
   }
 }

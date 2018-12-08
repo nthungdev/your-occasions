@@ -9,6 +9,7 @@ import 'package:youroccasions/models/category.dart';
 import 'package:youroccasions/models/data.dart';
 import 'package:youroccasions/models/event.dart';
 import 'package:youroccasions/controllers/event_controller.dart';
+import 'package:youroccasions/utilities/places.dart';
 import 'package:youroccasions/utilities/secret.dart';
 import 'package:youroccasions/utilities/cloudinary.dart';
 import 'package:youroccasions/screens/event/event_detail.dart';
@@ -26,14 +27,17 @@ class _CreateEventScreen extends State<CreateEventScreen> {
   GlobalKey<ScaffoldState> _scaffoldKey;
   FocusNode _eventTitleNode;
   FocusNode _descriptionNode;
+  FocusNode _locationNameNode;
   FocusNode _addressNode;
 
   TextEditingController nameController;
   TextEditingController descriptionController;
   TextEditingController categoryController;
+  TextEditingController locationNameController;
   TextEditingController addressController;
-  
+
   GoogleMapController mapController;
+  PlaceData _placeData;
 
   DateTime startDate;
   TimeOfDay startTime;
@@ -41,6 +45,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
   TimeOfDay endTime;
   
   File _image;
+  bool _showMap = false;
   bool _noImageError;
 
   bool _isSigningUp;
@@ -64,9 +69,12 @@ class _CreateEventScreen extends State<CreateEventScreen> {
     _scaffoldKey = GlobalKey<ScaffoldState>();
     _eventTitleNode = FocusNode();
     _descriptionNode = FocusNode();
+    _locationNameNode = FocusNode();
+    _addressNode = FocusNode();
     nameController = TextEditingController();
     descriptionController = TextEditingController();
     categoryController = TextEditingController();
+    locationNameController = TextEditingController();
     addressController = TextEditingController();
 
     _isSigningUp = false;
@@ -99,6 +107,14 @@ class _CreateEventScreen extends State<CreateEventScreen> {
     descriptionController.dispose();
     categoryController.dispose();
     addressController.dispose();
+  }
+
+  void _onMapCreated(GoogleMapController controller) {
+    setState(() { mapController = controller; });
+    mapController.clearMarkers();
+    mapController.addMarker(MarkerOptions(
+      position: LatLng(_placeData.latitude, _placeData.longitude)
+    ));
   }
 
   void _generateCategoryContent() {
@@ -351,9 +367,10 @@ class _CreateEventScreen extends State<CreateEventScreen> {
         hostId: hostId,
         name: name,
         description: description,
-        // category: category,
         startTime: startDate,
         endTime: endDate,
+        address: _placeData?.address,
+        locationName: _placeData?.name
       );
 
       
@@ -738,6 +755,56 @@ class _CreateEventScreen extends State<CreateEventScreen> {
     );
   }
 
+  Widget _buildLocationNameInput() {
+    final screen = MediaQuery.of(context).size;
+
+    return SizedBox(
+      width: screen.width * _contentWidth,
+      child: TextFormField(
+        focusNode: _locationNameNode,
+        controller: locationNameController,
+        textInputAction: TextInputAction.next,
+        keyboardType: TextInputType.text,
+        validator: (name) => (name.length < 3) ? "Please provide a name with at least 3 characters" : null,
+        autofocus: false,
+        maxLines: null, /// Extend as type
+        onFieldSubmitted: (term) async {
+          _locationNameNode.unfocus();
+          if (term.length >= 6) {
+            PlaceSearch ps = PlaceSearch.instance;
+            _placeData = await ps.search(term);
+            print(_placeData.address);
+            if (_placeData != null) {
+              addressController.text = _placeData.address;
+              locationNameController.text = _placeData.name;
+
+              if (mapController == null) {
+                setState(() {
+                  _showMap = true;     
+                });
+              }
+              else if (mapController != null) {
+                mapController.clearMarkers();
+                mapController.addMarker(MarkerOptions(
+                  position: LatLng(_placeData.latitude, _placeData.longitude)
+                ));
+                mapController.animateCamera(CameraUpdate.newCameraPosition(
+                  CameraPosition(
+                    target: LatLng(_placeData.latitude, _placeData.longitude),
+                    zoom: 17
+                  )
+                ));
+              }
+            }
+          }
+        },
+        maxLengthEnforced: false,
+        decoration: InputDecoration(
+          labelText: "Location Name",
+          labelStyle: TextStyle(fontWeight: FontWeight.bold)),
+      ));
+  }
+
   Widget _buildAddressInput() {
     final screen = MediaQuery.of(context).size;
 
@@ -751,14 +818,62 @@ class _CreateEventScreen extends State<CreateEventScreen> {
         validator: (name) => (name.length < 6) ? "Please provide an address with at least 6 characters" : null,
         autofocus: false,
         maxLines: null, /// Extend as type
-        onFieldSubmitted: (term) {
-          _descriptionNode.unfocus();
+        onFieldSubmitted: (term) async {
+          _addressNode.unfocus();
+          if (term.length >= 6) {
+            PlaceSearch ps = PlaceSearch.instance;
+            _placeData = await ps.search(term);
+            print(_placeData.address);
+            if (_placeData != null) {
+              addressController.text = _placeData.address;
+              locationNameController.text = _placeData.name;
+
+              if (mapController == null) {
+                setState(() {
+                  _showMap = true;     
+                });
+              }
+              else if (mapController != null) {
+                mapController.clearMarkers();
+                mapController.addMarker(MarkerOptions(
+                  position: LatLng(_placeData.latitude, _placeData.longitude)
+                ));
+                mapController.animateCamera(CameraUpdate.newCameraPosition(
+                  CameraPosition(
+                    target: LatLng(_placeData.latitude, _placeData.longitude),
+                    zoom: 17
+                  )
+                ));
+              }
+            }
+          }
         },
         maxLengthEnforced: false,
         decoration: InputDecoration(
           labelText: "Address",
           labelStyle: TextStyle(fontWeight: FontWeight.bold)),
       ));
+  }
+
+  Widget _buildGoogleMap() {
+    final screen = MediaQuery.of(context).size;
+
+    return SizedBox(
+      height: 300,
+      width: screen.width * 0.8,
+      child: GoogleMap(
+        onMapCreated: _onMapCreated,
+        options: GoogleMapOptions(
+          rotateGesturesEnabled: false,
+          scrollGesturesEnabled: false,
+          cameraPosition: CameraPosition(
+            target: LatLng(_placeData.latitude, _placeData.longitude),
+            zoom: 17
+          )
+        ),
+      ),
+    );
+ 
   }
 
   List<Widget> _buildListViewContent() {
@@ -786,8 +901,18 @@ class _CreateEventScreen extends State<CreateEventScreen> {
       _buildDescriptionInput(),
       _buildStartDateInput(),
       _buildCategoryInput(),
+      _buildLocationNameInput(),
       _buildAddressInput()
     ]);
+
+    if (_showMap) {
+      result.addAll([
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 10),
+          child: _buildGoogleMap()
+        )
+      ]);
+    }
 
     if (_invalidCategory) {
       result.add(
@@ -838,19 +963,21 @@ class _CreateEventScreen extends State<CreateEventScreen> {
         backgroundColor: Colors.white,
       ),
       body: SafeArea(
-        child: Stack(
+        child: Column(
           children: <Widget>[
-            ListView(
-              children: <Widget>[
-                Form(
-                  key: formKey,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: _buildListViewContent(),
-                  )
-                ),
-              ],
-            ),
+            Expanded(
+              child: ListView(
+                children: <Widget>[
+                  Form(
+                    key: formKey,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: _buildListViewContent(),
+                    )
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ));
