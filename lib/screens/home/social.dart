@@ -69,7 +69,7 @@ class _SocialTabView extends State<SocialTabView> {
   List<Widget> _buildFriends(){
     List<Widget> cards = List<Widget>();
     // print(following[0]);
-    if (following.length == 0 || following[0] == null){
+    if (following.length == 0 || following[0] == null || following == null){
       cards.add(
         Center(
           child: new Text('You currently have no friends', style: TextStyle(color: Colors.black, fontSize: 20)),
