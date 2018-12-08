@@ -13,6 +13,7 @@ const String USER_NAME = "userName";
 const String USER_PASSWORD = "userPassword";
 const String IS_LOGIN = "isLogin";
 
+
 Future<bool> getIsLogin() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool result = (prefs.getBool(IS_LOGIN) ?? false);
@@ -50,6 +51,17 @@ Future<String> getUserName() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String name = (prefs.getString(USER_NAME) ?? "");
   return name;
+}
+
+Future<void> setUserPassword(String password) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setString(USER_PASSWORD, password);
+}
+
+Future<String> getPassword() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String password = (prefs.getString(USER_PASSWORD) ?? "");
+  return password;
 }
 
 

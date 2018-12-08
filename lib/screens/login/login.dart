@@ -93,6 +93,7 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
       await setIsLogin(true);
       await setUserEmail(userFirebase.email);
       await setUserName(userFirebase.displayName);
+      await setUserPassword(passwordController.text);
       Dataset.currentUser.value = await _userController.getUserWithEmail(userFirebase.email);
       print("User: ");
       print(Dataset.currentUser.value);

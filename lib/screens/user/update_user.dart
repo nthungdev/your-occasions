@@ -113,14 +113,10 @@ class _UpdateUserScreen extends State<UpdateUserScreen> {
     }
 
     this._formKey.currentState.save();
+    UserUpdateInfo u;
+    u.displayName = name;
 
-  //   firebaseUser.updateProfile({
-  //     displayName: name,
-  //     }).then(function() {
-  // // Update successful.
-  //     }).catch(function(error) {
-  //       // An error happened.
-  //     });
+    await firebaseUser.updateProfile(u);
     if (firebaseUser!=null){
       if (firebaseUser.email != emailController.text){
         firebaseUser.updateEmail(emailController.text);
