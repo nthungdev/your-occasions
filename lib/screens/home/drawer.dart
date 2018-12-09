@@ -19,54 +19,44 @@ class HomeDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: ListView(
+      child: Column(
         children: <Widget>[
-          GestureDetector(
-            onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfileScreen(Dataset.currentUser.value)));},
-            child: UserAccountsDrawerHeader(
-              accountName: Text(accountName),
-              accountEmail: Text(accountEmail),
-              currentAccountPicture: CircleAvatar(
-                backgroundImage: accountPicture == null
-                ? AssetImage("assets/images/no-image.jpg")
-                : NetworkImage(accountPicture)
-              ),
+          Expanded(
+            child: ListView(
+              children: <Widget>[
+                GestureDetector(
+                  onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfileScreen(Dataset.currentUser.value)));},
+                  child: UserAccountsDrawerHeader(
+                    accountName: Text(accountName),
+                    accountEmail: Text(accountEmail),
+                    currentAccountPicture: CircleAvatar(
+                      backgroundImage: accountPicture == null
+                      ? AssetImage("assets/images/no-image.jpg")
+                      : NetworkImage(accountPicture)
+                    ),
+                  ),
+                ),
+                ListTile (
+                  title: Text ("Create Event"),
+                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => CreateEventScreen())),
+                ),
+                ListTile (
+                  title: Text ("Change Avatar"),
+                  onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => UploadAvatarPage(Dataset.currentUser.value))),
+                ),
+              ],
             ),
-          ),
-          ListTile (
-            title: Text ("Create Event"),
-            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => CreateEventScreen())),
-          ),
-          ListTile (
-            title: Text ("My Events"),
-            onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new OtherPage(" My Events"))),
-          ),
-          ListTile (
-            title: Text ("Shared Events"),
-            onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new OtherPage(" Shared Events"))),
-          ),   
-          ListTile (
-            title: Text ("Location"),
-            onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new OtherPage(" Location"))),
           ),
           ListTile (
             title: Text ("Settings"),
             onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new SettingPage())),
           ), 
           ListTile (
-            title: Text ("Change Avatar"),
-            onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => UploadAvatarPage(Dataset.currentUser.value))),
-          ),   
-          Container(
-          alignment: Alignment.center,
-          child:  MaterialButton(
-            color: Colors.red,
-            onPressed: () async {
+            title: Text ("Logout"),
+            onTap: () async {
               await logout();
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginWithEmailScreen()));
             },
-            child: Text("Logout"),
-            )
           ),
         ],
       ),

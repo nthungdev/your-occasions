@@ -119,12 +119,12 @@ class ReplyCommentPageState extends State<ReplyCommentPage> {
       Column(
         children: <Widget>[
           CommentTile(
-            image: NetworkImage("https://cdn0.iconfinder.com/data/icons/avatar-15/512/ninja-512.png"),
+            image: NetworkImage(_eventComment.authorPicture),
             messsage: _eventComment.message,
             onTap: () {},
             onTapReply: () {},
             postTime: _eventComment.date,
-            userName: _eventComment.authorId,
+            userName: _eventComment.authorName,
             repliesCount: _eventComment.replies.length,
           ),
           Divider(
@@ -162,7 +162,7 @@ class ReplyCommentPageState extends State<ReplyCommentPage> {
             print("Reply button press");
             Navigator.push(context, MaterialPageRoute(builder: (context) => ReplyCommentPage(eventComment: reply,)));
           },
-          image: NetworkImage("https://cdn0.iconfinder.com/data/icons/avatar-15/512/ninja-512.png"),
+          image: NetworkImage(reply.authorPicture),
           userName: reply.authorId,
           messsage: reply.message,
           postTime: reply.date,

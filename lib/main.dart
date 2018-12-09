@@ -51,6 +51,7 @@ class YourOccasions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Your Occasions',
       theme: ThemeData(
         // backgroundColor: Colors.red,

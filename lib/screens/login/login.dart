@@ -452,8 +452,13 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
                 children: <Widget>[
                   SizedBox(
                     height: screen.width * 2 / 3,
-                    child: Container(
-                      // TODO Put logo in here
+                    width: screen.width * 2 / 3,
+                    child: Center(
+                      child: SizedBox(
+                        height: screen.width * 0.5,
+                        width: screen.width * 0.5,
+                        child: Image.asset("assets/logos/yo.png"),
+                      ),
                     ),
                   ),
                   Column(
