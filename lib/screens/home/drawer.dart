@@ -30,7 +30,11 @@ class HomeDrawer extends StatelessWidget {
             child: ListView(
               children: <Widget>[
                 GestureDetector(
-                  onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfileScreen(Dataset.currentUser.value)));},
+                  onTap: () async{
+                    var user = await _userController.getUserWithId(Dataset.currentUser.value.id);
+                    Dataset.currentUser.value = user;
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfileScreen(user)));
+                  },
                   child: UserAccountsDrawerHeader(
                     accountName: Text(accountName),
                     accountEmail: Text(accountEmail),

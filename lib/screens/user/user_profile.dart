@@ -144,7 +144,8 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
     return new Hero(
       tag: "User Profile",
       child: new CircleAvatar(
-        backgroundImage: NetworkImage(user.picture ?? ""),
+        backgroundImage: user.picture != null? NetworkImage(user.picture) 
+        : AssetImage("assets/images/no-image-avatar.jpg"),
         radius: 50.0,
       ),
     );

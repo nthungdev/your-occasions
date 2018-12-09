@@ -64,7 +64,7 @@ class _SocialTabView extends State<SocialTabView> {
       onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => UserProfileScreen(user))),
       leading: CircleAvatar(
           backgroundImage: user.picture != null? NetworkImage(user.picture) 
-          : AssetImage("assets/images/no-image.jpg"),
+          : AssetImage("assets/images/no-image-avatar.jpg"),
         ),
       title: Text(user.name),
       subtitle: Text(user.email),
