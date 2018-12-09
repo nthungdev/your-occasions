@@ -87,15 +87,8 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
   }
 
   _launchURL() async {
-    // 44.691171,-73.467087
-    // 44.693532,-73.467489
-    // 44.6911032,-73.46672079999999
-    String url2 = "google.navigation:q=44.691171,-73.467087";
-    String url3 = "http://maps.google.com/?q=44.691171,-73.467087";
-    String url4 = "https://www.google.com/maps/@?api=1&map_action=map&q=44.693532,-73.467489";
     String url = "https://www.google.com/maps/search/?api=1&query=${_placeData.latitude},${_placeData.longitude}&query_place_id=${_placeData.placeId}";
-    // String url6 = "https://www.google.com/maps/search/?api=1&query=${_placeData.latitude},${_placeData.longitude}";
-    // const url = 'https://flutter.io';
+    
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -164,8 +157,9 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
     var comment = EventComment(
       authorId: Dataset.currentUser.value.id,
       date: DateTime.now(),
+      authorName: Dataset.currentUser.value.name,
       eventId: widget.event.id,
-      authorPicture: widget.event.picture,
+      authorPicture: Dataset.currentUser.value.picture,
       message: _commentController.text.trim(),
     );
 
@@ -250,7 +244,7 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
             // print("back to event details");
           },
           image: NetworkImage(comment.authorPicture),
-          userName: comment.authorId,
+          userName: comment.authorName,
           messsage: comment.message,
           postTime: comment.date,
           repliesCount: comment.replies?.length ?? 0,
@@ -352,7 +346,7 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
           ),
           InkWell(
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => ShareEventScreen(_event)));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => ShareEventScreen(_event, _placeData)));
             },
             child: Container(
               width: (screen.width - 40) / 3,

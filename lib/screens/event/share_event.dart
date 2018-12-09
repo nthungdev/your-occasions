@@ -23,14 +23,16 @@ import 'package:youroccasions/models/user.dart';
 import 'package:youroccasions/controllers/user_controller.dart';
 import 'package:youroccasions/models/data.dart';
 import 'package:youroccasions/utilities/secret.dart';
+import 'package:youroccasions/utilities/places.dart';
 
 
 
 
 class ShareEventScreen extends StatefulWidget {
   final Event event;
+  final PlaceData placeData;
 
-  ShareEventScreen(this.event);
+  ShareEventScreen(this.event, this.placeData);
 
   @override
   ShareEventScreenState createState() => ShareEventScreenState();
@@ -38,6 +40,7 @@ class ShareEventScreen extends StatefulWidget {
 }
 
 class ShareEventScreenState extends State<ShareEventScreen>{
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
   FocusNode _messageNode = FocusNode();
   TextEditingController _messageController = TextEditingController();
   List<User> _friends;
@@ -58,21 +61,11 @@ class ShareEventScreenState extends State<ShareEventScreen>{
     _messageController.dispose();
   }
 
-  _launchURL() async {
-    // 44.691171,-73.467087
-    // 44.693532,-73.467489
-    // 44.6911032,-73.46672079999999
-    String url2 = "google.navigation:q=44.691171,-73.467087";
-    String url3 = "http://maps.google.com/?q=44.691171,-73.467087";
-    String url4 = "https://www.google.com/maps/@?api=1&map_action=map&q=44.693532,-73.467489";
-    String url5 = "https://www.google.com/maps/search/?api=1&query=47.5951518,-122.3316393&query_place_id=ChIJKxjxuaNqkFQR3CK6O1HNNqY";
-    String url6 = "https://www.google.com/maps/search/?api=1&query=44.6911032,-73.46672079999999";
-    const url = 'https://flutter.io';
-    if (await canLaunch(url6)) {
-      await launch(url6);
-    } else {
-      throw 'Could not launch $url';
-    }
+  void showSnackbar(String text) {
+    _scaffoldKey.currentState.showSnackBar(new SnackBar(
+      content: Text(text),
+      duration: Duration(seconds: 1),
+    ));
   }
 
   Future _sendEmail(String recipient) async {
@@ -80,13 +73,23 @@ class ShareEventScreenState extends State<ShareEventScreen>{
     String password = SHARE_PASSWORD;
 
     final smtpServer = gmail(username, password);
-  
+
+
     // Create our message.
     final message = Message()
       ..from = Address(username, 'Your Occasions App')
       ..recipients.add(recipient)
       ..subject = '${Dataset.currentUser.value.name} invited you to go to an event'
-      ..html = "<h1>Test</h1>\n<p>This is automated email. Does not reply</p>";
+      ..html = """
+      <p>This is automated email. Does not reply</p>
+      <h1>You have an invitation to an event</h1>
+      <p>${Dataset.currentUser.value.name} invited you to go to ${widget.event.name} at ${widget.event.locationName}, ${widget.event.address}.</p>
+      <p>Time: ${widget.event.startTime}</p>
+      <p>Here is the message from ${Dataset.currentUser.value.name}:</p>
+      <p>${_messageController.text}</p>
+      <p>Click on the link below to navigate to the location.</p>
+      <a href="https://www.google.com/maps/search/?api=1&query=${widget.placeData.latitude},${widget.placeData.longitude}&query_place_id=${widget.placeData.placeId}"><p>Link</p></a>
+      """;
 
     final sendReports = await send(message, smtpServer);
     if (sendReports[0].validationProblems != null) {
@@ -144,11 +147,16 @@ class ShareEventScreenState extends State<ShareEventScreen>{
           user: friend,
           onSend: _sendStatus[friend.id] ? null : 
           () {
-            _sendEmail(friend.email);
-            setState(() {
-              _sendStatus[friend.id] = true;
-            });
-            print(_sendStatus);
+            if (_messageController.text.isEmpty) {
+              showSnackbar("Please write a message!");
+            }
+            else {
+              _sendEmail(friend.email);
+              setState(() {
+                _sendStatus[friend.id] = true;
+              });
+              print(_sendStatus);
+            }
           }
         )
       );
@@ -182,6 +190,7 @@ class ShareEventScreenState extends State<ShareEventScreen>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -204,12 +213,6 @@ class ShareEventScreenState extends State<ShareEventScreen>{
         child: Column(
           children: <Widget>[
             _buildMessageInput(),
-            RaisedButton(
-              onPressed: () {
-                _launchURL();
-              },
-              child: Text("Open Map"),
-            ),
             Expanded(
               child: _friends == null ? Center(child: CircularProgressIndicator(),) :
                 ListView(

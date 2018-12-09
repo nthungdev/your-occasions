@@ -51,7 +51,12 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
     friend = FriendList();
     friend.userId = currentUser.id;
     friend.friendId = user.id;
+    if (currentUser.id == widget.user.id){
+      getdata();
+    }
+    else{
     _refresh();
+    }
   }
 
 
@@ -60,6 +65,18 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
     //     id = value;
     //   });
     // });
+
+  void getdata() async {
+    var temp1 = await _eventController.getEvents(hostId: widget.user.id);
+
+    var temp2 = (await friendController.getFriendList(userId: widget.user.id)).length;
+
+    setState(() {
+          followed = false;
+          _eventList = temp1;
+          follow = temp2;
+        });
+  }
 
   void _refresh() async{
     var temp = await friendController.getFriend(currentUser.id, widget.user.id);
@@ -91,6 +108,15 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
       _add();
     }
     _queryTimer = null;
+  }
+
+  Future<void> getCurrentUser(String id) async {
+    List<User> currentUser = await _userController.getUsers(id: id);
+    print(currentUser);
+    Dataset.currentUser.value.followers = currentUser[0].followers;
+    setState(() {
+      follower = currentUser[0].followers;
+    });
   }
 
   void _add() async{

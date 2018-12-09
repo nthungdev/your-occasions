@@ -15,6 +15,7 @@ class SettingPage extends StatelessWidget {
       appBar: new AppBar(
         title: Text("Settings"),
       ),
+<<<<<<< HEAD
       body: new Container(
         color: Colors.orange,
         child: Column(
@@ -44,6 +45,33 @@ class SettingPage extends StatelessWidget {
           ],
         ),
       )
+=======
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          ListTile (
+            title: Text ("Edit Profile Picture"),
+            onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new UploadAvatarPage(Dataset.currentUser.value))),
+        
+          ),
+          ListTile (
+            title: Text ("Suggest Improvements"),
+            onTap: () {},
+          ),
+          ListTile (
+            title: Text ("Pravacy Policy"),
+            onTap:  () {Navigator.push(context, MaterialPageRoute(builder: (context) => AboutPage()));},
+          ),
+          ListTile (
+            title: Text ("Logout"),
+            onTap: () async {
+              await logout();
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginWithEmailScreen()));
+            },
+          ),
+        ],
+      ),
+>>>>>>> 7f11192abee8bae3481e07e5e8c2613cf472df5c
     );
   }
 }
