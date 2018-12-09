@@ -26,7 +26,6 @@ class HomeDrawer extends StatelessWidget {
     return Drawer(
       child: Column(
         children: <Widget>[
-<<<<<<< HEAD
           Expanded(
             child: ListView(
               children: <Widget>[
@@ -50,30 +49,19 @@ class HomeDrawer extends StatelessWidget {
                   title: Text ("Change Avatar"),
                   onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => UploadAvatarPage(Dataset.currentUser.value))),
                 ),
+                ListTile (
+                  title: Text ("Settings"),
+                  onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new SettingPage())),
+                ), 
               ],
-=======
-          GestureDetector(
-            onTap: () async{
-              var user = await _userController.getUserWithId(Dataset.currentUser.value.id);
-              Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfileScreen(user)));
-              },
-            child: UserAccountsDrawerHeader(
-              accountName: Text(accountName),
-              accountEmail: Text(accountEmail),
-              currentAccountPicture: CircleAvatar(
-                backgroundImage: accountPicture == null
-                ? AssetImage("assets/images/no-image.jpg")
-                : NetworkImage(accountPicture)
-              ),
->>>>>>> 709baa1f24c5ee558e1d2da099059e576dd053c5
             ),
           ),
           ListTile (
-            title: Text ("Settings"),
-            onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new SettingPage())),
-          ), 
-          ListTile (
-            title: Text ("Logout"),
+            title: Text ("Logout",
+              style: TextStyle(
+                color: Colors.red
+              ),
+            ),
             onTap: () async {
               await logout();
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginWithEmailScreen()));
