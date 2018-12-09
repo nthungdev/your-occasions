@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:youroccasions/models/data.dart';
 import 'package:youroccasions/screens/login/login.dart';
+import 'package:youroccasions/screens/setting/SuggestImprovements.dart';
 import 'package:youroccasions/screens/setting/setting.dart';
 import 'package:youroccasions/screens/user/upload_avatar.dart';
 import 'package:youroccasions/utilities/config.dart';
@@ -24,10 +25,10 @@ class SettingPage extends StatelessWidget {
           ),
           ListTile (
             title: Text ("Suggest Improvements"),
-            onTap: () {},
+            onTap:  () {Navigator.push(context, MaterialPageRoute(builder: (context) => SuggestImprovement ()));},
           ),
           ListTile (
-            title: Text ("About"),
+            title: Text ("Privacy Policy"),
             onTap:  () {Navigator.push(context, MaterialPageRoute(builder: (context) => AboutPage()));},
           ),
           ListTile (
@@ -36,6 +37,7 @@ class SettingPage extends StatelessWidget {
               await logout();
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginWithEmailScreen()));
             },
+            
           ),
         ],
       ),
