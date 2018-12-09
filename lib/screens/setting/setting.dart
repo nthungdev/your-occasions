@@ -27,7 +27,7 @@ class SettingPage extends StatelessWidget {
             onTap: () {},
           ),
           ListTile (
-            title: Text ("About"),
+            title: Text ("Pravacy Policy"),
             onTap:  () {Navigator.push(context, MaterialPageRoute(builder: (context) => AboutPage()));},
           ),
           ListTile (

@@ -3,11 +3,16 @@ import 'package:youroccasions/screens/setting/setting.dart';
 import 'package:youroccasions/screens/user/upload_avatar.dart';
 import './other_page.dart';
 
+import 'package:youroccasions/screens/home/home.dart';
 import 'package:youroccasions/screens/user/user_profile.dart';
 import 'package:youroccasions/screens/event/create_event.dart';
 import 'package:youroccasions/screens/login/login.dart';
 import 'package:youroccasions/utilities/config.dart';
 import 'package:youroccasions/models/data.dart';
+import 'package:youroccasions/controllers/user_controller.dart';
+
+
+final UserController _userController = UserController();
 
 class HomeDrawer extends StatelessWidget {
   final String accountName;
@@ -22,7 +27,10 @@ class HomeDrawer extends StatelessWidget {
       child: ListView(
         children: <Widget>[
           GestureDetector(
-            onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfileScreen(Dataset.currentUser.value)));},
+            onTap: () async{
+              var user = await _userController.getUserWithId(Dataset.currentUser.value.id);
+              Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfileScreen(user)));
+              },
             child: UserAccountsDrawerHeader(
               accountName: Text(accountName),
               accountEmail: Text(accountEmail),
