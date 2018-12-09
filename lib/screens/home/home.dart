@@ -107,6 +107,8 @@ class _HomeScreen extends State<HomeScreen> with SingleTickerProviderStateMixin 
 
   @override
   Widget build(BuildContext context) {
+    
+    // getCurrentUser(Dataset.currentUser.value.id);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
