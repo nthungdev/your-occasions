@@ -1,9 +1,15 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:youroccasions/controllers/event_category_controller.dart';
+import 'package:youroccasions/controllers/user_attended_event_controller.dart';
+import 'package:youroccasions/controllers/user_interested_event_controller.dart';
 import 'package:youroccasions/models/event_comment.dart';
+import 'package:youroccasions/models/user_attended_event.dart';
+import 'package:youroccasions/models/user_interested_event.dart';
 import 'package:youroccasions/screens/event/comment_input.dart';
 import 'package:youroccasions/screens/event/comment_tile.dart';
 import 'package:youroccasions/screens/event/reply_comment_page.dart';
@@ -44,13 +50,18 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
   DocumentReference _eventReference;
   bool _gotData;
   List<String> _categories;
-  
+  UserInterestedEventController _interestedEventController = UserInterestedEventController();
+  UserAttendedController _attendedController = UserAttendedController();
   EventComment eventComment;
   List<EventComment> eventComments;
   int descriptionMaxLine;
+  Timer _queryTimer;
 
   GoogleMapController mapController;
   PlaceData _placeData;
+
+  bool _isInterested;
+  bool _isGoing;
 
   @override
   initState() {
@@ -75,6 +86,51 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
     super.dispose();
     _commentNode.dispose();
     _commentController.dispose();
+  }
+
+  /// option == true: interested event
+  /// option == false: going event
+  void _handleTimer(bool option) {
+    if (option) {
+      if(_isInterested) {
+        _addInterestEvent();
+      }
+      else{
+        _deleteInterestEvent();
+      }
+    }
+    else {
+      if(_isGoing) {
+        _addAttendEvent();
+      }
+      else{
+        _deleteAttendEvent();
+      }
+    }
+    _queryTimer = null;
+  }
+
+  void _addInterestEvent() async {
+    UserInterestedEvent newModel = UserInterestedEvent(userId: Dataset.currentUser.value.id, eventId: widget.event.id);
+    var result = await _interestedEventController.getUserInterestedEvent(eventId: widget.event.id, userId: Dataset.currentUser.value.id);
+    if (result.isEmpty) _interestedEventController.insert(newModel);
+  }
+
+  void _deleteInterestEvent() async {
+    var interestedEvent = await _interestedEventController.getUserInterestedEvent(userId: Dataset.currentUser.value.id, eventId: widget.event.id);
+    if(!(interestedEvent.isEmpty)) _interestedEventController.delete(interestedEvent[0].id);
+  }
+  
+
+  void _addAttendEvent() async {
+    UserAttendedEvent newModel = UserAttendedEvent(userId: Dataset.currentUser.value.id, eventId: widget.event.id);
+    var result = await _attendedController.getUserAttendedEvent(eventId: widget.event.id, userId: Dataset.currentUser.value.id);
+    if (result.isEmpty) _attendedController.insert(newModel);
+  }
+
+  void _deleteAttendEvent() async {
+    var attendEvent = await _attendedController.getUserAttendedEvent(userId: Dataset.currentUser.value.id, eventId: widget.event.id);
+    if(!(attendEvent.isEmpty)) _attendedController.delete(attendEvent[0].id);
   }
 
   void _onMapCreated(GoogleMapController controller) async {
@@ -112,6 +168,25 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
     PlaceSearch ps = PlaceSearch.instance;
     _placeData = await ps.search(_event.address);
 
+    UserInterestedEventController uiec = UserInterestedEventController();
+    var temp = await uiec.getUserInterestedEvent(userId: Dataset.currentUser.value.id, eventId: _event.id);
+    if (temp.isEmpty) {
+      _isInterested = false;
+    }
+    else {
+      _isInterested = true;
+    }
+
+    UserAttendedController uaec = UserAttendedController();
+    var temp2 = await uaec.getUserAttendedEvent(userId: Dataset.currentUser.value.id, eventId: _event.id);
+    if (temp2.isEmpty) {
+      _isGoing = false;
+    }
+    else {
+      _isGoing = true;
+    }
+
+
     if(this.mounted) {
       setState(() { 
         _gotData = true;
@@ -148,8 +223,6 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
     else {
       eventComments = [];
     }
-
-    print("DEBUG eventComments : $eventComments");
   }
 
   Future<void> _postComment() async {
@@ -164,7 +237,7 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
     );
 
     // _eventReference.
-    print("eventRef: ${_eventReference.documentID}");
+    // print("eventRef: ${_eventReference.documentID}");
     _eventReference.collection("Comments").add(comment.toJson());
     _commentController.clear();
     _commentNode.unfocus();
@@ -176,22 +249,6 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
   void delete() async {
     await _eventController.delete(_event.id);
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
-  }
-
-  Widget _buildHost() {
-    return ListTile(
-      onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => UserProfileScreen(_host))),
-      leading: Hero(
-        tag: 0,
-        child: CircleAvatar(
-          backgroundImage: _host.picture != null
-          ? NetworkImage(_host.picture)
-          : AssetImage("assets/images/no-image.jpg")
-        ),
-      ),
-      title: Text(_host.name),
-      subtitle: Text(_host.email),
-    );
   }
 
   Widget _buildCoverImage() {
@@ -315,14 +372,26 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           InkWell(
-            onTap: () {},
+            onTap: () {
+              if (this.mounted) {
+                setState(() {
+                  _isInterested = !_isInterested;
+
+                  if(_queryTimer == null) {
+                    _queryTimer = Timer(Duration(seconds: 1), () { _handleTimer(true); });
+                  }
+                });
+              }
+            },
             child: SizedBox(
               width: (screen.width - 40) / 3,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: <Widget>[
-                    Icon(Icons.star),
+                    Icon(_isInterested ? Icons.favorite : Icons.favorite_border,
+                      color: Colors.red,
+                    ),
                     Text("Interested"),
                   ],
                 ),
@@ -330,14 +399,26 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
             ),
           ),
           InkWell(
-            onTap: () {},
+            onTap: () {
+              if (this.mounted) {
+                setState(() {
+                  _isGoing = !_isGoing;
+
+                  if(_queryTimer == null) {
+                    _queryTimer = Timer(Duration(seconds: 1), () { _handleTimer(false); });
+                  }
+                });
+              }
+            },
             child: SizedBox(
               width: (screen.width - 40) / 3,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: <Widget>[
-                    Icon(Icons.check_circle_outline,),
+                    Icon(_isGoing ? Icons.check_circle : Icons.check_circle_outline,
+                      color: Colors.blueAccent,
+                    ),
                     Text("Going"),
                   ],
                 ),
@@ -354,7 +435,9 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: <Widget>[
-                    Icon(Icons.share),
+                    Icon(Icons.share,
+                      color: Colors.green,
+                    ),
                     Text("Share"),
                   ],
                 ),
@@ -363,6 +446,33 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildHost() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.only(left: 20, top: 20),
+          child: Text("Host",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+        ),
+        ListTile(
+          onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => UserProfileScreen(_host))),
+          leading: CircleAvatar(
+            backgroundImage: _host.picture != null
+            ? NetworkImage(_host.picture)
+            : AssetImage("assets/images/no-image.jpg")
+          ),
+          title: Text(_host.name),
+          subtitle: Text(_host.email),
+        ),
+      ],
     );
   }
 
@@ -376,6 +486,14 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 16,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 20),
+            child: Text(_event.startTime.toString(),
+              style: TextStyle(
+                fontSize: 16,
+              ),
             ),
           ),
           Padding(
@@ -474,7 +592,10 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
           _buildHost(),
           Divider(height: 1,),
           _buildDescription(),
-          Divider(height: 1),
+          Container(
+            height: 10,
+            color: Colors.grey[200],
+          ),
           _buildLocationInfo(),
           Divider(height: 1),
           _buildGoogleMap(),
@@ -498,16 +619,13 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
   }
 
   Widget _buildGoogleMap() {
-    final screen = MediaQuery.of(context).size;
-
     return SizedBox(
       height: 150,
-      width: screen.width * 0.8,
       child: GoogleMap(
         onMapCreated: _onMapCreated,
         options: GoogleMapOptions(
           rotateGesturesEnabled: false,
-          scrollGesturesEnabled: false,
+          // scrollGesturesEnabled: false,
           cameraPosition: CameraPosition(
             target: LatLng(_placeData.latitude, _placeData.longitude),
             zoom: 17
@@ -526,7 +644,7 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
           onPressed: () {
             Navigator.of(context).pop();
           },
-          icon: Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back,),
         ),
       ),
       Expanded(
@@ -551,7 +669,8 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
 
     return SizedBox(
       child: Container(
-        color: Color(0x0F000000),
+        color: Color.fromARGB(200, 255, 255, 255),
+        // color: Color(0x0F000000),
         child: Row(
           children: row,
         ),

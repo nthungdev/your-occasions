@@ -23,15 +23,6 @@ class UploadAvatarPageState extends State<UploadAvatarPage> {
   File _imageFile;
   Image _image;
   String _imageURL;
-  // List<PopupMenuItem> _selectImageOptions = 
-  //   [
-  //     PopupMenuItem(
-  //       child: Text("Choose from gallery"),
-  //     ),
-  //     PopupMenuItem(
-  //       child: Text("From camera"),
-  //     ),
-  //   ];
   
   @override
   initState() {
@@ -105,23 +96,36 @@ class UploadAvatarPageState extends State<UploadAvatarPage> {
     var screen = MediaQuery.of(context).size;
 
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         SizedBox(
-          width: screen.width * 0.5,
-          child: RaisedButton(
-            onPressed: () {
-              _getImage(ImageSource.camera);
-            },
-            child: Text("Select image from camera"),
+          width: screen.width,
+          child: Material(
+            color: Colors.redAccent,
+            child: InkWell(
+              onTap: () {
+                _getImage(ImageSource.camera);
+              },
+              child: Container(
+                padding: EdgeInsets.all(20),
+                child: Center(child: Text("Capture image from camera")),
+              ),
+            ),
           ),
         ),
         SizedBox(
-          width: screen.width * 0.5,
-          child: RaisedButton(
-            onPressed: () {
-              _getImage(ImageSource.gallery);
-            },
-            child: Text("Select image from gallery"),
+          width: screen.width,
+          child: Material(
+            color: Colors.blueAccent,
+            child: InkWell(
+              onTap: () {
+                _getImage(ImageSource.gallery);
+              },
+              child: Container(
+                padding: EdgeInsets.all(20),
+                child: Center(child: Text("Select image from gallery")),
+              ),
+            ),
           ),
         )
       ],
@@ -177,6 +181,9 @@ class UploadAvatarPageState extends State<UploadAvatarPage> {
               _buildImageFrame(),
               SizedBox(
                 height: screen.height * 0.05,
+              ),
+              Expanded(
+                child: SizedBox(),
               ),
               _buildButtons(),
             ]

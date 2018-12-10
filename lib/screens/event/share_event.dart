@@ -5,28 +5,16 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server/gmail.dart';
 
-import 'package:youroccasions/controllers/event_category_controller.dart';
 import 'package:youroccasions/controllers/friend_list_controller.dart';
-import 'package:youroccasions/models/event_comment.dart';
 import 'package:youroccasions/models/friend_list.dart';
-import 'package:youroccasions/screens/event/comment_input.dart';
-import 'package:youroccasions/screens/event/comment_tile.dart';
-import 'package:youroccasions/screens/event/reply_comment_page.dart';
 import 'package:youroccasions/screens/event/share_user_card.dart';
 
-import 'package:youroccasions/screens/home/home.dart';
-import 'package:youroccasions/screens/event/update_event.dart';
 import 'package:youroccasions/models/event.dart';
-import 'package:youroccasions/controllers/event_controller.dart';
-import 'package:youroccasions/screens/user/user_profile.dart';
 import 'package:youroccasions/models/user.dart';
 import 'package:youroccasions/controllers/user_controller.dart';
 import 'package:youroccasions/models/data.dart';
 import 'package:youroccasions/utilities/secret.dart';
 import 'package:youroccasions/utilities/places.dart';
-
-
-
 
 class ShareEventScreen extends StatefulWidget {
   final Event event;
@@ -41,6 +29,7 @@ class ShareEventScreen extends StatefulWidget {
 
 class ShareEventScreenState extends State<ShareEventScreen>{
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+  GlobalKey<FormFieldState> _messageKey = GlobalKey<FormFieldState>();
   FocusNode _messageNode = FocusNode();
   TextEditingController _messageController = TextEditingController();
   List<User> _friends;
@@ -120,10 +109,12 @@ class ShareEventScreenState extends State<ShareEventScreen>{
   Widget _buildMessageInput() {
     return SizedBox(
       child: TextFormField(
+        key: _messageKey,
         focusNode: _messageNode,
         controller: _messageController,
         textInputAction: TextInputAction.next,
         keyboardType: TextInputType.text,
+        maxLength: 200,
         validator: (name) => (name.length < 6) ? "Please provide a message with at least 6 characters" : null,
         autofocus: false,
         maxLines: null, /// Extend as type
@@ -147,16 +138,25 @@ class ShareEventScreenState extends State<ShareEventScreen>{
           user: friend,
           onSend: _sendStatus[friend.id] ? null : 
           () {
-            if (_messageController.text.isEmpty) {
-              showSnackbar("Please write a message!");
-            }
-            else {
+            var result = _messageKey.currentState.validate();
+            // if (_messageController.text.isEmpty) {
+            //   showSnackbar("Please write a message!");
+            // }
+            // else {
+            //   _sendEmail(friend.email);
+            //   setState(() {
+            //     _sendStatus[friend.id] = true;
+            //   });
+            //   print(_sendStatus);
+            // }
+            if (result) {
               _sendEmail(friend.email);
               setState(() {
                 _sendStatus[friend.id] = true;
               });
               print(_sendStatus);
             }
+
           }
         )
       );

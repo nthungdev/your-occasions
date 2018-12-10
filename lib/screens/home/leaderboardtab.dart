@@ -14,6 +14,7 @@ class LeaderboardTabView extends StatefulWidget {
 class _LeaderboardTabView extends State<LeaderboardTabView> {
   bool _hasData1;
   bool _hasData2;
+  bool _gotData = false;
   // bool _hasData3;
   // bool _hasData4;
   
@@ -69,6 +70,12 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
         });
       }
     });
+
+    if (this.mounted) {
+      setState(() {
+        _gotData = true;
+      });
+    }
   }
   
   // get hosts with the highest views
@@ -239,7 +246,9 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
   Widget build(BuildContext context) {
     return new Container(
       color: Colors.white,
-      child: RefreshIndicator(
+      child: !_gotData
+      ? Center(child: CircularProgressIndicator(),)
+      : RefreshIndicator(
         onRefresh: _refresh,
         child: ListView(
           padding: const EdgeInsets.all(15.0),

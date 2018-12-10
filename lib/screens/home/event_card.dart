@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:youroccasions/models/data.dart';
 import 'dart:async';
 
 import 'package:youroccasions/screens/event/event_detail.dart';
@@ -50,14 +51,12 @@ class _SmallEventCardState extends State<SmallEventCard> {
 
   void _getData() async {
     try {
-      var userId = await getUserId();
-      var result = await _interestedEventController.getUserInterestedEvent(eventId: widget.event.id, userId: userId);
-
+      var result = await _interestedEventController.getUserInterestedEvent(eventId: widget.event.id, userId: Dataset.currentUser.value.id);
       _gotData = true;
 
       if (this.mounted) {
         setState(() {
-          _isInterested = !(result.isEmpty) ? true : false;
+          _isInterested = (result.isNotEmpty) ? true : false;
         });
       }
     } 

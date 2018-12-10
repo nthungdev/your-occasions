@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:youroccasions/screens/home/interested_events.dart';
 import 'package:youroccasions/screens/setting/setting.dart';
 import 'package:youroccasions/screens/user/upload_avatar.dart';
 import './other_page.dart';
@@ -23,6 +24,8 @@ class HomeDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var screen = MediaQuery.of(context).size;
+
     return Drawer(
       child: Column(
         children: <Widget>[
@@ -50,6 +53,10 @@ class HomeDrawer extends StatelessWidget {
                   onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => CreateEventScreen())),
                 ),
                 ListTile (
+                  title: Text ("My Interested Events"),
+                  onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => MyInterestedEventsPage())),
+                ),
+                ListTile (
                   title: Text ("Change Avatar"),
                   onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => UploadAvatarPage(Dataset.currentUser.value))),
                 ),
@@ -60,16 +67,24 @@ class HomeDrawer extends StatelessWidget {
               ],
             ),
           ),
-          ListTile (
-            title: Text ("Logout",
-              style: TextStyle(
-                color: Colors.red
-              ),
-            ),
+          GestureDetector(
             onTap: () async {
               await logout();
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginWithEmailScreen()));
             },
+            child: SizedBox(
+              width: screen.width,
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                color: Colors.red,
+                child: Text ("Logout",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold
+                  ),
+                ),
+              ),
+            ),
           ),
         ],
       ),

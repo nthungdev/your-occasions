@@ -54,7 +54,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
   bool _invalidEnd;
   bool _invalidCategory;
 
-  List<PopupMenuItem> _selectImageOptions;
+  List<PopupMenuItem<ImageSource>> _selectImageOptions;
 
   Map<String, ValueNotifier<bool>> _selectCategoryValue;
   List<PopupMenuItem> _selectCategoryOptions;
@@ -84,10 +84,12 @@ class _CreateEventScreen extends State<CreateEventScreen> {
     _noImageError = false;
 
     _selectImageOptions = [
-      PopupMenuItem(
+      PopupMenuItem<ImageSource>(
+        value: ImageSource.gallery,
         child: Text("Choose from gallery"),
       ),
-      PopupMenuItem(
+      PopupMenuItem<ImageSource>(
+        value: ImageSource.camera,
         child: Text("From camera"),
       ),
     ];
@@ -163,9 +165,13 @@ class _CreateEventScreen extends State<CreateEventScreen> {
 
   void _getImage(ImageSource source) {
     ImagePicker.pickImage(source: source).then((image) {
-      setState(() {
-        _image = image;
-      });
+      if (image != null) {
+        if (this.mounted) {
+          setState(() {
+            _image = image;
+          });
+        }
+      }
     });
   }
 
@@ -435,16 +441,19 @@ class _CreateEventScreen extends State<CreateEventScreen> {
     if (_image == null) {
       result = Container(
         color: Colors.white,
-        child: ButtonBar(children: <Widget>[
-          MaterialButton(
-            onPressed: () => _getImage(ImageSource.camera),
-            child: Text("Get image from camera"),
-          ),
-          MaterialButton(
-            onPressed: () => _getImage(ImageSource.gallery),
-            child: Text("Get image from gallery"),
-          ),
-        ]),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            MaterialButton(
+              onPressed: () => _getImage(ImageSource.camera),
+              child: Text("Take picture from camera"),
+            ),
+            MaterialButton(
+              onPressed: () => _getImage(ImageSource.gallery),
+              child: Text("Get picture from gallery"),
+            ),
+          ]
+        ),
       );
     } else {
       result = Stack(
@@ -464,8 +473,12 @@ class _CreateEventScreen extends State<CreateEventScreen> {
               child: SizedBox(
                 width: 30,
                 height: 30,
-                child: PopupMenuButton(
-                  onSelected: (item) {},
+                child: PopupMenuButton<ImageSource>(
+                  onSelected: (item) {
+                    print("item selected");
+                    print(item.toString());
+                    _getImage(item);
+                  },
                   child: Icon(
                     Icons.edit,
                     semanticLabel: "Change image",
@@ -553,72 +566,71 @@ class _CreateEventScreen extends State<CreateEventScreen> {
             ),
             child: Row(
               children: <Widget>[
-                SizedBox(
-                  child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
-                      child: Text(
-                        "Start Date",
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Color(0xFF757575),
-                          fontWeight: FontWeight.bold
-                        )
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        popUpSelectStartDate(context);
-                      },
-                      child: Text(
-                        _getDateFormatted(startDate),
-                        style: TextStyle(
-                          letterSpacing: 2,
-                          fontSize: 14,
-                          color: _invalidStart ? Colors.red : Colors.grey[500],
-                          fontFamily: "Monaco"
+                Expanded(
+                  child: SizedBox(
+                    child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Text(
+                          "Start Date",
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Color(0xFF757575),
+                            fontWeight: FontWeight.bold
+                          )
                         ),
                       ),
-                    ),
-                  ],
-                )),
-                Expanded(
-                  child: SizedBox(),
+                      GestureDetector(
+                        onTap: () {
+                          popUpSelectStartDate(context);
+                        },
+                        child: Text(
+                          _getDateFormatted(startDate),
+                          style: TextStyle(
+                            letterSpacing: 2,
+                            fontSize: 14,
+                            color: _invalidStart ? Colors.red : startDate == null ? Colors.grey[500] : Colors.black,
+                            fontFamily: "Monaco"
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
                 ),
-                SizedBox(
-                    child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
-                      child: Text(
-                        "Time",
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Color(0xFF757575),
-                          fontWeight: FontWeight.bold
-                        )
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        selectStartTime(context);
-                      },
-                      child: Text(
-                        _getTimeFormatted(startTime),
-                        style: TextStyle(
-                          letterSpacing: 2,
-                          fontSize: 14,
-                          color: _invalidStart ? Colors.red : startTime == null ? Colors.grey[500] : Colors.black,
-                          fontFamily: "Monaco"),
-                      ),
-                    ),
-                  ],
-                )),
                 Expanded(
-                  child: SizedBox(),
+                  child: SizedBox(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 5),
+                          child: Text(
+                            "Time",
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Color(0xFF757575),
+                              fontWeight: FontWeight.bold
+                            )
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            selectStartTime(context);
+                          },
+                          child: Text(
+                            _getTimeFormatted(startTime),
+                            style: TextStyle(
+                              letterSpacing: 2,
+                              fontSize: 14,
+                              color: _invalidStart ? Colors.red : startTime == null ? Colors.grey[500] : Colors.black,
+                              fontFamily: "Monaco"),
+                          ),
+                        ),
+                      ],
+                    )
+                  ),
                 ),
               ],
             ),
@@ -635,71 +647,69 @@ class _CreateEventScreen extends State<CreateEventScreen> {
             ),
             child: Row(
               children: <Widget>[
-                SizedBox(
-                  child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
-                      child: Text(
-                        "End Date",
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Color(0xFF757575),
-                          fontWeight: FontWeight.bold
-                        )
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        selectEndDate(context);
-                      },
-                      child: Text(
-                        _getDateFormatted(endDate),
-                        style: TextStyle(
-                          letterSpacing: 2,
-                          fontSize: 14,
-                          color: _invalidEnd ? Colors.red : Colors.grey[500],
-                          fontFamily: "Monaco"),
-                      ),
-                    ),
-                  ],
-                )),
                 Expanded(
-                  child: SizedBox(),
+                  child: SizedBox(
+                    child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Text(
+                          "End Date",
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Color(0xFF757575),
+                            fontWeight: FontWeight.bold
+                          )
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          selectEndDate(context);
+                        },
+                        child: Text(
+                          _getDateFormatted(endDate),
+                          style: TextStyle(
+                            letterSpacing: 2,
+                            fontSize: 14,
+                            color: _invalidEnd ? Colors.red : endDate == null ? Colors.grey[500] : Colors.black,
+                            fontFamily: "Monaco"),
+                        ),
+                      ),
+                    ],
+                  )),
                 ),
-                SizedBox(
-                  child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
-                      child: Text(
-                        "Time",
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Color(0xFF757575),
-                          fontWeight: FontWeight.bold
-                        )
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        selectEndTime(context);
-                      },
-                      child: Text(
-                        _getTimeFormatted(endTime),
-                        style: TextStyle(
-                          letterSpacing: 2,
-                          fontSize: 14,
-                          color: _invalidEnd ? Colors.red : endTime == null ? Colors.grey[500] : Colors.black,
-                          fontFamily: "Monaco"),
-                      ),
-                    ),
-                  ],
-                )),
                 Expanded(
-                  child: SizedBox(),
+                  child: SizedBox(
+                    child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Text(
+                          "Time",
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Color(0xFF757575),
+                            fontWeight: FontWeight.bold
+                          )
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          selectEndTime(context);
+                        },
+                        child: Text(
+                          _getTimeFormatted(endTime),
+                          style: TextStyle(
+                            letterSpacing: 2,
+                            fontSize: 14,
+                            color: _invalidEnd ? Colors.red : endTime == null ? Colors.grey[500] : Colors.black,
+                            fontFamily: "Monaco"),
+                        ),
+                      ),
+                    ],
+                  )),
                 ),
               ],
             ),
@@ -771,7 +781,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
         maxLines: null, /// Extend as type
         onFieldSubmitted: (term) async {
           _locationNameNode.unfocus();
-          if (term.length >= 6) {
+          if (term.isNotEmpty) {
             PlaceSearch ps = PlaceSearch.instance;
             _placeData = await ps.search(term);
             print(_placeData.address);
@@ -816,12 +826,12 @@ class _CreateEventScreen extends State<CreateEventScreen> {
         controller: addressController,
         textInputAction: TextInputAction.next,
         keyboardType: TextInputType.text,
-        validator: (name) => (name.length < 6) ? "Please provide an address with at least 6 characters" : null,
+        validator: (name) => (name.length < 3) ? "Please provide an address with at least 3 characters" : null,
         autofocus: false,
         maxLines: null, /// Extend as type
         onFieldSubmitted: (term) async {
           _addressNode.unfocus();
-          if (term.length >= 6) {
+          if (term.length >= 3) {
             PlaceSearch ps = PlaceSearch.instance;
             _placeData = await ps.search(term);
             print(_placeData.address);
@@ -902,7 +912,10 @@ class _CreateEventScreen extends State<CreateEventScreen> {
       _buildStartDateInput(),
       _buildCategoryInput(),
       _buildLocationNameInput(),
-      _buildAddressInput()
+      _buildAddressInput(),
+      SizedBox(
+        height: 30,
+      )
     ]);
 
     if (_showMap) {
@@ -938,7 +951,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text(
-          "CREATE EVENTS",
+          "CREATE EVENT",
           style: TextStyle(color: Colors.black),
         ),
         leading: IconButton(
@@ -955,7 +968,8 @@ class _CreateEventScreen extends State<CreateEventScreen> {
             onPressed: _submit,
             child: Text("SAVE",
               style: TextStyle(
-                color: Colors.blueAccent
+                color: Colors.blueAccent,
+                fontSize: 18
               ),
             ),
           )

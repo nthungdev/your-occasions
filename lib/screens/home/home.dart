@@ -31,7 +31,7 @@ class _HomeScreen extends State<HomeScreen> with SingleTickerProviderStateMixin 
 
   final List<Widget> _myTabViews = <Widget>[
     FeedTabView(),
-    SocialTabView(),
+    FriendsTabView(),
     LeaderboardTabView(),
   ];
 
@@ -131,7 +131,7 @@ class _HomeScreen extends State<HomeScreen> with SingleTickerProviderStateMixin 
                 _title = "Feed";
                 break;
               case 1:
-                _title = "Social";
+                _title = "Friends";
                 break;
               case 2:
                 _title = "Leaderboard";

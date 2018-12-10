@@ -20,7 +20,7 @@ final FriendListController friendController = FriendListController();
 class UserProfileScreen extends StatefulWidget {
   final User user;
 
-  UserProfileScreen(User user) :  this.user = user;
+  UserProfileScreen(this.user);
 
   @override
   _UserProfileScreenState createState() => _UserProfileScreenState();
@@ -175,9 +175,9 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
     }
 
     Widget e = Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: Text(
-        user == currentUser? "My Events" : "User's Events",
+        user == currentUser? "My events" : "${user.name}'s events",
         style: TextStyle(color: Colors.white, fontSize: 30.0, fontFamily: "Niramit")
       ),
     );
@@ -422,6 +422,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
               ),
               info(textTheme),
               new Container(
+                padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: _buildUserEventsCardList(),
@@ -454,6 +455,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
               ),
               info(textTheme),
               new Container(
+                padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: _buildUserEventsCardList(),

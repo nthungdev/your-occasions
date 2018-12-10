@@ -46,7 +46,7 @@ class _BottomMenu extends State<BottomMenu> {
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.people),
-          title: Text("Social"),
+          title: Text("Friends"),
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.equalizer),

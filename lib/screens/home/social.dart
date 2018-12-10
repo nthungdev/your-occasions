@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:youroccasions/controllers/friend_list_controller.dart';
-import 'package:youroccasions/models/friend_list.dart';
-import 'package:youroccasions/screens/user/user_card.dart';
 import 'package:youroccasions/models/user.dart';
 import 'package:youroccasions/controllers/user_controller.dart';
 import 'package:youroccasions/screens/user/user_profile.dart';
@@ -13,16 +11,16 @@ import 'package:youroccasions/models/data.dart';
 final FriendListController _friendController = FriendListController();
 final UserController _userController = UserController();
 
-class SocialTabView extends StatefulWidget {
+class FriendsTabView extends StatefulWidget {
   @override
-  _SocialTabView createState() => _SocialTabView();
+  FriendsTabViewState createState() => FriendsTabViewState();
 }
 
-class _SocialTabView extends State<SocialTabView> {
-  
+class FriendsTabViewState extends State<FriendsTabView> {
   User currentUser = Dataset.currentUser.value;
   List<User> following;
   var data;
+  bool _gotData = false;
 
   @override
   void initState() {
@@ -33,29 +31,37 @@ class _SocialTabView extends State<SocialTabView> {
   }
 
   Future<void> _refresh() async {
-      await _getFollowing();
+    await _getFollowing();
+
+    if (this.mounted) {
+      setState(() {
+        _gotData = true;
+      });
+    }
   }
 
   Future<void> _getFollowing() async {
-      var temp = await _friendController.getFriendList(userId: currentUser.id);
+    var temp = await _friendController.getFriendList(userId: currentUser.id);
+    if (this.mounted) {
       setState(() {
         data = temp;
       });
-      List<User> users = List<User>();
+    }
+    List<User> users = List<User>();
 
-      for (var friend in data){
-        User temp = await _userController.getUserWithId(friend.friendId);
-        users.add(temp);
-      }
-      
-      FollowDataset.following.value = users;
-      // print(data[0].userId);
-      // print(users);
-      if(this.mounted) {
-        setState(() {
-          following = FollowDataset.following.value;
-        });
-      }
+    for (var friend in data){
+      User temp = await _userController.getUserWithId(friend.friendId);
+      users.add(temp);
+    }
+    
+    FollowDataset.following.value = users;
+    // print(data[0].userId);
+    // print(users);
+    if(this.mounted) {
+      setState(() {
+        following = FollowDataset.following.value;
+      });
+    }
   }
 
   Widget _buildUser(User user){
@@ -144,30 +150,17 @@ class _SocialTabView extends State<SocialTabView> {
       ),
     );
 
-    // return new Material(
-    //   child: Container(
-    //     decoration: linearGradient,
-    //     child: Padding(
-    //     padding: const EdgeInsets.all(15.0),
-    //     child: Text("Social page", style: TextStyle(fontSize: 30.0, fontFamily: "Niramit"),),
-    //    ),
-    //  )
-    // );
-    // if (following.isEmpty){
-    //   return new Scaffold(
-    //     body: new Container(
-    //       child: new Text('You currently have no friends', style: TextStyle(color: Colors.black, fontSize: 20))
-    //     )
-    //   );
-    // }
-    return Material(
-      child: new Container(
-        // color: Colors.orange,
-        // color: Colors.red,
-        // padding: EdgeInsets.symmetric(horizontal: 10.0),
-        color: Colors.white,
-        // decoration: linearGradient,
-        child: RefreshIndicator(
+    return new Container(
+      color: Colors.white,
+      child: !_gotData 
+      ? Center(child: CircularProgressIndicator(),)
+      : following.isEmpty 
+        ? Center(child: Text("You have not followed anyone",
+            style: TextStyle(
+              fontSize: 20
+            ),
+          ),)
+        : RefreshIndicator(
             onRefresh: _refresh,
             child: ListView(
               physics: AlwaysScrollableScrollPhysics(),
@@ -175,8 +168,7 @@ class _SocialTabView extends State<SocialTabView> {
               addAutomaticKeepAlives: false, // Force to kill the Card
               children: _buildFriends(),
             ),
-          )
-      ),
+        )
     );
   }
 }
