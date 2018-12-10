@@ -39,7 +39,7 @@ class UploadAvatarPageState extends State<UploadAvatarPage> {
   void _getImage(ImageSource source) {
     ImagePicker.pickImage(source: source).then((image) {
       setState(() {
-        _imageFile = image;
+        _image = Image.file(image);
       });
     });
   }
