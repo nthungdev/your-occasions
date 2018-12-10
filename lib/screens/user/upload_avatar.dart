@@ -31,7 +31,7 @@ class UploadAvatarPageState extends State<UploadAvatarPage> {
 
     
     if (_imageURL != null) {
-      _image = Image.network(_imageURL);
+      _image = Image.network(_imageURL, fit: BoxFit.cover);
     }
   }
 
@@ -39,7 +39,8 @@ class UploadAvatarPageState extends State<UploadAvatarPage> {
   void _getImage(ImageSource source) {
     ImagePicker.pickImage(source: source).then((image) {
       setState(() {
-        _image = Image.file(image);
+        // _imageFile = image;
+        _image = Image.file(image, fit: BoxFit.cover);
       });
     });
   }
@@ -81,15 +82,17 @@ class UploadAvatarPageState extends State<UploadAvatarPage> {
         _image = Image.asset("assets/images/no-image-avatar.jpg", fit: BoxFit.cover,);
       }
       else {
-        _image = Image.file(_imageFile, fit: BoxFit.fitWidth,);
+        _image = Image.file(_imageFile, fit: BoxFit.cover);
       }
     }
     
     return SizedBox(
-      height: screen.height * 0.50,
-      width: screen.height * 0.50,
+      width: screen.width,
+      height: screen.width,
+      // child: Image.asset("assets/images/no-image.jpg", fit: BoxFit.cover,),
       child: _image,
     );
+
   }
 
   Widget _buildButtons() {
