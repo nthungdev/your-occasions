@@ -151,7 +151,7 @@ class FriendsTabViewState extends State<FriendsTabView> {
     );
 
     return new Container(
-      color: Colors.white,
+      color: Colors.white70,
       child: !_gotData 
       ? Center(child: CircularProgressIndicator(),)
       : following.isEmpty 
