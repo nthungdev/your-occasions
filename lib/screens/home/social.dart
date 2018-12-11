@@ -20,7 +20,7 @@ class FriendsTabViewState extends State<FriendsTabView> {
   User currentUser = Dataset.currentUser.value;
   List<User> following;
   var data;
-  bool _gotData = false;
+  static bool _gotData = false;
 
   @override
   void initState() {
@@ -72,8 +72,8 @@ class FriendsTabViewState extends State<FriendsTabView> {
           backgroundImage: user.picture != null? NetworkImage(user.picture) 
           : AssetImage("assets/images/no-image-avatar.jpg"),
         ),
-      title: Text(user.name),
-      subtitle: Text(user.email),
+      title: Text(user.name, style: TextStyle(color: Colors.white)),
+      subtitle: Text(user.email, style: TextStyle(color: Colors.white)),
     );
   }
 
@@ -144,14 +144,16 @@ class FriendsTabViewState extends State<FriendsTabView> {
         end: FractionalOffset.bottomLeft,
         colors: <Color>[
           // Colors.blue,
-          Colors.blue,
-          Colors.white,
+          Colors.deepPurpleAccent,
+          Colors.indigoAccent,
+          Colors.blueAccent,
+          Colors.lightBlue
         ],
       ),
     );
 
     return new Container(
-      color: Colors.white70,
+      decoration: linearGradient,
       child: !_gotData 
       ? Center(child: CircularProgressIndicator(),)
       : RefreshIndicator(

@@ -55,7 +55,8 @@ class YourOccasions extends StatelessWidget {
       title: 'Your Occasions',
       theme: ThemeData(
         // backgroundColor: Colors.red,
-        primarySwatch: Colors.blue,
+        primaryColor: Colors.deepPurpleAccent,
+        // primarySwatch: Colors.red,
       ),
       home: home,
     );

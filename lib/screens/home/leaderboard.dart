@@ -265,7 +265,18 @@ class _LeaderboardState extends State<Leaderboard> {
 
   @override
   Widget build(BuildContext context) {
-  final screen = MediaQuery.of(context).size;
+    final screen = MediaQuery.of(context).size;
+    var linearGradient = const BoxDecoration(
+      gradient: const LinearGradient(
+        begin: FractionalOffset.centerRight,
+        end: FractionalOffset.bottomLeft,
+        colors: <Color>[
+          // Colors.blue,
+          Colors.deepPurpleAccent,
+          Colors.transparent,
+        ],
+      ),
+    );
 
     if(widget.leadingHeading != null && widget.contentHeading != null && widget.trailingHeading != null) {
       return Container(
@@ -282,10 +293,11 @@ class _LeaderboardState extends State<Leaderboard> {
             ),
             Container(
               padding: EdgeInsets.symmetric(vertical: 5.0),
-              decoration: BoxDecoration(
-                color: Colors.blueAccent,
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(10.0), topRight: Radius.circular(10.0))
-              ),
+              color: Colors.black26,
+              // decoration: BoxDecoration(
+              //   color: Colors.blueAccent,
+              //   borderRadius: BorderRadius.only(topLeft: Radius.circular(10.0), topRight: Radius.circular(10.0))
+              // ),
               child: Row(
                 children: <Widget>[
                   Expanded(
@@ -325,7 +337,7 @@ class _LeaderboardState extends State<Leaderboard> {
             Container(
               padding: EdgeInsets.all(0.0),
               decoration: BoxDecoration(
-                color: Colors.amberAccent,
+                color: Colors.white54,
                 borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10.0), bottomRight: Radius.circular(10.0)),
               ),
               child: Column(

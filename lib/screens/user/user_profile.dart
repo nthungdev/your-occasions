@@ -363,12 +363,14 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
     var theme = Theme.of(context);
     var textTheme = theme.textTheme;
     var linearGradient = const BoxDecoration(
-      gradient: const LinearGradient(
+      gradient: LinearGradient(
         begin: FractionalOffset.centerRight,
         end: FractionalOffset.bottomLeft,
         colors: <Color>[
-          Colors.blue,
-          Colors.white,
+          Colors.deepPurpleAccent,
+          Colors.indigoAccent,
+          Colors.blueAccent,
+          Colors.lightBlue
         ],
       ),
     );

@@ -244,8 +244,23 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
 
   @override
   Widget build(BuildContext context) {
+
+    var linearGradient = const BoxDecoration(
+      gradient: const LinearGradient(
+        begin: FractionalOffset.centerRight,
+        end: FractionalOffset.bottomLeft,
+        colors: <Color>[
+          // Colors.blue,
+          Colors.deepPurpleAccent,
+          Colors.indigoAccent,
+          Colors.blueAccent,
+          Colors.lightBlue
+        ],
+      ),
+    );
+
     return new Container(
-      color: Colors.white,
+      decoration: linearGradient,
       child: !_gotData
       ? Center(child: CircularProgressIndicator(),)
       : RefreshIndicator(
