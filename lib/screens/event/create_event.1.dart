@@ -2,56 +2,65 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:io';
 
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:youroccasions/controllers/event_category_controller.dart';
+import 'package:youroccasions/models/category.dart';
+import 'package:youroccasions/models/data.dart';
 import 'package:youroccasions/models/event.dart';
 import 'package:youroccasions/controllers/event_controller.dart';
-import 'package:youroccasions/utilities/config.dart';
+import 'package:youroccasions/utilities/places.dart';
 import 'package:youroccasions/utilities/secret.dart';
+import 'package:youroccasions/utilities/cloudinary.dart';
 import 'package:youroccasions/screens/event/event_detail.dart';
 
-import 'package:youroccasions/utilities/cloudinary.dart';
 
 final EventController _eventController = EventController();
-bool _isSigningUp = false;
 
 class UpdateEventScreen extends StatefulWidget {
   final Event event;
 
-  UpdateEventScreen(Event event) :  this.event = event;
+  UpdateEventScreen(this.event);
   
   @override
-  _UpdateEventScreen createState() => _UpdateEventScreen();
+  UpdateEventScreenState createState() => UpdateEventScreenState();
 }
 
-class _UpdateEventScreen extends State<UpdateEventScreen> {
-  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+class UpdateEventScreenState extends State<UpdateEventScreen> {
   GlobalKey<FormState> formKey;
+  GlobalKey<ScaffoldState> _scaffoldKey;
+
+  FocusNode _eventTitleNode;
+  FocusNode _descriptionNode;
+  FocusNode _locationNameNode;
+  FocusNode _addressNode;
+
   TextEditingController nameController;
   TextEditingController descriptionController;
   TextEditingController categoryController;
-  FocusNode _eventTitleNode = FocusNode();
-  FocusNode _descriptionNode = FocusNode();
-  FocusNode _c = FocusNode();
+  TextEditingController locationNameController;
+  TextEditingController addressController;
+
+  GoogleMapController mapController;
+
+  PlaceData _placeData;
+
   DateTime startDate;
   TimeOfDay startTime;
   DateTime endDate;
   TimeOfDay endTime;
-  String start;
-  String end;
-  Event event;
-  File _image;
+  
   String _imageURL;
+  File _image;
+  bool _showMap = false;
+  bool _noImageError = false;
+
+  bool _isSigningUp;
 
   bool _invalidStart = false;
   bool _invalidEnd = false;
   bool _invalidCategory = false;
-  List<String> _selectCategoryName = [];
-  List<PopupMenuItem> _selectCategoryOptions = [];
 
-  bool _imageChanged;
-  bool _noImageError = false;
-  double _contentWidth = 0.8;
   List<PopupMenuItem<ImageSource>> _selectImageOptions = [
     PopupMenuItem<ImageSource>(
       value: ImageSource.gallery,
@@ -63,18 +72,33 @@ class _UpdateEventScreen extends State<UpdateEventScreen> {
     ),
   ];
 
+  Map<String, ValueNotifier<bool>> _selectCategoryValue;
+  List<PopupMenuItem> _selectCategoryOptions = [];
+  List<String> _selectCategoryName = [];
+
+  double _contentWidth = 0.8;
+
   @override
   initState() {
     super.initState();
-    startDate = DateTime.now();
-    startTime = TimeOfDay.now();
-    event = widget.event;
-    _imageChanged = false;
     formKey = GlobalKey<FormState>();
-    nameController = TextEditingController(text: widget.event.name ?? "");
-    descriptionController = TextEditingController(text: widget.event.description ?? "");
-    categoryController = TextEditingController(text: widget.event.category ?? "");
-    
+    _scaffoldKey = GlobalKey<ScaffoldState>();
+    _eventTitleNode = FocusNode();
+    _descriptionNode = FocusNode();
+    _locationNameNode = FocusNode();
+    _addressNode = FocusNode();
+    nameController = TextEditingController();
+    descriptionController = TextEditingController();
+    categoryController = TextEditingController();
+    locationNameController = TextEditingController();
+    addressController = TextEditingController();
+
+    _selectCategoryValue = Map<String, ValueNotifier<bool>>();
+
+    _imageURL = widget.event.picture;
+
+    // Generate check box list tile
+    _generateCategoryContent();
   }
 
   @override
@@ -83,20 +107,102 @@ class _UpdateEventScreen extends State<UpdateEventScreen> {
     nameController.dispose();
     descriptionController.dispose();
     categoryController.dispose();
+    addressController.dispose();
   }
 
-  void retrieveImageURL() {
-    var url = fetch("event_header/${widget.event.id}");
+  void _onMapCreated(GoogleMapController controller) {
+    setState(() { mapController = controller; });
+    mapController.clearMarkers();
+    mapController.addMarker(MarkerOptions(
+      position: LatLng(_placeData.latitude, _placeData.longitude)
+    ));
   }
-  
-  void getImage(ImageSource source) {
-    print(_imageChanged);
-    ImagePicker.pickImage(source: source).then((image) {
-      setState(() {
-        _imageChanged = true;
-        _image = image;
-      });
+
+  void _generateCategoryContent() {
+    Categories.all.forEach((category) {
+      _selectCategoryValue[category.name] = ValueNotifier<bool>(false);
+
+      _selectCategoryOptions.add(
+        PopupMenuItem(
+          value: category.name,
+          child: AnimatedBuilder(
+            animation: _selectCategoryValue[category.name],
+            builder: (context, child) {
+              return CheckboxListTile(
+                title: Text(category.name),
+                value: _selectCategoryValue[category.name].value,
+                onChanged: (value) {
+                  print("value changed to $value");
+                  _selectCategoryValue[category.name].value = value;
+                  setState(() {
+                    if (value) {
+                      _selectCategoryName.add(category.name);
+                    }
+                    else {
+                      _selectCategoryName.remove(category.name);
+                    }
+                  });
+                },
+              );
+            },
+          ),
+        )
+      );
     });
+  }
+
+  String _getCategoryInput() {
+    String result = "";
+    _selectCategoryName.forEach((category) {
+      result += category;
+      if (_selectCategoryName.indexOf(category) != _selectCategoryName.length - 1) {
+        result += ", ";
+      }
+    });
+    return result;
+  }
+
+  void _getImage(ImageSource source) {
+    ImagePicker.pickImage(source: source).then((image) {
+      if (image != null) {
+        if (this.mounted) {
+          setState(() {
+            _image = image;
+          });
+        }
+      }
+    });
+  }
+
+  bool _validateDateTime() {
+    _invalidStart = false;
+    _invalidEnd = false;
+
+    if (startDate == null || startTime == null) {
+      _invalidStart = true;
+      print("false here 4");
+      return false;
+    }
+
+    // if (endDate == null && endTime == null) {
+    //   _invalidEnd = true;
+    //   print("false here 3");
+    //   return false;
+    // }
+    if (startDate != null && endDate != null && startDate.compareTo(endDate) > 0) {
+      _invalidStart = true;
+      print("false here");
+      return false;
+    }
+    if (startDate != null && endDate != null &&  startDate.compareTo(endDate) == 0) {
+      if (endTime != null && startTime != null && endTime.hour - startTime.hour < 0) {
+        _invalidEnd = true;
+        print("false here 2");
+        return false;
+      }
+    }
+
+    return true;
   }
 
   bool _autoValidateDateTime() {
@@ -188,195 +294,150 @@ class _UpdateEventScreen extends State<UpdateEventScreen> {
     });
   }
 
-  String _getCategoryInput() {
-    String result = "";
-    _selectCategoryName.forEach((category) {
-      result += category;
-      if (_selectCategoryName.indexOf(category) != _selectCategoryName.length - 1) {
-        result += ", ";
-      }
-    });
-    return result;
-  }
-
-
   void _submit() async {
-    final form = formKey.currentState;
+    String message = "";
+    
+    if (_image == null) {
+      message += "Please add an image for the event\n";
+    }
 
-    if (form.validate()) {
-      form.save();
-      bool result = await update();
+    if (_selectCategoryName.length == 0) {
+      message += "Please select category for the event";
+    }
+
+    if (message.isNotEmpty) {
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text(message),
+      ));
+    }
+
+
+    print("before validate");
+    bool validateTime = _validateDateTime();
+    bool validateForm = formKey.currentState.validate();
+    // formKey.currentState.validate();
+    if (validateForm && validateTime && _selectCategoryName.length != 0) {
+      print("inside validate");
+      formKey.currentState.save();
+
+      bool result = await create();
       print(result);
+
       // if(result) {
       //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => EventDetailScreen()));
       // }
     }
-  }
-
-  Widget selectImageButton() {
-    var screen = MediaQuery.of(context).size;
-
-    if (_image == null) {
-      return ButtonBar(
-        children: <Widget>[
-          MaterialButton(
-            onPressed: () => getImage(ImageSource.camera),
-            child: Text("Get image from camera"),
-          ),
-          MaterialButton(
-            onPressed: () => getImage(ImageSource.gallery),
-            child: Text("Get image from gallery"),
-          ),
-        ] 
-      );
-    }
     else {
-      return SizedBox(
-        height: screen.height / 3,
-        width: screen.width,
-        child: Image.file(_image, fit: BoxFit.fitWidth,)
-      );
+      print("validate fail");
     }
-  }
-  
-  Widget updateButton() {
-    return Padding(
-        padding: EdgeInsets.symmetric(vertical: 16.0),
-        child: Material(
-          borderRadius: BorderRadius.circular(30.0),
-          shadowColor: Colors.lightBlueAccent.shade100,
-          elevation: 5.0,
-          child: MaterialButton(
-            minWidth: 200.0,
-            height: 42.0,
-            onPressed: () async {
-              _submit();
-            },
-            // color: Colors.lightBlueAccent,
-            child: Text('Update', style: TextStyle(color: Colors.black)),
-          ),
-        ));
+
+    // setState(() { });
   }
 
-  Widget nameForm() {
-    return Container(
-      margin: const EdgeInsets.all(10.0),
-      width: 260.0,
-      child: TextFormField(
-        controller: nameController,
-        keyboardType: TextInputType.emailAddress,
-        // validator: (name) => !isPassword(name) ? "Invalid name" : null,
-        autofocus: false,
-        // initialValue: widget.event.name,
-        decoration: InputDecoration(
-          hintText: 'Event Name',
-          contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-          border:
-              OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
-        ),
-      ));
-  }
+  Future<bool> create() async {
+    String url;
+    Cloudinary cl = Cloudinary(CLOUDINARY_API_KEY, API_SECRET);
 
-  Widget descriptionForm() {
-    return Container(
-        margin: const EdgeInsets.all(10.0),
-        width: 260.0,
-        child: TextFormField(
-          controller: descriptionController,
-          keyboardType: TextInputType.emailAddress,
-          // validator: (name) => !isPassword(name) ? "Invalid description" : null,
-          autofocus: false,
-          decoration: InputDecoration(
-            hintText: 'Event Description',
-            contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-            border:
-                OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
-          ),
-        ));
-  }
-
-  Widget categoryForm() {
-    return Container(
-        margin: const EdgeInsets.all(10.0),
-        width: 260.0,
-        // color: const Color(0xFF00FF00),
-        child: TextFormField(
-          controller: categoryController,
-          keyboardType: TextInputType.emailAddress,
-          // validator: (password) => !isName(password) ? "Invalid!" : null,
-          autofocus: false,
-          decoration: InputDecoration(
-            hintText: 'Category',
-            contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-            border:
-                OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
-          ),
-        ));
-  }
-
-  Future<bool> update() async {
+    print("DEBUG: creating event");
     if (!_isSigningUp) {
       _isSigningUp = true;
 
-      String url;
-      if(_imageChanged) {
-        Cloudinary cl = Cloudinary(CLOUDINARY_API_KEY, API_SECRET);
-        url = await cl.upload(file: toDataURL(file: _image), preset: Presets.eventCover, path: "${widget.event.id}/cover");
-        print(url);
+      startDate = DateTime(
+        startDate.year, 
+        startDate.month, 
+        startDate.day,
+        startTime.hour, 
+        startTime.minute
+      );
+
+      if (endDate != null) {
+        endDate = DateTime(
+          endDate.year, 
+          endDate.month, 
+          endDate.day,
+          endTime.hour, 
+          endTime.minute);
       }
 
-      final start = new DateTime(startDate.year, startDate.month, startDate.day, startTime.hour, startTime.minute);
-      if (endDate != null){
-        endDate = new DateTime(endDate.year, endDate.month, endDate.day, endTime.hour, endTime.minute);
-      }
       String name = nameController.text;
       String description = descriptionController.text;
-      String category = categoryController.text;
-      String hostId = await getUserId();
-      // String location = "Plattsburgh";
-      Event newEvent = Event(hostId: hostId, name: name, description: description, category: category, startTime: start, endTime: endDate);
-      print("DEBUG new event is : $newEvent");
+      // String category = categoryController.text;
+      String hostId = Dataset.currentUser.value.id;
       
-      if(url != null) {
-        _eventController.update(event.id, hostId: hostId, name: name, description: description, category: category, startTime: start, endTime: endDate, picture: url);
-      }
-      else {
-        _eventController.update(event.id, hostId: hostId, name: name, description: description, category: category, startTime: start, endTime: endDate);
-      }
+      // if (_image == null) {
+      //   _isSigningUp = false;
+      //   print("Please select an event image");
+      // }
+      Event newEvent = Event(
+        hostId: hostId,
+        name: name,
+        description: description,
+        startTime: startDate,
+        endTime: endDate,
+        address: _placeData?.address,
+        locationName: _placeData?.name,
+        placeId: _placeData?.placeId,
+      );
+
+      
+      print("DEBUG new event is : $newEvent");
+      Event createdEvent = await _eventController.insert(newEvent);
+
+      EventCategoryController ec = EventCategoryController();
+      await ec.bulkInsert(_selectCategoryName, createdEvent.id);
+      
+      print("DEBUG name is : ${newEvent.name}");
+      print("Your event is created successfully!");
+      // print("Create failed");
+
+      // Event createdEvent =
+      //     (await _eventController.getEvents(hostId: hostId, name: name))[0];
+      // print("DEBUG: $createdEvent");
+
+      url = await cl.upload(
+        file: toDataURL(file: _image),
+        preset: Presets.eventCover,
+        path: "${createdEvent.id}/cover"
+      );
+      print("DEBUG url: $url");
+      await _eventController.update(createdEvent.id, picture: url);
+      createdEvent.picture = url;
+
       _isSigningUp = false;
 
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => EventDetailScreen(newEvent)));
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => EventDetailScreen(createdEvent)));
+
       return true;
     }
+    _isSigningUp = false;
     return false;
   }
 
-  Widget _buildCoverImage() {
-    if (_imageURL == null) {
-      return selectImageButton();
-    }
-    else {
-      return Image.network(_imageURL);
-    }
-  }
-
-  void _getImage(ImageSource source) {
-    ImagePicker.pickImage(source: source).then((image) {
-      if (image != null) {
-        if (this.mounted) {
-          setState(() {
-            _image = image;
-          });
-        }
-      }
-    });
+  Widget createButton() {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 16.0),
+      child: Material(
+        borderRadius: BorderRadius.circular(30.0),
+        shadowColor: Colors.lightBlueAccent.shade100,
+        elevation: 5.0,
+        child: MaterialButton(
+          minWidth: 200.0,
+          height: 42.0,
+          onPressed: _submit,
+          // color: Colors.lightBlueAccent,
+          child: Text('Create', style: TextStyle(color: Colors.black)),
+        ),
+      ));
   }
 
   Widget _buildSelectImageSection() {
     var screen = MediaQuery.of(context).size;
     Widget result;
 
-    if (_image == null) {
+    if (_imageURL == null && _image == null) {
       result = Container(
         color: Colors.white,
         child: Column(
@@ -399,10 +460,12 @@ class _UpdateEventScreen extends State<UpdateEventScreen> {
         children: <Widget>[
           SizedBox(
             width: screen.width,
-            child: Image.file(
-              _image,
-              fit: BoxFit.fitWidth,
-            )),
+            child: _imageURL != null 
+            ? Image.network(_imageURL)
+            : Image.file(
+                _image,
+                fit: BoxFit.fitWidth,
+              )),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Container(
@@ -429,6 +492,12 @@ class _UpdateEventScreen extends State<UpdateEventScreen> {
         ],
       );
     }
+
+    return SizedBox(
+      height: screen.height / 3,
+      width: screen.width,
+      child: result,
+    );
   }
 
   Widget _buildEventTitleInput() {
@@ -698,6 +767,125 @@ class _UpdateEventScreen extends State<UpdateEventScreen> {
     );
   }
 
+  Widget _buildLocationNameInput() {
+    final screen = MediaQuery.of(context).size;
+
+    return SizedBox(
+      width: screen.width * _contentWidth,
+      child: TextFormField(
+        focusNode: _locationNameNode,
+        controller: locationNameController,
+        textInputAction: TextInputAction.next,
+        keyboardType: TextInputType.text,
+        validator: (name) => (name.length < 3) ? "Please provide a name with at least 3 characters" : null,
+        autofocus: false,
+        maxLines: null, /// Extend as type
+        onFieldSubmitted: (term) async {
+          _locationNameNode.unfocus();
+          if (term.isNotEmpty) {
+            PlaceSearch ps = PlaceSearch.instance;
+            _placeData = await ps.search(term);
+            print(_placeData.address);
+            if (_placeData != null) {
+              addressController.text = _placeData.address;
+              locationNameController.text = _placeData.name;
+
+              if (mapController == null) {
+                setState(() {
+                  _showMap = true;     
+                });
+              }
+              else if (mapController != null) {
+                mapController.clearMarkers();
+                mapController.addMarker(MarkerOptions(
+                  position: LatLng(_placeData.latitude, _placeData.longitude)
+                ));
+                mapController.animateCamera(CameraUpdate.newCameraPosition(
+                  CameraPosition(
+                    target: LatLng(_placeData.latitude, _placeData.longitude),
+                    zoom: 17
+                  )
+                ));
+              }
+            }
+          }
+        },
+        maxLengthEnforced: false,
+        decoration: InputDecoration(
+          labelText: "Location Name",
+          labelStyle: TextStyle(fontWeight: FontWeight.bold)),
+      ));
+  }
+
+  Widget _buildAddressInput() {
+    final screen = MediaQuery.of(context).size;
+
+    return SizedBox(
+      width: screen.width * _contentWidth,
+      child: TextFormField(
+        focusNode: _addressNode,
+        controller: addressController,
+        textInputAction: TextInputAction.next,
+        keyboardType: TextInputType.text,
+        validator: (name) => (name.length < 3) ? "Please provide an address with at least 3 characters" : null,
+        autofocus: false,
+        maxLines: null, /// Extend as type
+        onFieldSubmitted: (term) async {
+          _addressNode.unfocus();
+          if (term.length >= 3) {
+            PlaceSearch ps = PlaceSearch.instance;
+            _placeData = await ps.search(term);
+            print(_placeData.address);
+            if (_placeData != null) {
+              addressController.text = _placeData.address;
+              locationNameController.text = _placeData.name;
+
+              if (mapController == null) {
+                setState(() {
+                  _showMap = true;     
+                });
+              }
+              else if (mapController != null) {
+                mapController.clearMarkers();
+                mapController.addMarker(MarkerOptions(
+                  position: LatLng(_placeData.latitude, _placeData.longitude)
+                ));
+                mapController.animateCamera(CameraUpdate.newCameraPosition(
+                  CameraPosition(
+                    target: LatLng(_placeData.latitude, _placeData.longitude),
+                    zoom: 17
+                  )
+                ));
+              }
+            }
+          }
+        },
+        maxLengthEnforced: false,
+        decoration: InputDecoration(
+          labelText: "Address",
+          labelStyle: TextStyle(fontWeight: FontWeight.bold)),
+      ));
+  }
+
+  Widget _buildGoogleMap() {
+    final screen = MediaQuery.of(context).size;
+
+    return SizedBox(
+      height: 300,
+      width: screen.width * 0.8,
+      child: GoogleMap(
+        onMapCreated: _onMapCreated,
+        options: GoogleMapOptions(
+          rotateGesturesEnabled: false,
+          scrollGesturesEnabled: false,
+          cameraPosition: CameraPosition(
+            target: LatLng(_placeData.latitude, _placeData.longitude),
+            zoom: 17
+          )
+        ),
+      ),
+    );
+  }
 
   List<Widget> _buildListViewContent() {
     List<Widget> result = List<Widget>();
@@ -724,34 +912,36 @@ class _UpdateEventScreen extends State<UpdateEventScreen> {
       _buildDescriptionInput(),
       _buildStartDateInput(),
       _buildCategoryInput(),
-      // _buildLocationNameInput(),
-      // _buildAddressInput(),
+      _buildLocationNameInput(),
+      _buildAddressInput(),
       SizedBox(
         height: 30,
       )
     ]);
 
-    // if (_showMap) {
-    //   result.addAll([
-    //     Padding(
-    //       padding: EdgeInsets.symmetric(vertical: 10),
-    //       child: _buildGoogleMap()
-    //     )
-    //   ]);
-    // }
+    if (_showMap) {
+      result.addAll([
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 10),
+          child: _buildGoogleMap()
+        )
+      ]);
+    }
 
-    // if (_invalidCategory) {
-    //   result.add(
-    //     Container(
-    //       child: Text(
-    //         "Please add at least 1 category for the event!",
-    //         style: TextStyle(
-    //           color: Colors.red
-    //         ),
-    //       ),
-    //     )
-    //   );
-    // }
+    if (_invalidCategory) {
+      result.add(
+        Container(
+          child: Text(
+            "Please add at least 1 category for the event!",
+            style: TextStyle(
+              color: Colors.red
+            ),
+          ),
+        )
+      );
+    }
+
+    // result.add(createButton());
 
     return result;
   }
@@ -789,63 +979,22 @@ class _UpdateEventScreen extends State<UpdateEventScreen> {
       ),
       body: SafeArea(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Expanded(
-              child: Form(
-                key: formKey,
-                child: ListView(
-                  children: _buildListViewContent(),
-                ),
+              child: ListView(
+                children: <Widget>[
+                  Form(
+                    key: formKey,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: _buildListViewContent(),
+                    )
+                  ),
+                ],
               ),
             )
           ],
         ),
       ));
   }
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return new Scaffold(
-  //     appBar: AppBar(
-  //       title: Text("Update Event"),
-  //     ),
-  //     body: Center(
-  //       child: Form(
-  //         key: formKey,
-  //         child: ListView(
-            
-  //           // mainAxisAlignment: MainAxisAlignment.center,
-  //           children: <Widget>[
-  //             _buildCoverImage(),
-  //             nameForm(),
-  //             descriptionForm(),
-  //             categoryForm(),
-  //             new Text('Start Date Selected: $start'),
-  //             new RaisedButton(
-  //               child: new Text('Select Date'),
-  //               onPressed: (){selectStartDate(context);}
-  //             ),
-  //             new Text('Start Time Selected: ${startTime.toString().substring(10,15)}'),
-  //             new RaisedButton(
-  //               child: new Text('Select Time'),
-  //               onPressed: (){selectStartTime(context);}
-  //             ),
-  //             new Text('End Date Selected: $end'),
-  //             new RaisedButton(
-  //               child: new Text('Select Date'),
-  //               onPressed: (){selectEndDate(context);}
-  //             ),
-  //             new Text('End Time Selected: ${endTime.toString()}'),
-  //             new RaisedButton(
-  //               child: new Text('Select Time'),
-  //               onPressed: (){selectEndTime(context);}
-  //             ),
-  //             updateButton(),
-  //           ]
-  //         ),
-  //       )
-  //     )
-  //   );
-  // }
 }

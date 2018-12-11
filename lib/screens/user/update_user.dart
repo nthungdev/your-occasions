@@ -1,15 +1,11 @@
-//import 'dart:io';
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:youroccasions/models/data.dart';
-import 'package:youroccasions/screens/home/home.dart';
 import 'package:youroccasions/models/user.dart';
 import 'package:youroccasions/controllers/user_controller.dart';
-import 'package:youroccasions/screens/login/login.dart';
-//import 'package:youroccasions/utilities/config.dart';
 import 'package:youroccasions/utilities/validator..dart';
 
 final UserController _userController = UserController();
@@ -199,7 +195,7 @@ class _UpdateUserScreen extends State<UpdateUserScreen> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(45))),
         color: Colors.blue,
         onPressed: (){Navigator.pop(context,true);},
-        child: Text('Cancel', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        child: Text('CANCEL', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
       ),
     );
   }
@@ -426,6 +422,7 @@ class _UpdateUserScreen extends State<UpdateUserScreen> {
       key: _scaffoldKey,
       backgroundColor: Colors.white,
       appBar: AppBar(
+        title: Text("UPDATE PROFILE", style: TextStyle(color: Colors.black),),
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(

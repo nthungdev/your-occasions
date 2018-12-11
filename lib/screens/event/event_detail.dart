@@ -16,7 +16,7 @@ import 'package:youroccasions/screens/event/reply_comment_page.dart';
 import 'package:youroccasions/screens/event/share_event.dart';
 
 import 'package:youroccasions/screens/home/home.dart';
-import 'package:youroccasions/screens/event/update_event.dart';
+import 'package:youroccasions/screens/event/create_event.1.dart';
 import 'package:youroccasions/models/event.dart';
 import 'package:youroccasions/controllers/event_controller.dart';
 import 'package:youroccasions/screens/user/user_profile.dart';
@@ -42,6 +42,7 @@ class EventDetailScreen extends StatefulWidget {
 
 class _EventDetailScreenState extends State<EventDetailScreen>{
   final GlobalKey<FormFieldState> commentKey = GlobalKey<FormFieldState>();
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   Event _event;
   User _host;
   // User _currentUser = Dataset.currentUser.value;
@@ -400,7 +401,12 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
           ),
           InkWell(
             onTap: () {
-              if (this.mounted) {
+              if (_event.startTime.compareTo(DateTime.now()) < 0) {
+                _scaffoldKey.currentState.showSnackBar(
+                  SnackBar(content: Text("The event has past"),)
+                );
+              }
+              else if (this.mounted) {
                 setState(() {
                   _isGoing = !_isGoing;
 
@@ -681,6 +687,7 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       body: SafeArea(
         child: Container(
           child: !_gotData

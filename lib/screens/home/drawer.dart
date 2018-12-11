@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'package:youroccasions/screens/home/interested_events.dart';
 import 'package:youroccasions/screens/setting/setting.dart';
 import 'package:youroccasions/screens/user/upload_avatar.dart';
-import './other_page.dart';
-
-import 'package:youroccasions/screens/home/home.dart';
 import 'package:youroccasions/screens/user/user_profile.dart';
 import 'package:youroccasions/screens/event/create_event.dart';
 import 'package:youroccasions/screens/login/login.dart';
@@ -75,7 +73,7 @@ class HomeDrawer extends StatelessWidget {
             child: SizedBox(
               width: screen.width,
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                 color: Colors.red,
                 child: Text ("Logout",
                   style: TextStyle(

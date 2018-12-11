@@ -41,12 +41,12 @@ class FriendsTabViewState extends State<FriendsTabView> {
   }
 
   Future<void> _getFollowing() async {
-    var temp = await _friendController.getFriendList(userId: currentUser.id);
-    if (this.mounted) {
-      setState(() {
-        data = temp;
-      });
-    }
+    var data = await _friendController.getFriendList(userId: currentUser.id);
+    // if (this.mounted) {
+    //   setState(() {
+    //     data = temp;
+    //   });
+    // }
     List<User> users = List<User>();
 
     for (var friend in data){

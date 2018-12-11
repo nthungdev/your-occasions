@@ -22,8 +22,6 @@ class _HomeScreen extends State<HomeScreen> with SingleTickerProviderStateMixin 
   /// _currentPage -> 0: home | 1: social | 2: leaderboard
   UserController controller = UserController();
   int _currentPage = 0;
-  String _accountName;
-  String _accountEmail;
   String id;
   PageController _pageController;
   BottomMenu bottomMenu;
@@ -41,26 +39,7 @@ class _HomeScreen extends State<HomeScreen> with SingleTickerProviderStateMixin 
   void initState() {
     super.initState();
     _pageController = PageController();
-    _title = "Feed";
-
-    // getUserName().then((value) {
-    //   setState(() {
-    //     _accountName = value;
-    //   });
-    // });
-    // getUserEmail().then((value) {
-    //   setState(() {
-    //     _accountEmail = value;
-    //   });
-    // });
-    // getUserId().then((value) {
-    //   id = value;
-    //   Dataset.userId.value = id;
-    //   getCurrentUser(id);
-    // });
-
-    _accountName = Dataset.currentUser.value.name;
-    _accountEmail = Dataset.currentUser.value.email;
+    _title = "FEED";
 
     print("User's picture: \n");
     print(Dataset.currentUser.value.picture);   
@@ -107,8 +86,6 @@ class _HomeScreen extends State<HomeScreen> with SingleTickerProviderStateMixin 
 
   @override
   Widget build(BuildContext context) {
-    
-    // getCurrentUser(Dataset.currentUser.value.id);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -128,13 +105,13 @@ class _HomeScreen extends State<HomeScreen> with SingleTickerProviderStateMixin 
             _currentPage = index;   
             switch (index) {
               case 0:
-                _title = "Feed";
+                _title = "FEED";
                 break;
               case 1:
-                _title = "Friends";
+                _title = "FRIENDS";
                 break;
               case 2:
-                _title = "Leaderboard";
+                _title = "LEADERBOARD";
                 break;
               default:
                 _title = "Unknown Page";
