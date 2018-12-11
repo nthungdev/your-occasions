@@ -224,8 +224,8 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
         begin: FractionalOffset.centerRight,
         end: FractionalOffset.bottomLeft,
         colors: <Color>[
-          Colors.blue[200],
-          Colors.white,
+          // Colors.blue[200],
+          // Colors.white,
           Colors.deepPurpleAccent,
           Colors.indigoAccent,
           Colors.blueAccent,
