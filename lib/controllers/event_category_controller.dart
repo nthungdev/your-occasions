@@ -4,10 +4,12 @@ import 'package:youroccasions/controllers/base_controller.dart';
 import 'package:youroccasions/models/event_category.dart';
 import 'package:youroccasions/exceptions/UpdateQueryException.dart';
 
-class EventCategoryController extends BaseController{
+class EventCategoryController extends BaseController {
   // PROPERTIES //
 
   // CONSTRUCTORS //
+  // CONSTRUCTORS //
+  EventCategoryController() : super();
 
   // GETTERS //
 
@@ -43,7 +45,18 @@ class EventCategoryController extends BaseController{
 
     await disconnect();
   }
-  /// Delete an existing row from user_interested_events table.
+  
+
+  /// Delete rows from event_categories table.
+  Future<void> bulkDelete(int eventId) async {
+    await connect();
+
+    await connection.query("""DELETE FROM event_categories WHERE event_id = @event_id""", substitutionValues: { 'event_id': eventId });  
+
+    await disconnect();
+  }
+
+  /// Delete an existing row from event_categories table.
   Future<void> delete(eventId, String category) async {
     await connect();
 
@@ -52,27 +65,6 @@ class EventCategoryController extends BaseController{
     await disconnect();
   }
 
-  /// Update an existing row from user_interested_events table.
-  // Future<void> update(int event_id, String category, {int eventId, String category, DateTime creationDate}) async {
-  //   if(categoryId == null && eventId == null && category == null && creationDate == null) {
-  //     throw UpdateQueryException(); //
-  //   }
-  //   else {
-  //     await connect();
-
-  //     String query = "UPDATE event_categories SET ";
-  //     if(categoryId != null) { query += "category_id = $categoryId"; }
-  //     if(eventId != null) { query += "event_id = $eventId "; }
-  //     if(category != null) { query += "category = $category"; }
-  //     if(creationDate != null) { query += "creation_date = '$creationDate' "; }
-
-  //     query += " WHERE id = '$id'";
-
-  //     await connection.query(query); 
-
-  //     await disconnect();
-  //   }
-  // }
 
   Future<List<EventCategory>> getEventCategory({int eventId, String category}) async {
     if (eventId == null && category == null) {

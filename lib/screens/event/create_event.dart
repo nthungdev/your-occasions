@@ -86,11 +86,11 @@ class _CreateEventScreen extends State<CreateEventScreen> {
     _selectImageOptions = [
       PopupMenuItem<ImageSource>(
         value: ImageSource.gallery,
-        child: Text("Choose from gallery"),
+        child: Text("Choose image from gallery"),
       ),
       PopupMenuItem<ImageSource>(
         value: ImageSource.camera,
-        child: Text("From camera"),
+        child: Text("Take photo from camera"),
       ),
     ];
 
@@ -362,13 +362,8 @@ class _CreateEventScreen extends State<CreateEventScreen> {
 
       String name = nameController.text;
       String description = descriptionController.text;
-      // String category = categoryController.text;
       String hostId = Dataset.currentUser.value.id;
       
-      // if (_image == null) {
-      //   _isSigningUp = false;
-      //   print("Please select an event image");
-      // }
       Event newEvent = Event(
         hostId: hostId,
         name: name,
@@ -444,14 +439,29 @@ class _CreateEventScreen extends State<CreateEventScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            MaterialButton(
-              onPressed: () => _getImage(ImageSource.camera),
-              child: Text("Take picture from camera"),
+            // MaterialButton(
+            //   onPressed: () => _getImage(ImageSource.camera),
+            //   child: Text("Take picture from camera"),
+            // ),
+            // MaterialButton(
+            //   onPressed: () => _getImage(ImageSource.gallery),
+            //   child: Text("Get picture from gallery"),
+            // ),
+            PopupMenuButton<ImageSource>(
+              onSelected: (item) {
+                print("item selected");
+                print(item.toString());
+                _getImage(item);
+              },
+              child: Icon(
+                Icons.add_photo_alternate,
+                size: screen.width * 0.4,
+                semanticLabel: "Add image",
+                color: Colors.blueAccent,
+              ),
+              itemBuilder: (context) => _selectImageOptions,
             ),
-            MaterialButton(
-              onPressed: () => _getImage(ImageSource.gallery),
-              child: Text("Get picture from gallery"),
-            ),
+            // Text("Add image"),
           ]
         ),
       );

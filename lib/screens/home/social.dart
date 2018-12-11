@@ -42,11 +42,7 @@ class FriendsTabViewState extends State<FriendsTabView> {
 
   Future<void> _getFollowing() async {
     var data = await _friendController.getFriendList(userId: currentUser.id);
-    // if (this.mounted) {
-    //   setState(() {
-    //     data = temp;
-    //   });
-    // }
+    
     List<User> users = List<User>();
 
     for (var friend in data){
@@ -155,20 +151,22 @@ class FriendsTabViewState extends State<FriendsTabView> {
       child: !_gotData 
       ? Center(child: CircularProgressIndicator(),)
       : RefreshIndicator(
-            onRefresh: _refresh,
+          onRefresh: _refresh,
             child: following.isEmpty
-            ? Center(child: Text("You have not followed anyone",
-                style: TextStyle(
-                  fontSize: 20
+            ? Center(
+                child: Text("You have not followed anyone",
+                  style: TextStyle(
+                    fontSize: 20
+                  ),
                 ),
-              ),)
+              )
             : ListView(
               physics: AlwaysScrollableScrollPhysics(),
               padding: EdgeInsets.symmetric(horizontal: 10.0),
               addAutomaticKeepAlives: false, // Force to kill the Card
               children: _buildFriends(),
             ),
-        )
+      )
     );
   }
 }
