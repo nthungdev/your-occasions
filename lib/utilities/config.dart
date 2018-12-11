@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:youroccasions/screens/login/login.dart';
+
 /// This file interact with local data stored on user's device
 
 /// How preference's names are stored on the phone.
@@ -76,4 +78,6 @@ Future<void> logout() async {
 
   FirebaseAuth auth = FirebaseAuth.instance;
   await auth.signOut();
+
+  await facebookSignIn.logOut(); 
 }

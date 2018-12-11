@@ -25,15 +25,18 @@ const String ERROR_CODE_01 = "The password is invalid or the user does not have 
 const String ERROR_CODE_02 = "The email address is badly formatted";
 const String ERROR_CODE_03 = "There is no user record corresponding to this identifier. The user may have been deleted";
 const String ERROR_CODE_04 = "Given String is empty or null";
+final FacebookLogin facebookSignIn = new FacebookLogin();
 
 class LoginWithEmailScreen extends StatefulWidget {
   @override
   _LoginWithEmailScreen createState() => _LoginWithEmailScreen();
 }
 
+
 class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
   // Create a text controller. We will use it to retrieve the current value
   // of the TextField!
+  // static final FacebookLogin facebookSignIn = new FacebookLogin();
   TextEditingController passwordController;
   TextEditingController emailController;
   FocusNode emailNode;
@@ -238,15 +241,20 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
 
 
     var userName, email, pic, id;
-    FacebookLogin facebookSignIn = new FacebookLogin();
     FacebookLoginResult result = await facebookSignIn.logInWithReadPermissions(['email','public_profile']);
     // print(result.accessToken);
     //,publish_actions,manage_pages,publish_pages,user_status,user_videos,user_work_history
 
     switch (result.status) {
       case FacebookLoginStatus.loggedIn:
-        print("LoggedIn");
         var accessToken = result.accessToken;
+        print(
+          '''LoggedIn
+          Token: ${accessToken.token}
+          User id: ${accessToken.userId}
+          '''
+        );
+        
         // accessToken.permissions;
 
         var graphResponse = await http.get(
