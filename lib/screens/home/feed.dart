@@ -245,13 +245,12 @@ class _FeedTabView extends State<FeedTabView> {
 
   @override
   Widget build(BuildContext context) {
-    var linearGradient = const BoxDecoration(
-      gradient: const LinearGradient(
+    var linearGradient = BoxDecoration(
+      gradient: LinearGradient(
         begin: FractionalOffset.centerRight,
         end: FractionalOffset.bottomLeft,
         colors: <Color>[
-          // Colors.blue,
-          Colors.blue,
+          Colors.blue[200],
           Colors.white,
         ],
       ),

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:youroccasions/models/user.dart';
-import 'package:youroccasions/utilities/config.dart';
 import 'package:youroccasions/controllers/friend_list_controller.dart';
 import 'package:youroccasions/models/friend_list.dart';
 import 'package:youroccasions/controllers/user_controller.dart';
@@ -23,7 +22,6 @@ class SmallUserCard extends StatefulWidget {
 
 class _SmallUserCardState extends State<SmallUserCard> {
   FriendListController _friendListController;
-  UserController _userController;
   bool _isFollowed;
   bool _gotData;
   Timer _queryTimer;
@@ -32,7 +30,6 @@ class _SmallUserCardState extends State<SmallUserCard> {
   @override
   void initState() {
     super.initState();
-    _userController = UserController();
     _friendListController = FriendListController();
     _gotData = false;
     getData();
@@ -42,13 +39,11 @@ class _SmallUserCardState extends State<SmallUserCard> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    _userController = null;
     _friendListController = null;
   }
 
   void getData() async {
     try {
-      var userId = Dataset.userId.value;
       var result = await _friendListController.getFriend(currentUser.id, widget.user.id);
 
       _gotData = true;

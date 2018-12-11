@@ -157,7 +157,7 @@ class _LeaderboardItemState extends State<LeaderboardItem> {
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 image: DecorationImage(
-                                  fit: BoxFit.fill,
+                                  fit: BoxFit.cover,
                                   image: widget.imageUrl != null 
                                     ? NetworkImage(
                                       widget.imageUrl

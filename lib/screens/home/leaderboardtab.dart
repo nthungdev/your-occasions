@@ -74,7 +74,7 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
   // get hosts with the highest views
   Future<void> getTopHost() async {
     EventController ec = EventController();
-    
+
     var temp = await ec.getEvents();
     Map<String,int> topHostMap = Map();
     var hostIds = List();
@@ -219,8 +219,20 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
 
   @override
   Widget build(BuildContext context) {
+    var linearGradient = BoxDecoration(
+      gradient: LinearGradient(
+        begin: FractionalOffset.centerRight,
+        end: FractionalOffset.bottomLeft,
+        colors: <Color>[
+          Colors.blue[200],
+          Colors.white,
+        ],
+      ),
+    );
+
     return new Container(
-      color: Colors.white,
+      decoration: linearGradient,
+      // color: Colors.white,
       child: !_gotData
       ? Center(child: CircularProgressIndicator(),)
       : RefreshIndicator(

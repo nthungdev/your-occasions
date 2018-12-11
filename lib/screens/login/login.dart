@@ -236,6 +236,7 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
     // Map<String,dynamic> user = json.decode(response.body);
     // print(user);
 
+
     var userName, email, pic, id;
     FacebookLogin facebookSignIn = new FacebookLogin();
     FacebookLoginResult result = await facebookSignIn.logInWithReadPermissions(['email','public_profile']);
@@ -273,6 +274,7 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
         if (userFromDB != null && userFromDB.provider != "facebook") { 
           showSnackbar("Email is used");
           print("Email is used");
+          print(email);
           return;
         }
 
@@ -450,7 +452,7 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
               child: ListView(
                 children: <Widget>[
                   SizedBox(
-                    height: screen.width * 2 / 3,
+                    height: screen.height * 0.4,
                     width: screen.width * 2 / 3,
                     child: Center(
                       child: SizedBox(

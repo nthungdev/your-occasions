@@ -23,6 +23,7 @@ class UploadAvatarPageState extends State<UploadAvatarPage> {
   File _imageFile;
   Image _image;
   String _imageURL;
+  List<PopupMenuItem<ImageSource>> _selectImageOptions;
   
   @override
   initState() {
@@ -33,15 +34,28 @@ class UploadAvatarPageState extends State<UploadAvatarPage> {
     if (_imageURL != null) {
       _image = Image.network(_imageURL, fit: BoxFit.cover);
     }
+
+    _selectImageOptions = [
+      PopupMenuItem<ImageSource>(
+        value: ImageSource.gallery,
+        child: Text("Choose image from gallery"),
+      ),
+      PopupMenuItem<ImageSource>(
+        value: ImageSource.camera,
+        child: Text("Take photo from camera"),
+      ),
+    ];
   }
 
 
   void _getImage(ImageSource source) {
     ImagePicker.pickImage(source: source).then((image) {
-      setState(() {
-        // _imageFile = image;
-        _image = Image.file(image, fit: BoxFit.cover);
-      });
+      if (image != null) {
+        setState(() {
+          _image = Image.file(image, fit: BoxFit.cover);
+          _imageFile = image;
+        });
+      }
     });
   }
 
@@ -165,7 +179,7 @@ class UploadAvatarPageState extends State<UploadAvatarPage> {
             child: FlatButton(
               padding: EdgeInsets.all(0),
               onPressed: _saveImage,
-              child: Text("SAVE"),
+              child: Text("SAVE", style: TextStyle(fontSize: 18, color: Colors.blue),),
             ),
           )
         ],
@@ -178,17 +192,32 @@ class UploadAvatarPageState extends State<UploadAvatarPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              SizedBox(
-                height: screen.height * 0.05,
-              ),
-              _buildImageFrame(),
-              SizedBox(
-                height: screen.height * 0.05,
+              // Expanded(
+              //   child: SizedBox(),
+              // ),
+              Expanded(
+                flex: 3,
+                child: _buildImageFrame(),
               ),
               Expanded(
-                child: SizedBox(),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    FlatButton(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                      color: Colors.blue,
+                      onPressed: () {},
+                      child: PopupMenuButton<ImageSource>(
+                        onSelected: (item) {
+                          _getImage(item);
+                        },
+                        child: Text("EDIT", style: TextStyle(color: Colors.white,)),
+                        itemBuilder: (context) => _selectImageOptions,
+                      ),
+                    ),
+                  ],
+                )
               ),
-              _buildButtons(),
             ]
           ),
         ),

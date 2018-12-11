@@ -134,20 +134,20 @@ class FriendsTabViewState extends State<FriendsTabView> {
   
   @override
   Widget build(BuildContext context) {
-    var linearGradient = const BoxDecoration(
-      gradient: const LinearGradient(
-        begin: FractionalOffset.centerRight,
-        end: FractionalOffset.bottomLeft,
+    var linearGradient = BoxDecoration(
+      gradient:  LinearGradient(
+        begin: FractionalOffset.centerLeft,
+        end: FractionalOffset.bottomRight,
         colors: <Color>[
-          // Colors.blue,
-          Colors.blue,
+          Colors.blue[200],
           Colors.white,
         ],
       ),
     );
 
     return new Container(
-      color: Colors.white70,
+      decoration: linearGradient,
+      // color: Colors.white70,
       child: !_gotData 
       ? Center(child: CircularProgressIndicator(),)
       : RefreshIndicator(

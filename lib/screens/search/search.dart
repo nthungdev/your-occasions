@@ -26,7 +26,12 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
   TabController _tabController;
 
   final List<Tab> _myTabs = <Tab>[
-    Tab(text: "Events"),
+    Tab(
+      // text: "Events", 
+      child: Container(
+        // color: Colors.green,
+        child: Text("Events"),
+      ),),
     Tab(text: 'Hosts'),
   ];
 
@@ -95,6 +100,11 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
       controller: _searchController,
       onEditingComplete: onSearch,
       textInputAction: TextInputAction.search,
+      style: TextStyle(
+        fontSize: 24,
+        color: Colors.black,
+        decoration: TextDecoration.none,
+      ),
       decoration: InputDecoration(
         border: InputBorder.none,
         hintText: 'Search for...'
@@ -115,7 +125,7 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
         ),
         IconButton(
           disabledColor: Colors.transparent,
-          color: Colors.black,
+          color: Colors.red,
           icon: Icon(Icons.cancel),
           onPressed: _searchController.text.isEmpty ? null : onClearKeywordField,
         )
@@ -177,24 +187,6 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
     var screen = MediaQuery.of(context).size;
 
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        leading: IconButton(
-          onPressed: (){ Navigator.pop(context,true); },
-          icon: Icon(Icons.arrow_back, color: Colors.black,),
-        ),
-        actions: <Widget>[
-          IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.filter_list, color: Colors.black,)
-          )
-        ],
-        // bottom: TabBar(
-        //   tabs: _myTabs,
-        //   controller: _tabController,
-        // ),
-      ),
       floatingActionButton: FloatingActionButton(
         onPressed: onSearch,
         child: Icon(Icons.search),
@@ -204,23 +196,49 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
         padding: EdgeInsets.all(0),
         child: Column(
           children: <Widget>[
-            Container(
-              color: Colors.white,
-              child: Form(
-                key: _formKey,
-                child: _buildSearchBar()
-              ),
-            ),
-            PreferredSize(
-              preferredSize: Size(screen.width, 100),
-              child: Container(
-                color: Colors.white,
-                child: TabBar(
-                  indicatorColor: Colors.blue,
-                  labelColor: Colors.black,
-                  tabs: _myTabs,
-                  controller: _tabController,
-                ),
+            Material(
+              elevation: 2,
+              child: Column(
+                children: <Widget>[
+                  PreferredSize(
+                    preferredSize: Size(screen.width, 100),
+                    child: AppBar(
+                      elevation: 0,
+                      backgroundColor: Colors.white,
+                      leading: IconButton(
+                        onPressed: (){ Navigator.pop(context,true); },
+                        icon: Icon(Icons.arrow_back, color: Colors.black,),
+                      ),
+                      actions: <Widget>[
+                        // IconButton(
+                        //   onPressed: () {},
+                        //   icon: Icon(Icons.filter_list, color: Colors.black,)
+                        // )
+                      ],
+                    ),
+                  ),
+                  Container(
+                    color: Colors.white,
+                    child: Form(
+                      key: _formKey,
+                      child: _buildSearchBar()
+                    ),
+                  ),
+                  Container(child: Divider(height: 1,)),
+                  PreferredSize(
+                    preferredSize: Size(screen.width, 100),
+                    child: Container(
+                      color: Colors.white,
+                      child: TabBar(
+                        indicatorColor: Colors.blue,
+                        labelColor: Colors.blue,
+                        unselectedLabelColor: Colors.grey,
+                        tabs: _myTabs,
+                        controller: _tabController,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             Expanded(
