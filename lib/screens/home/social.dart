@@ -151,18 +151,18 @@ class FriendsTabViewState extends State<FriendsTabView> {
     );
 
     return new Container(
-      color: Colors.white,
+      color: Colors.white70,
       child: !_gotData 
       ? Center(child: CircularProgressIndicator(),)
-      : following.isEmpty 
-        ? Center(child: Text("You have not followed anyone",
-            style: TextStyle(
-              fontSize: 20
-            ),
-          ),)
-        : RefreshIndicator(
+      : RefreshIndicator(
             onRefresh: _refresh,
-            child: ListView(
+            child: following.isEmpty
+            ? Center(child: Text("You have not followed anyone",
+                style: TextStyle(
+                  fontSize: 20
+                ),
+              ),)
+            : ListView(
               physics: AlwaysScrollableScrollPhysics(),
               padding: EdgeInsets.symmetric(horizontal: 10.0),
               addAutomaticKeepAlives: false, // Force to kill the Card

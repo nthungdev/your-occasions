@@ -13,28 +13,28 @@ class SettingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: new AppBar(
-        title: Text("Settings"),
+        title: Text("Settings",style: TextStyle(fontWeight: FontWeight.bold),),
       ),
       body: new Container(
-        color: Colors.orange,
+        color: Colors.blue[200],
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             ListTile (
-              title: Text ("Edit Profile Picture"),
+              title: Text ("Edit Profile Picture", style: TextStyle(fontWeight: FontWeight.bold),),
               onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new UploadAvatarPage(Dataset.currentUser.value))),
           
             ),
             ListTile (
-              title: Text ("Suggest Improvements"),
+              title: Text ("Suggest Improvements", style: TextStyle(fontWeight: FontWeight.bold),),
               onTap:  () {Navigator.push(context, MaterialPageRoute(builder: (context) => SuggestImprovement ()));},
             ),
             ListTile (
-              title: Text ("Privacy Policy"),
+              title: Text ("Privacy Policy", style: TextStyle(fontWeight: FontWeight.bold),),
               onTap:  () {Navigator.push(context, MaterialPageRoute(builder: (context) => AboutPage()));},
             ),
             ListTile (
-              title: Text ("Logout"),
+              title: Text ("Logout", style: TextStyle(fontWeight: FontWeight.bold),),
               onTap: () async {
                 await logout();
                 Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginWithEmailScreen()));

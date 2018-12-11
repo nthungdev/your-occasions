@@ -326,7 +326,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
 
   Widget info(var textTheme){
     return new Padding(
-      padding: const EdgeInsets.all(24.0),
+      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 20),
       child: new Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -421,7 +421,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
               ),
               info(textTheme),
               new Container(
-                padding: EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: _buildUserEventsCardList(),
@@ -454,7 +454,7 @@ class _UserProfileScreenState extends State<UserProfileScreen>{
               ),
               info(textTheme),
               new Container(
-                padding: EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: _buildUserEventsCardList(),
