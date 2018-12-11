@@ -66,7 +66,7 @@ class FriendsTabViewState extends State<FriendsTabView> {
       onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => UserProfileScreen(user))),
       leading: CircleAvatar(
           backgroundImage: user.picture != null? NetworkImage(user.picture) 
-          : AssetImage("assets/images/no-image-avatar.jpg"),
+          : AssetImage("assets/images/no-avatar2.jpg"),
         ),
       title: Text(user.name, style: TextStyle(color: Colors.white)),
       subtitle: Text(user.email, style: TextStyle(color: Colors.white)),

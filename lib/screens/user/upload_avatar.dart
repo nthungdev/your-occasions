@@ -93,7 +93,7 @@ class UploadAvatarPageState extends State<UploadAvatarPage> {
 
     if (_imageURL == null) {
       if (_imageFile == null) {
-        _image = Image.asset("assets/images/no-image-avatar.jpg", fit: BoxFit.cover,);
+        _image = Image.asset("assets/images/no-avatar2.jpg", fit: BoxFit.cover,);
       }
       else {
         _image = Image.file(_imageFile, fit: BoxFit.cover);
@@ -161,7 +161,7 @@ class UploadAvatarPageState extends State<UploadAvatarPage> {
         elevation: 0,
         title: Text("UPLOAD AVATAR",
           style: TextStyle(
-            color: Colors.black
+            color: Colors.white
           ),
         ),
         leading: IconButton(
@@ -169,7 +169,7 @@ class UploadAvatarPageState extends State<UploadAvatarPage> {
             Navigator.of(context).pop();
           },
           icon: Icon(Icons.arrow_back,
-            color: Colors.black,
+            color: Colors.white,
           ),
         ),
         actions: <Widget>[
@@ -179,11 +179,10 @@ class UploadAvatarPageState extends State<UploadAvatarPage> {
             child: FlatButton(
               padding: EdgeInsets.all(0),
               onPressed: _saveImage,
-              child: Text("SAVE", style: TextStyle(fontSize: 18, color: Colors.blue),),
+              child: Text("SAVE", style: TextStyle(fontSize: 18, color: Colors.white),),
             ),
           )
         ],
-        backgroundColor: Colors.white,
       ),
       body: Container(
         padding: EdgeInsets.all(0),
@@ -203,16 +202,19 @@ class UploadAvatarPageState extends State<UploadAvatarPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    FlatButton(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                      color: Colors.blue,
-                      onPressed: () {},
-                      child: PopupMenuButton<ImageSource>(
-                        onSelected: (item) {
-                          _getImage(item);
-                        },
-                        child: Text("EDIT", style: TextStyle(color: Colors.white,)),
-                        itemBuilder: (context) => _selectImageOptions,
+                    PopupMenuButton<ImageSource>(
+                      onSelected: (item) {
+                        _getImage(item);
+                      },
+                      itemBuilder: (context) => _selectImageOptions,
+                      child: Container(
+                        width: screen.width * 0.2,
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          color: Colors.deepPurpleAccent
+                        ),
+                        child: Text("EDIT", style: TextStyle(color: Colors.white, ), textAlign: TextAlign.center,),
                       ),
                     ),
                   ],

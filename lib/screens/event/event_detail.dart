@@ -501,7 +501,7 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
           leading: CircleAvatar(
             backgroundImage: _host.picture != null
             ? NetworkImage(_host.picture)
-            : AssetImage("assets/images/no-image.jpg")
+            : AssetImage("assets/images/no-avatar2.jpg")
           ),
           title: Text(_host.name),
           subtitle: Text(_host.email),

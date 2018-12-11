@@ -131,6 +131,8 @@ class EventController extends BaseController {
       else if (startTime != null) { query += "start_time = '$startTime' "; }
     }
 
+    print(query);
+
     var queryResult = await connection.mappedResultsQuery(query);
 
     for (var item in queryResult) {

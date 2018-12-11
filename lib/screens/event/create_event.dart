@@ -48,7 +48,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
   bool _showMap = false;
   bool _noImageError;
 
-  bool _isSigningUp;
+  bool _isCreating;
 
   bool _invalidStart;
   bool _invalidEnd;
@@ -77,7 +77,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
     locationNameController = TextEditingController();
     addressController = TextEditingController();
 
-    _isSigningUp = false;
+    _isCreating = false;
     _invalidStart = false;
     _invalidEnd = false;
     _invalidCategory = false;
@@ -340,8 +340,8 @@ class _CreateEventScreen extends State<CreateEventScreen> {
     Cloudinary cl = Cloudinary(CLOUDINARY_API_KEY, API_SECRET);
 
     print("DEBUG: creating event");
-    if (!_isSigningUp) {
-      _isSigningUp = true;
+    if (!_isCreating) {
+      _isCreating = true;
 
       startDate = DateTime(
         startDate.year, 
@@ -399,7 +399,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
       await _eventController.update(createdEvent.id, picture: url);
       createdEvent.picture = url;
 
-      _isSigningUp = false;
+      _isCreating = false;
 
       Navigator.pushReplacement(
         context,
@@ -408,7 +408,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
 
       return true;
     }
-    _isSigningUp = false;
+    _isCreating = false;
     return false;
   }
 
@@ -457,7 +457,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
                 Icons.add_photo_alternate,
                 size: screen.width * 0.4,
                 semanticLabel: "Add image",
-                color: Colors.blueAccent,
+                color: Colors.deepPurpleAccent,
               ),
               itemBuilder: (context) => _selectImageOptions,
             ),
@@ -962,7 +962,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
       appBar: AppBar(
         title: Text(
           "CREATE EVENT",
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Colors.white),
         ),
         leading: IconButton(
           onPressed: () {
@@ -970,7 +970,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
           },
           icon: Icon(
             Icons.arrow_back,
-            color: Colors.black,
+            color: Colors.white
           ),
         ),
         actions: <Widget>[
@@ -978,13 +978,13 @@ class _CreateEventScreen extends State<CreateEventScreen> {
             onPressed: _submit,
             child: Text("SAVE",
               style: TextStyle(
-                color: Colors.blueAccent,
+                color: Colors.white,
                 fontSize: 18
               ),
             ),
           )
         ],
-        backgroundColor: Colors.white,
+        // backgroundColor: Colors.white,
       ),
       body: SafeArea(
         child: Column(

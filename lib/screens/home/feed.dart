@@ -21,7 +21,8 @@ class _FeedTabView extends State<FeedTabView> {
   // TODO Fix duplicate card issue. If there is multiple cards of the same event,
   // and 1 of them is interested, the other ones' interest status are not updated.
   List<Event> _upcomingEvents;
-  List<Event> _trendingEvents;
+  List<Event> _trendingMusic;
+  List<Event> _trendingParty;
   List<Event> _pastEvents;
 
   @override
@@ -29,7 +30,8 @@ class _FeedTabView extends State<FeedTabView> {
     super.initState();
     _pastEvents = FeedDataset.pastEvents.value;
     _upcomingEvents = FeedDataset.upcomingEvents.value;
-    _trendingEvents = FeedDataset.trendingEvents.value;
+    _trendingMusic = FeedDataset.trendingMusic.value;
+    _trendingParty = FeedDataset.trendingParty.value;
     loadData();
   }
 
@@ -37,7 +39,9 @@ class _FeedTabView extends State<FeedTabView> {
   void dispose() {
     super.dispose();
     _upcomingEvents = null;
-    _trendingEvents = null;
+    _trendingMusic = null;
+    _trendingParty = null;
+    _pastEvents = null;
   }
 
   Future<void> _refresh() async {
@@ -95,10 +99,36 @@ class _FeedTabView extends State<FeedTabView> {
     
     temp.sort((a,b) => a.views.compareTo(b.views));
 
-    FeedDataset.trendingEvents.value = temp;
+    FeedDataset.trendingMusic.value = temp;
     if(this.mounted) {
       setState(() {
-        _trendingEvents = FeedDataset.trendingEvents.value;
+        _trendingMusic = FeedDataset.trendingMusic.value;
+      });
+    }
+  }
+
+  Future _getTrendingPartyData() async {
+    // TODO don't get past event
+    EventController _ec = EventController();
+    EventCategoryController _ecc = EventCategoryController();
+    List<Event> temp = List<Event>();
+
+    var eventCategoryList = await _ecc.getEventCategory(category: Categories.party.name);
+    print(eventCategoryList);
+
+    for(int i = 0 ; i < eventCategoryList.length ; i++ ) {
+      var event = (await _ec.getEvents(id: eventCategoryList[i].eventId))[0];
+      if (event.startTime.compareTo(DateTime.now()) < 0) {
+        temp.add(event);
+      }
+    }
+    
+    temp.sort((a,b) => a.views.compareTo(b.views));
+
+    FeedDataset.trendingParty.value = temp;
+    if(this.mounted) {
+      setState(() {
+        _trendingParty = FeedDataset.trendingParty.value;
       });
     }
   }
@@ -186,7 +216,7 @@ class _FeedTabView extends State<FeedTabView> {
   List<Widget> _buildTrendingMusicEventsCardList(int count) {
     List<Widget> cards = List<Widget>();
 
-    if (_trendingEvents == null || _trendingEvents.length == 0) {
+    if (_trendingMusic == null || _trendingMusic.length == 0) {
       return cards;
     }
 
@@ -199,12 +229,12 @@ class _FeedTabView extends State<FeedTabView> {
     
     cards.add(e);
 
-    if(_trendingEvents == null || _trendingEvents.length == 0) {
+    if(_trendingMusic == null || _trendingMusic.length == 0) {
       cards.add(Center(child: CircularProgressIndicator()));
       return cards;
     }
 
-    _trendingEvents.forEach((Event currentEvent) {
+    _trendingMusic.forEach((Event currentEvent) {
       counter++;
       if(counter > count) return cards;
       
@@ -227,12 +257,54 @@ class _FeedTabView extends State<FeedTabView> {
     return cards;
   }
 
+  List<Widget> _buildTrendingPartyEventsCardList(int count) {
+    List<Widget> cards = List<Widget>();
+
+    if (_trendingParty == null || _trendingParty.length == 0) {
+      return cards;
+    }
+
+    int counter = 0;
+
+    Widget e = Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+      child: Text("Trending in Music", style: TextStyle(fontSize: 30.0, fontFamily: "Niramit")),
+    );
+    
+    cards.add(e);
+
+    if(_trendingParty == null || _trendingParty.length == 0) {
+      cards.add(Center(child: CircularProgressIndicator()));
+      return cards;
+    }
+
+    _trendingParty.forEach((Event currentEvent) {
+      counter++;
+      if(counter > count) return cards;
+      
+      cards.add(Padding(
+        padding: const EdgeInsets.only(bottom: 8.0),
+        child: SmallEventCard(
+          event: currentEvent,
+          imageURL: currentEvent.picture,
+          place: currentEvent.locationName ?? "Unname location",
+          time: currentEvent.startTime ?? DateTime.now(),
+          title: currentEvent.name ?? "Untitled event" ,
+        ),
+      ));
+    });
+
+    return cards;
+  }
+
+
   List<Widget> _buildListViewChildren() {
     // TO DO duplicate cards don't sync favorite status. 
     List<Widget> alist = List<Widget>();
 
     alist.addAll(_buildUpcomingEventsCardList(5));
     alist.addAll(_buildTrendingMusicEventsCardList(5));
+    alist.addAll(_buildTrendingPartyEventsCardList(5));
     alist.addAll(_buildPastEventsCardList(5));
     
     return alist;

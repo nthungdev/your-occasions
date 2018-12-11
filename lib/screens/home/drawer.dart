@@ -68,7 +68,7 @@ class HomeDrawer extends StatelessWidget {
                       accountEmail: Text(accountEmail),
                       currentAccountPicture: CircleAvatar(
                         backgroundImage: accountPicture == null
-                        ? AssetImage("assets/images/no-image.jpg")
+                        ? AssetImage("assets/images/no-avatar2.jpg")
                         : NetworkImage(accountPicture)
                       ),
                     ),

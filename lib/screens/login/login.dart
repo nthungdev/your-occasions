@@ -196,12 +196,18 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
     return SizedBox(
       width: screen.width / 1.5 + 10,
       height: 40,
-      child: FlatButton(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(45))),
-        color: Colors.blue,
-        onPressed: _loginWithEmail,
-        // color: Colors.lightBlueAccent,
-        child: Text('LOGIN', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+      child: Material(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30)
+        ),
+        elevation: 3,
+        child: FlatButton(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(45))),
+          color: Colors.deepPurpleAccent,
+          onPressed: _loginWithEmail,
+          // color: Colors.lightBlueAccent,
+          child: Text('LOGIN', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        ),
       ),
     );
   }
@@ -239,6 +245,7 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
 
     var userName, email, pic, id;
     FacebookLogin facebookSignIn = new FacebookLogin();
+    // await facebookSignIn.logOut();
     FacebookLoginResult result = await facebookSignIn.logInWithReadPermissions(['email','public_profile']);
     // print(result.accessToken);
     //,publish_actions,manage_pages,publish_pages,user_status,user_videos,user_work_history
@@ -342,24 +349,29 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
     return SizedBox(
       width: screen.width / 3,
       height: 40,
-      child: FlatButton(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(45))),
-        // color: Color(0xffd62d20),
-        color: Colors.white,
-        onPressed: _loginWithGoogle,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            SizedBox(
-              height: 25,
-              width: 25,
-              child: SvgPicture.asset(
-                "assets/logos/google.svg",
+      child: Material(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30)
+        ),
+        elevation: 3,
+        child: FlatButton(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(45))),
+          color: Colors.white54,
+          onPressed: _loginWithGoogle,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              SizedBox(
+                height: 25,
+                width: 25,
+                child: SvgPicture.asset(
+                  "assets/logos/google.svg",
+                ),
               ),
-            ),
-            SizedBox(width: 5,),
-            Text('GOOGLE', style: TextStyle(color: Color(0xFF7D7D7D), fontWeight: FontWeight.bold)),
-          ],
+              SizedBox(width: 5,),
+              Text('GOOGLE', style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold)),
+            ],
+          ),
         ),
       ),
     );
@@ -371,22 +383,28 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
     return SizedBox(
       width: screen.width / 3,
       height: 40,
-      child: FlatButton(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(45))),
-        color: Color(0xff3b5998),
-        onPressed: _facebookLogin,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            SizedBox(
-              height: 25,
-              width: 25,
-              child: SvgPicture.asset(
-                "assets/logos/facebook.svg",
+      child: Material(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
+        elevation: 3,
+        child: FlatButton(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(45))),
+          color: Color(0xff3b5998),
+          onPressed: _facebookLogin,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              SizedBox(
+                height: 25,
+                width: 25,
+                child: SvgPicture.asset(
+                  "assets/logos/facebook.svg",
+                ),
               ),
-            ),
-            Text('FACEBOOK', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-          ],
+              Text('FACEBOOK', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+            ],
+          ),
         ),
       ),
     );
@@ -408,9 +426,22 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
           emailNode.unfocus();
           FocusScope.of(context).requestFocus(passwordNode);
         },
+        style: TextStyle(
+          color: Colors.white
+        ),
         decoration: InputDecoration(
           labelText: "EMAIL",
-          labelStyle: TextStyle(fontWeight: FontWeight.bold)
+          labelStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.white
+            )
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.white
+            )
+          ),
         ),
       ));
   }
@@ -427,9 +458,22 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
         validator: (password) => isPassword(password) ? null : "Invalid",
         textInputAction: TextInputAction.done,
         obscureText: true,
+        style: TextStyle(
+          color: Colors.white
+        ),
         decoration: InputDecoration(
           labelText: "PASSWORD",
-          labelStyle: TextStyle(fontWeight: FontWeight.bold)
+          labelStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.white
+            )
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.white
+            )
+          ),
         )),
     );
   }
@@ -438,78 +482,108 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
   @override
   Widget build(BuildContext context) {
     final screen = MediaQuery.of(context).size;
+    var linearGradient = BoxDecoration(
+      gradient: LinearGradient(
+        begin: FractionalOffset.topCenter,
+        end: FractionalOffset.bottomCenter,
+        colors: <Color>[
+          // Colors.blue[200],
+          // Colors.white,
+          // Colors.blue,
+          Colors.white,
+          // Colors.indigoAccent,
+          Colors.deepPurpleAccent,
+          Colors.black87,
+          Colors.black,
+          // Colors.black
+        ],
+      ),
+    );
 
     return new Scaffold(
       key: _scaffoldKey,
-      backgroundColor: Color(0xFF82E0FF),
-      body: Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Expanded(
-              child: ListView(
-                children: <Widget>[
-                  SizedBox(
-                    height: screen.height * 0.4,
-                    width: screen.width * 2 / 3,
-                    child: Center(
-                      child: SizedBox(
-                        height: screen.width * 0.5,
-                        width: screen.width * 0.5,
-                        child: Image.asset("assets/logos/yo.png"),
+      // backgroundColor: Colors.black,
+      body: Container(
+        decoration: linearGradient,
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Expanded(
+                child: ListView(
+                  children: <Widget>[
+                    SizedBox(
+                      height: screen.height * 0.4,
+                      width: screen.width * 2 / 3,
+                      child: Center(
+                        child: SizedBox(
+                          height: screen.width * 0.5,
+                          width: screen.width * 0.5,
+                          child: Image.asset("assets/logos/logo-no-background.png"),
+                        ),
                       ),
                     ),
-                  ),
-                  Column(
-                    children: <Widget>[
-                      _buildEmailInput(),
-                      _buildPasswordInput(),
-                      SizedBox(height: screen.height * 0.05,),
-                      _buildLoginButton(),
-                      SizedBox(height: screen.height * 0.025,),
-                      Container(
-                        child: Text("OR CONNECT WITH"),
-                      ),
-                      SizedBox(height: screen.height * 0.025,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          _loginWithFacebookButton(),
-                          SizedBox(width: 10,),
-                          _loginWithGoogleButton(),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
+                    Column(
+                      children: <Widget>[
+                        _buildEmailInput(),
+                        _buildPasswordInput(),
+                        SizedBox(height: screen.height * 0.05,),
+                        _buildLoginButton(),
+                        SizedBox(height: screen.height * 0.025,),
+                        Container(
+                          child: Text("OR CONNECT WITH", 
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.white,
+                            // fontWeight: FontWeight.bold,
+                        ),),
+                        ),
+                        SizedBox(height: screen.height * 0.025,),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            _loginWithFacebookButton(),
+                            SizedBox(width: 10,),
+                            _loginWithGoogleButton(),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text("New to Your Occasions? "),
-                SizedBox(
-                  child: CupertinoButton(
-                    padding: EdgeInsets.all(0),
-                    pressedOpacity: 0.5,
-                    onPressed: () {
-                      _formKey.currentState.reset();
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => SignUpWithEmailScreen()),);
-                    },
-                    child: Text("SIGN UP", 
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text("New to Your Occasions? ",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),),
+                  SizedBox(
+                    child: CupertinoButton(
+                      padding: EdgeInsets.all(0),
+                      pressedOpacity: 0.5,
+                      onPressed: () {
+                        _formKey.currentState.reset();
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => SignUpWithEmailScreen()),);
+                      },
+                      child: Text("SIGN UP", 
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.deepPurpleAccent,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  ),
-                )
-              ],
-            )
-          ]
+                  )
+                ],
+              )
+            ]
+          ),
         ),
       )
     );
