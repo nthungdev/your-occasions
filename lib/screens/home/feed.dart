@@ -168,7 +168,7 @@ class _FeedTabView extends State<FeedTabView> {
     _upcomingEvents.forEach((Event currentEvent) {
       counter++;
       if(counter > count) return cards;
-      cards.insert(1, Padding(
+      cards.insert(1, Container(
         padding: const EdgeInsets.only(bottom: 8.0),
         child: SmallEventCard(
           event: currentEvent,
@@ -250,8 +250,13 @@ class _FeedTabView extends State<FeedTabView> {
         begin: FractionalOffset.centerRight,
         end: FractionalOffset.bottomLeft,
         colors: <Color>[
-          Colors.blue[200],
-          Colors.white,
+          // Colors.blue[200],
+          // Colors.white,
+          // Colors.blue,
+          Colors.deepPurpleAccent,
+          Colors.indigoAccent,
+          Colors.blueAccent,
+          Colors.lightBlue
         ],
       ),
     );

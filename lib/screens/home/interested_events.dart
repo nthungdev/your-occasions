@@ -90,8 +90,10 @@ class MyInterestedEventsPageState extends State<MyInterestedEventsPage> {
         end: FractionalOffset.bottomLeft,
         colors: <Color>[
           // Colors.blue,
-          Colors.blue,
-          Colors.white,
+          Colors.deepPurpleAccent,
+          Colors.indigoAccent,
+          Colors.blueAccent,
+          Colors.lightBlue
         ],
       ),
     );

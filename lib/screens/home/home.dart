@@ -89,7 +89,7 @@ class _HomeScreen extends State<HomeScreen> with SingleTickerProviderStateMixin 
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.deepPurpleAccent,
         title: Text(_title),
         actions: _buildActions(),
       ),

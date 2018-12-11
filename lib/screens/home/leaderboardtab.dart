@@ -226,6 +226,10 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
         colors: <Color>[
           Colors.blue[200],
           Colors.white,
+          Colors.deepPurpleAccent,
+          Colors.indigoAccent,
+          Colors.blueAccent,
+          Colors.lightBlue
         ],
       ),
     );

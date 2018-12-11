@@ -82,6 +82,7 @@ class _SmallEventCardState extends State<SmallEventCard> {
       child: SizedBox(
         height: screen.height / 7,
         child: Card(
+          // color: Colors.white54,
           clipBehavior: Clip.antiAlias,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           child: Row(
@@ -89,7 +90,7 @@ class _SmallEventCardState extends State<SmallEventCard> {
               AspectRatio(
                 aspectRatio: 4 / 3,
                 child: Container(
-                  color: Colors.grey[200],
+                  color: Colors.transparent,
                 )
               ),
             ],
@@ -112,10 +113,10 @@ class _SmallEventCardState extends State<SmallEventCard> {
           clipBehavior: Clip.antiAlias,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           child: Material(
-            // color: Colors.transparent,
+            // color: Colors.white54,
             child: InkWell(
               onTap: _onTap,
-              splashColor: Colors.red,
+              splashColor: Colors.transparent,
               child: Row(
                 children: <Widget>[
                   AspectRatio(
