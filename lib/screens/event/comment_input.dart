@@ -66,7 +66,7 @@ class CommentInputState extends State<CommentInput>{
                   child: CircleAvatar(
                     backgroundImage: Dataset.currentUser.value.picture != null 
                     ? NetworkImage(Dataset.currentUser.value.picture)
-                    : AssetImage("assets/images/no-image.jpg")
+                    : AssetImage("assets/images/no-avatar2.jpg")
                   ),
                 ),
               ],

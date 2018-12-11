@@ -160,7 +160,8 @@ class FriendsTabViewState extends State<FriendsTabView> {
             ? Center(
                 child: Text("You have not followed anyone",
                   style: TextStyle(
-                    fontSize: 20
+                    fontSize: 20,
+                    color: Colors.white
                   ),
                 ),
               )

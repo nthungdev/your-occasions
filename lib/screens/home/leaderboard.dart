@@ -287,7 +287,7 @@ class _LeaderboardState extends State<Leaderboard> {
               padding: EdgeInsets.only(bottom: 10.0),
               child: Text(
                 widget.title, 
-                style: TextStyle(fontSize: 30.0, fontFamily: "Niramit"), 
+                style: TextStyle(fontSize: 30.0, fontFamily: "Niramit", color: Colors.white), 
                 textAlign: TextAlign.center,
               )
             ),

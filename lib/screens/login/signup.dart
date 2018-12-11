@@ -183,7 +183,7 @@ class _SignUpWithEmailScreen extends State<SignUpWithEmailScreen> {
               decoration: BoxDecoration(
                 border: Border(
                   bottom: BorderSide(
-                    color: Colors.black54,
+                    color: Colors.white,
                     width: 1
                   )
                 )
@@ -200,7 +200,7 @@ class _SignUpWithEmailScreen extends State<SignUpWithEmailScreen> {
                           "Birthday",
                           style: TextStyle(
                             fontSize: 15,
-                            color: Color(0xFF757575),
+                            color: Colors.white,
                             fontWeight: FontWeight.bold
                           )
                         ),
@@ -214,7 +214,7 @@ class _SignUpWithEmailScreen extends State<SignUpWithEmailScreen> {
                           style: TextStyle(
                             letterSpacing: 2,
                             fontSize: 14,
-                            color: Colors.grey[500],
+                            color: Colors.white,
                             fontFamily: "Monaco"
                           ),
                         ),
@@ -235,12 +235,19 @@ class _SignUpWithEmailScreen extends State<SignUpWithEmailScreen> {
     return SizedBox(
       width: screen.width / 1.5 + 10,
       height: 40,
-      child: FlatButton(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(45))),
-        color: Colors.blue,
-        onPressed: _submit,
-        // color: Colors.lightBlueAccent,
-        child: Text('SIGN UP', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+      child: Material(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30)
+        ),
+        color: Colors.deepPurpleAccent,
+        elevation: 3,
+        child: FlatButton(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(45))),
+          // color: Colors.blue,
+          onPressed: _submit,
+          // color: Colors.lightBlueAccent,
+          child: Text('SIGN UP', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        ),
       ),
     );
   }
@@ -261,9 +268,17 @@ class _SignUpWithEmailScreen extends State<SignUpWithEmailScreen> {
           emailNode.unfocus();
           FocusScope.of(context).requestFocus(lastNameNode);
         },
+        style: TextStyle(
+          color: Colors.white
+        ),
         decoration: InputDecoration(
           labelText: "FIRST NAME",
-          labelStyle: TextStyle(fontWeight: FontWeight.bold)
+          labelStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.white,
+            )
+          )
         ),
       ));
   }
@@ -284,9 +299,17 @@ class _SignUpWithEmailScreen extends State<SignUpWithEmailScreen> {
           emailNode.unfocus();
           FocusScope.of(context).requestFocus(emailNode);
         },
+        style: TextStyle(
+          color: Colors.white
+        ),
         decoration: InputDecoration(
           labelText: "LAST NAME",
-          labelStyle: TextStyle(fontWeight: FontWeight.bold)
+          labelStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.white,
+            )
+          )
         ),
       ));
   }
@@ -308,10 +331,18 @@ class _SignUpWithEmailScreen extends State<SignUpWithEmailScreen> {
           emailNode.unfocus();
           FocusScope.of(context).requestFocus(passwordNode);
         },
+        style: TextStyle(
+          color: Colors.white
+        ),
         decoration: InputDecoration(
           labelText: "EMAIL",
-          labelStyle: TextStyle(fontWeight: FontWeight.bold),
-          errorMaxLines: 2
+          labelStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+          errorMaxLines: 2,
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.white,
+            )
+          )
         ),
       ));
   }
@@ -332,9 +363,17 @@ class _SignUpWithEmailScreen extends State<SignUpWithEmailScreen> {
           emailNode.unfocus();
           FocusScope.of(context).requestFocus(password2Node);
         },
+        style: TextStyle(
+          color: Colors.white
+        ),
         decoration: InputDecoration(
           labelText: "PASSWORD",
-          labelStyle: TextStyle(fontWeight: FontWeight.bold)
+          labelStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.white,
+            )
+          )
         )),
     );
   }
@@ -351,9 +390,17 @@ class _SignUpWithEmailScreen extends State<SignUpWithEmailScreen> {
         validator: (password) => isPassword(password) ? null : "Invalid",
         textInputAction: TextInputAction.done,
         obscureText: true,
+        style: TextStyle(
+          color: Colors.white
+        ),
         decoration: InputDecoration(
           labelText: "COMFIRM PASSWORD",
-          labelStyle: TextStyle(fontWeight: FontWeight.bold)
+          labelStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.white,
+            )
+          )
         )),
     );
   }
@@ -361,38 +408,85 @@ class _SignUpWithEmailScreen extends State<SignUpWithEmailScreen> {
   @override
   Widget build(BuildContext context) {
     final screen = MediaQuery.of(context).size;
+    var linearGradient = BoxDecoration(
+      gradient: LinearGradient(
+        begin: FractionalOffset.topCenter,
+        end: FractionalOffset.bottomCenter,
+        colors: <Color>[
+          // Colors.blue[200],
+          // Colors.white,
+          // Colors.blue,
+          // Colors.indigoAccent,,
+          // Colors.black,
+          // Colors.deepPurpleAccent,
+          // Colors.indigoAccent,
+          // Colors.blueAccent,
+          // Colors.black87,
+          // Colors.indigo,
+          // Colors.black
+          Colors.white,
+          // Colors.indigoAccent,
+          Colors.deepPurpleAccent,
+          Colors.black87,
+          Colors.black,
+        ],
+      ),
+    );
 
     return new Scaffold(
       key: _scaffoldKey,
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          onPressed: () { Navigator.of(context).pop(); },
-          icon: Icon(Icons.arrow_back, color: Colors.black,),
-        ),
-        // title: Text("Sign Up"),
-      ),
-      body: ListView(
-        children: <Widget>[
-          Form(
-            key: _formKey,
-            child: Column(
-              children: <Widget>[
-                SizedBox(height: screen.height * 0.1,),
-                _buildFirstNameInput(),
-                _buildLastNameInput(),
-                _buildEmailInput(),
-                _buildBirthdayInput(),
-                _buildPasswordInput(),
-                _buildPassword2Input(),
-                SizedBox(height: screen.height * 0.05,),
-                _buildSignUpButton(),
-              ],
+      backgroundColor: Colors.black,
+      // appBar: AppBar(
+      //   // backgroundColor: Colors.white,
+      //   elevation: 0,
+      //   leading: IconButton(
+      //     onPressed: () { Navigator.of(context).pop(); },
+      //     icon: Icon(Icons.arrow_back, color: Colors.white,),
+      //   ),
+      //   title: Text("SIGN UP",
+      //     style: TextStyle(
+      //       color: Colors.white
+      //     ),  
+      //   ),
+      // ),
+      body: Container(
+        decoration: linearGradient,
+        child: ListView(
+          children: <Widget>[
+            Form(
+              key: _formKey,
+              child: Column(
+                children: <Widget>[
+                  PreferredSize(
+                    preferredSize: Size(100, 100),
+                    child: AppBar(
+                      backgroundColor: Colors.transparent,
+                      elevation: 0,
+                      leading: IconButton(
+                        onPressed: () { Navigator.of(context).pop(); },
+                        icon: Icon(Icons.arrow_back, color: Colors.deepPurpleAccent,),
+                      ),
+                      title: Text("SIGN UP",
+                        style: TextStyle(
+                          color: Colors.deepPurpleAccent
+                        ),  
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: screen.height * 0.1,),
+                  _buildFirstNameInput(),
+                  _buildLastNameInput(),
+                  _buildEmailInput(),
+                  _buildBirthdayInput(),
+                  _buildPasswordInput(),
+                  _buildPassword2Input(),
+                  SizedBox(height: screen.height * 0.05,),
+                  _buildSignUpButton(),
+                ],
+              ),
             ),
-          ),
-        ]
+          ]
+        ),
       )
     );
   }

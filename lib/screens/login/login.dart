@@ -27,6 +27,9 @@ const String ERROR_CODE_03 = "There is no user record corresponding to this iden
 const String ERROR_CODE_04 = "Given String is empty or null";
 final FacebookLogin facebookSignIn = new FacebookLogin();
 
+const double _bigFont = 18;
+const double _smallFont = 14;
+
 class LoginWithEmailScreen extends StatefulWidget {
   @override
   _LoginWithEmailScreen createState() => _LoginWithEmailScreen();
@@ -247,11 +250,6 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
 
 
     var userName, email, pic, id;
-<<<<<<< HEAD
-    FacebookLogin facebookSignIn = new FacebookLogin();
-    // await facebookSignIn.logOut();
-=======
->>>>>>> e05b9e7f2799606ba79a0bf48de6ad6b7752b0d8
     FacebookLoginResult result = await facebookSignIn.logInWithReadPermissions(['email','public_profile']);
     // print(result.accessToken);
     //,publish_actions,manage_pages,publish_pages,user_status,user_videos,user_work_history
@@ -381,7 +379,13 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
                 ),
               ),
               SizedBox(width: 5,),
-              Text('GOOGLE', style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold)),
+              Text('GOOGLE', 
+                style: TextStyle(
+                  color: Colors.black54, 
+                  fontWeight: FontWeight.bold, 
+                  fontSize: 12,
+                )
+              ),
             ],
           ),
         ),
@@ -414,7 +418,14 @@ class _LoginWithEmailScreen extends State<LoginWithEmailScreen> {
                   "assets/logos/facebook.svg",
                 ),
               ),
-              Text('FACEBOOK', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+              Text('FACEBOOK', 
+                style: TextStyle(
+                  color: Colors.white, 
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                ), 
+                overflow: TextOverflow.clip,
+              ),
             ],
           ),
         ),

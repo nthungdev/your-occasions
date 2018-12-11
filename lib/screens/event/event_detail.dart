@@ -329,7 +329,7 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
             Navigator.push(context, MaterialPageRoute(builder: (context) => ReplyCommentPage(eventComment: comment,)));
             // print("back to event details");
           },
-          image: NetworkImage(comment.authorPicture),
+          image: comment.authorPicture == null ? AssetImage("assets/images/no-avatar2.jpg") : NetworkImage(comment.authorPicture),
           userName: comment.authorName,
           messsage: comment.message,
           postTime: comment.date,

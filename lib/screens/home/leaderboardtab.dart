@@ -242,7 +242,11 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
       : RefreshIndicator(
         onRefresh: _refresh,
         child: (!_hasData1 && !_hasData2) 
-        ? Center(child: Text("Wow such empty!"))
+        ? Center(child: Text("Wow such empty!",
+            style: TextStyle(
+              color: Colors.white
+            ),
+          ))
         : ListView(
             padding: const EdgeInsets.all(15.0),
             children: _buildListViewChildren(),

@@ -100,7 +100,7 @@ class ReplyCommentPageState extends State<ReplyCommentPage> {
       Column(
         children: <Widget>[
           CommentTile(
-            image: NetworkImage(_eventComment.authorPicture),
+            image: _eventComment.authorPicture == null ? AssetImage("assets/images/no-avatar2.jpg") : NetworkImage(_eventComment.authorPicture),
             messsage: _eventComment.message,
             onTap: () {},
             onTapReply: () {},
@@ -143,8 +143,8 @@ class ReplyCommentPageState extends State<ReplyCommentPage> {
             print("Reply button press");
             Navigator.push(context, MaterialPageRoute(builder: (context) => ReplyCommentPage(eventComment: reply,)));
           },
-          image: NetworkImage(reply.authorPicture),
-          userName: reply.authorId,
+          image: reply.authorPicture == null ? AssetImage("assets/images/no-avatar2.jpg")  : NetworkImage(reply.authorPicture),
+          userName: reply.authorName,
           messsage: reply.message,
           postTime: reply.date,
         ),

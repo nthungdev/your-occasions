@@ -50,6 +50,7 @@ class _FeedTabView extends State<FeedTabView> {
     // });
     await _getPastEventData();
     await _getUpcomingEventData();
+    await _getTrendingPartyData();
     await _getTrendingMusicData();
   }
 
@@ -143,7 +144,7 @@ class _FeedTabView extends State<FeedTabView> {
     cards.add(
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
-        child: Text("Past events", style: TextStyle(fontSize: 30.0, fontFamily: "Niramit")),
+        child: Text("Past events", style: TextStyle(fontSize: 30.0, fontFamily: "Niramit", color: Colors.white)),
       )
     );
     
@@ -183,7 +184,7 @@ class _FeedTabView extends State<FeedTabView> {
     cards.add(
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
-        child: Text("Upcoming events", style: TextStyle(fontSize: 30.0, fontFamily: "Niramit")),
+        child: Text("Upcoming events", style: TextStyle(fontSize: 30.0, fontFamily: "Niramit", color: Colors.white)),
       )
     );
     
@@ -224,7 +225,7 @@ class _FeedTabView extends State<FeedTabView> {
 
     Widget e = Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
-      child: Text("Trending in Music", style: TextStyle(fontSize: 30.0, fontFamily: "Niramit")),
+      child: Text("Trending in Music", style: TextStyle(fontSize: 30.0, fontFamily: "Niramit", color: Colors.white)),
     );
     
     cards.add(e);
@@ -268,7 +269,7 @@ class _FeedTabView extends State<FeedTabView> {
 
     Widget e = Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
-      child: Text("Trending in Music", style: TextStyle(fontSize: 30.0, fontFamily: "Niramit")),
+      child: Text("Trending in Party", style: TextStyle(fontSize: 30.0, fontFamily: "Niramit", color: Colors.white)),
     );
     
     cards.add(e);
