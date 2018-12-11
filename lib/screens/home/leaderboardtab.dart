@@ -56,21 +56,14 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
   }
 
   Future<void> _refresh() async {
-    await getTopHost().then((onValue) {
-      if(this.mounted) {
-        setState(() { 
-          if (LeaderboardDataset.topHost.value.length != 0) { _hasData1 = true; }
-        });
-      }
-    });
-    await getMostFollowedUsers().then((onValue) {
-      if(this.mounted) {
-        setState(() { 
-          if (LeaderboardDataset.mostFollowedUsers.value.length != 0) { _hasData2 = true; }
-        });
-      }
-    });
 
+    print("refresh leaderboard");
+
+
+    await getTopHost();
+    await getMostFollowedUsers();
+
+    
     if (this.mounted) {
       setState(() {
         _gotData = true;
@@ -81,16 +74,6 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
   // get hosts with the highest views
   Future<void> getTopHost() async {
     EventController ec = EventController();
-    /**
-     * Data is recently pulled 30 seconds ago. Wait until the 30 seconds span finish to get data again.
-     */
-    // print("DEBUG lastModified topHost : ${LeaderboardDataset.topHost.lastModified}");
-    // print("DEBUG current time : ${DateTime.now()}");
-    // if (LeaderboardDataset.topHost.lastModified != null) {
-      // print("DEBUG Diff in seconds ${(DateTime.now()).difference(LeaderboardDataset.topHost.lastModified).inSeconds}");
-    // }
-    // print("DEBUG Diff in minutes ${LeaderboardDataset.topHost.lastModified.difference(DateTime.now()).inMinutes}");
-    if (LeaderboardDataset.topHost.lastModified != null && (DateTime.now()).difference(LeaderboardDataset.topHost.lastModified).inSeconds < 30) return;
     
     var temp = await ec.getEvents();
     Map<String,int> topHostMap = Map();
@@ -144,6 +127,8 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
     LeaderboardDataset.topHostTotalEventViews.value = topHostMap;
 
     LeaderboardDataset.topHost.value = finalResult;
+
+    _hasData1 = true;
   }
 
   List<LeaderboardItem> _buildTopHostsItem() {
@@ -160,21 +145,11 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
   }
 
   Future<void> getMostFollowedUsers() async {
-    /**
-     * Data is recently pulled 30 seconds ago. Wait until the 30 seconds span finish to get data again.
-     */
-    // print("DEBUG lastModified MostFollowedUsers : ${LeaderboardDataset.mostFollowedUsers.lastModified}");
-    // print("DEBUG current time : ${DateTime.now()}");
-    // if (LeaderboardDataset.mostFollowedUsers.lastModified != null) {
-    //   print("DEBUG Diff in seconds ${(DateTime.now()).difference(LeaderboardDataset.mostFollowedUsers.lastModified).inSeconds}");
-    // }
-    // print("DEBUG Diff in minutes ${LeaderboardDataset.topHost.lastModified.difference(DateTime.now()).inMinutes}");
-    if (LeaderboardDataset.mostFollowedUsers.lastModified != null && (DateTime.now()).difference(LeaderboardDataset.mostFollowedUsers.lastModified).inSeconds < 30) return;
-    
-    
     UserController uc = UserController();
     var mostFollowedusers = await uc.getMostFollowedUsers();
     LeaderboardDataset.mostFollowedUsers.value = mostFollowedusers;
+    
+    _hasData2 = true;
   }
 
   List<LeaderboardItem> _buildMostFollowedUsersItem() {
@@ -265,10 +240,12 @@ class _LeaderboardTabView extends State<LeaderboardTabView> {
       ? Center(child: CircularProgressIndicator(),)
       : RefreshIndicator(
         onRefresh: _refresh,
-        child: ListView(
-          padding: const EdgeInsets.all(15.0),
-          children: _buildListViewChildren(),
-        ),
+        child: (!_hasData1 && !_hasData2) 
+        ? Center(child: Text("Wow such empty!"))
+        : ListView(
+            padding: const EdgeInsets.all(15.0),
+            children: _buildListViewChildren(),
+          )
       ),
     );
   }

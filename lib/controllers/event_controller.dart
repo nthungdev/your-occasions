@@ -48,36 +48,32 @@ class EventController extends BaseController {
 
   /// Update an existing row from Events table based on id.
   Future<void> update(int id, {String hostId, String name, String description, String locationName, DateTime startTime, DateTime endTime,
-  int views, int age, int price, String category, int one, int two, int three, int four, int five, double rating, bool isUsed, String picture, DateTime creationDate}) async {
+  int views, int age, int price, int one, int two, int three, int four, int five, double rating, bool isUsed, String picture, DateTime creationDate}) async {
     
     if(hostId == null && name == null && description == null && locationName == null && startTime == null && endTime == null
-    && views == null && age == null && price == null && category == null && one == null && two == null && three == null && four == null && five == null && rating == null 
+    && views == null && age == null && price == null && one == null && two == null && three == null && four == null && five == null && rating == null 
     && isUsed == null && picture == null && creationDate == null) {
       throw UpdateQueryException(); //
     }
     else {
       await connect();
 
+      List<String> updateCol = [];
       String query = "UPDATE events SET ";
-      if(hostId != null) { query += "host_id = '$hostId', "; }
-      if(name != null) { query += "name = '$name', "; }
-      if(description != null) { query += "description = '$description', "; }
-      if(locationName != null) { query += "locationName = '$locationName', "; }
-      if(startTime != null) { query += "start_time = '$startTime', "; }
-      if(endTime != null) { query += "end_time = '$endTime', "; }
-      if(views != null) { query += "views = '$views', "; }
-      if(age != null) { query += "age = '$age', "; }
-      if(one != null) { query += "one = $one, "; }
-      if(two != null) { query += "two = $two, "; }
-      if(three != null) { query += "three = $three, "; }
-      if(four != null) { query += "four = $four, "; }
-      if(five != null) { query += "five = $five, "; }
-      if(rating != null) { query += "rating = $rating, "; }
-      if(isUsed != null) { query += "is_used = $isUsed, "; }
-      if(picture != null) { query += "picture = '$picture', "; }
-      query = query.substring(0, query.length - 2);
-      query += " WHERE id = '$id'";
-      print("DEBUG: $query");
+      if(hostId != null) { updateCol.add("host_id = '$hostId' "); }
+      if(name != null) { updateCol.add("name = '$name' "); }
+      if(description != null) { updateCol.add("description = '$description' "); }
+      if(locationName != null) { updateCol.add("location_name = '$locationName' "); }
+      if(startTime != null) { updateCol.add("start_time = '$startTime' "); }
+      if(endTime != null) { updateCol.add("end_time = '$endTime' "); }
+      if(views != null) { updateCol.add("views = '$views' "); }
+      if(age != null) { updateCol.add("age = '$age' "); }
+      if(picture != null) { updateCol.add("picture = '$picture' "); }
+
+      query += updateCol.join(", ");
+
+      query += " WHERE id = $id ";
+      print("DEBUG update query: $query");
       await connection.query(query);
 
       await disconnect();

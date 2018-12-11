@@ -136,6 +136,7 @@ class _SmallEventCardState extends State<SmallEventCard> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
+                        SizedBox(height: 5.0,),
                         Text(widget.title, 
                           style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold), maxLines: 2, overflow: TextOverflow.ellipsis,
                         ),

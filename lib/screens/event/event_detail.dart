@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:youroccasions/controllers/event_category_controller.dart';
 import 'package:youroccasions/controllers/user_attended_event_controller.dart';
@@ -16,7 +17,7 @@ import 'package:youroccasions/screens/event/reply_comment_page.dart';
 import 'package:youroccasions/screens/event/share_event.dart';
 
 import 'package:youroccasions/screens/home/home.dart';
-import 'package:youroccasions/screens/event/create_event.1.dart';
+import 'package:youroccasions/screens/event/update_event.dart';
 import 'package:youroccasions/models/event.dart';
 import 'package:youroccasions/controllers/event_controller.dart';
 import 'package:youroccasions/screens/user/user_profile.dart';
@@ -77,9 +78,7 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
     _commentNode = FocusNode();
     _refresh();
 
-    EventController ec = EventController();
-    ec.increaseView(_event.id);
-
+    print("Event Id: ${_event.id}");
   }
 
   @override
@@ -87,6 +86,29 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
     super.dispose();
     _commentNode.dispose();
     _commentController.dispose();
+  }
+
+  String _formatDate(DateTime d) {
+    List weekday = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+    List month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    var minuteFormat = new NumberFormat("00");
+    String formattedMinute = minuteFormat.format(d.minute);
+
+    // All day event
+    String time = "";
+    if (d.hour == 0) {
+      time = "${d.hour + 12}:$formattedMinute AM";
+    }
+    else if (d.hour < 12) {
+      time = "${d.hour}:$formattedMinute AM";
+    }
+    else if (d.hour == 12) {
+      time = "${d.hour}:$formattedMinute PM";
+    }
+    else {
+      time = "${d.hour - 12}:$formattedMinute PM";
+    }
+    return "${weekday[d.weekday - 1]}, ${month[d.month - 1]} ${d.day}, $time";
   }
 
   /// option == true: interested event
@@ -144,7 +166,9 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
   }
 
   _launchURL() async {
+    print("place Id: ${_placeData.placeId}");
     String url = "https://www.google.com/maps/search/?api=1&query=${_placeData.latitude},${_placeData.longitude}&query_place_id=${_placeData.placeId}";
+    // String url = "https://www.google.com/maps/search/?api=1&query_place_id=${_placeData.placeId}";
     
     if (await canLaunch(url)) {
       await launch(url);
@@ -154,6 +178,9 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
   }
 
   Future<void> _refresh() async {
+    EventController ec = EventController();
+    await ec.increaseView(_event.id);
+
     await _userController.getUserWithId(_event.hostId).then((value){
       if(this.mounted) {
         setState(() { 
@@ -202,7 +229,8 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
     _categories = List<String>.generate(temp.length, (index) {
       return temp[index].category;
     });
-    print("Categories : $_categories");
+    _event.categories = _categories;
+    // print("Categories : $_categories");
   }
 
   Future<void> _getComments() async {
@@ -496,7 +524,7 @@ class _EventDetailScreenState extends State<EventDetailScreen>{
           ),
           Padding(
             padding: const EdgeInsets.only(top: 20),
-            child: Text(_event.startTime.toString(),
+            child: Text(_formatDate(_event.startTime),
               style: TextStyle(
                 fontSize: 16,
               ),

@@ -23,7 +23,7 @@ class Event {
   int five;
   num rating;
   bool isUsed;
-  List<Category> categories;
+  List<String> categories;
   DateTime creationDate;
 
   // CONSTRUCTORS //
