@@ -4,7 +4,7 @@ Our app Your Occasions will offer people easy access to events near them, where 
 
 # DEMO
 
-![alt text](https://imgur.com/a/0vYrN8E)
+![News Feed Page](https://i.imgur.com/HxmWWvv.png)
 
 
 ## Getting Started
