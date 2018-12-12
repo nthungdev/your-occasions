@@ -4,8 +4,10 @@ Our app Your Occasions will offer people easy access to events near them, where 
 
 # DEMO
 
-![News Feed Page](https://i.imgur.com/HxmWWvv.png)
-
+<img src="https://i.imgur.com/HxmWWvv.png" width=40% height=40%> <img src="https://i.imgur.com/fDju4jL.png" width=40% height=40%>
+<img src="https://i.imgur.com/P4S3P9E.png" width=40% height=40%> <img src="https://i.imgur.com/iuTATTK.png" width=40% height=40%>
+<img src="https://i.imgur.com/QLOdPo9.png" width=40% height=40%> <img src="https://i.imgur.com/Fz9q8fT.png" width=40% height=40%>
+<img src="https://i.imgur.com/An6JlUd.png" width=40% height=40%> <img src="https://i.imgur.com/bOOjTqv.png" width=40% height=40%>
 
 ## Getting Started
 
