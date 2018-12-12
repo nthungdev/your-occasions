@@ -1,6 +1,11 @@
 # Your Occasions
 
-Our app Your Occasions will offer people easy access to events near them, where they are able to see available events in the area. 
+Our app Your Occasions will offer people easy access to events near them, where they are able to see available events in the area.
+
+# DEMO
+
+![alt text](https://imgur.com/a/0vYrN8E)
+
 
 ## Getting Started
 
