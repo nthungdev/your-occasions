@@ -185,14 +185,33 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     var screen = MediaQuery.of(context).size;
+    var linearGradient = BoxDecoration(
+      gradient: LinearGradient(
+        begin: FractionalOffset.centerRight,
+        end: FractionalOffset.bottomLeft,
+        colors: <Color>[
+          // Colors.blue[200],
+          // Colors.white,
+          // Colors.blue,
+          Colors.deepPurpleAccent,
+          Colors.indigoAccent,
+          Colors.blueAccent,
+          Colors.lightBlue
+        ],
+      ),
+    );
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: onSearch,
-        child: Icon(Icons.search),
+        backgroundColor: Colors.white,
+        child: Icon(Icons.search,
+          color: Colors.deepPurpleAccent,
+        ),
       ),
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       body: Container(
+        decoration: linearGradient,
         padding: EdgeInsets.all(0),
         child: Column(
           children: <Widget>[

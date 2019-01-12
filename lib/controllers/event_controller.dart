@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:meta/meta.dart';
 import 'package:youroccasions/controllers/base_controller.dart';
+import 'package:youroccasions/controllers/event_category_controller.dart';
 import 'package:youroccasions/models/event.dart';
 import 'package:youroccasions/exceptions/UpdateQueryException.dart';
 
@@ -42,6 +43,9 @@ class EventController extends BaseController {
     await connect();
 
     await connection.query("""DELETE FROM events WHERE id = @id""", substitutionValues: { 'id': id, });  
+
+    EventCategoryController ecc = EventCategoryController();
+    await ecc.bulkDelete(id);
 
     await disconnect();
   }

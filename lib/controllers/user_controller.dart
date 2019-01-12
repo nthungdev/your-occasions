@@ -32,7 +32,7 @@ class UserController extends BaseController {
   Future<void> updateUser(String id, String name, DateTime birthday) async{
     await connect();
 
-    await connection.query("""UPDATE users SET name = @name AND birthday = @birthday WHERE id = @id""", 
+    await connection.query("""UPDATE users SET name = @name , birthday = @birthday WHERE id = @id""", 
     substitutionValues: {
       'name': name,
       'birthday': birthday,

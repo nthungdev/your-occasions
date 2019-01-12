@@ -77,109 +77,170 @@ class _SmallEventCardState extends State<SmallEventCard> {
   Widget _buildLoadingCard() {
     final screen = MediaQuery.of(context).size;
 
-    return Material(
-      color: Colors.transparent,
-      child: SizedBox(
-        height: screen.height / 7,
-        child: Card(
-          // color: Colors.white54,
-          clipBehavior: Clip.antiAlias,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+    return SizedBox(
+      height: screen.height / 7,
+      child: Card(
+        elevation: 0,
+        color: Colors.white54,
+        margin: EdgeInsets.all(0.0),
+        clipBehavior: Clip.antiAlias,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        child: InkWell(
+          onTap: _onTap,
+          splashColor: Colors.white,
           child: Row(
             children: <Widget>[
-              AspectRatio(
-                aspectRatio: 4 / 3,
-                child: Container(
-                  color: Colors.transparent,
-                )
+              Padding(
+                padding: const EdgeInsets.all(0),
+                child: AspectRatio(
+                  aspectRatio: 4 / 3,
+                  child: Material(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10.0), topLeft: Radius.circular(10.0)),
+                    ),
+                    color: Colors.white54,
+                    child: SizedBox(
+                      // height: 20,
+                      // width: screen.width * 0.4,
+                    ),
+                  )
+                ),
+              ),
+              SizedBox(
+                width: 10.0,
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    SizedBox(height: 5.0,),
+                    SizedBox(
+                      child: Material(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30)
+                        ),
+                        color: Colors.white30,
+                        child: SizedBox(
+                          height: 20,
+                          width: screen.width * 0.4,
+                        ),
+                      )
+                    ),
+                    // Text(widget.title, 
+                    //   style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold), maxLines: 2, overflow: TextOverflow.ellipsis,
+                    // ),
+                    SizedBox(height: 10.0,),
+                    SizedBox(
+                      child: Material(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30)
+                        ),
+                        color: Colors.white30,
+                        child: SizedBox(
+                          height: 20,
+                          width: screen.width * 0.2,
+                        ),
+                      )
+                    ),
+                    SizedBox(height: 10.0,),
+                    SizedBox(
+                      child: Material(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30)
+                        ),
+                        color: Colors.white30,
+                        child: SizedBox(
+                          height: 20,
+                          width: screen.width * 0.2,
+                        ),
+                      )
+                    ),
+                  ],
+                ),
               ),
             ],
+            ),
           ),
         ),
-      ),
     );
+
   }
 
   Widget _buildCard() {
     final screen = MediaQuery.of(context).size;
 
-    return Material(
-      color: Colors.transparent,
-      child: SizedBox(
-        height: screen.height / 7,
-        child: Card(
-          color: Colors.transparent,
-          margin: EdgeInsets.all(0.0),
-          clipBehavior: Clip.antiAlias,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-          child: Material(
-            // color: Colors.white54,
-            child: InkWell(
-              onTap: _onTap,
-              splashColor: Colors.transparent,
-              child: Row(
-                children: <Widget>[
-                  AspectRatio(
-                    aspectRatio: 4 / 3,
-                    child: widget.imageURL != null
-                      ? Image.network(widget.imageURL,
-                          fit: BoxFit.cover,
-                        )
-                      : Image.asset("assets/images/no-image.jpg",
-                          fit: BoxFit.cover,
-                        )
-                  ),
-                  SizedBox(
-                    width: 10.0,
-                  ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        SizedBox(height: 5.0,),
-                        Text(widget.title, 
-                          style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold), maxLines: 2, overflow: TextOverflow.ellipsis,
-                        ),
-                        SizedBox(height: 5.0,),
-                        Text(_time,
-                          overflow: TextOverflow.clip,
-                        ),
-                        SizedBox(height: 5.0,),
-                        Text(widget.place,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
+    return SizedBox(
+      height: screen.height / 7,
+      child: Card(
+        elevation: 0,
+        color: Colors.white54,
+        margin: EdgeInsets.all(0.0),
+        clipBehavior: Clip.antiAlias,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        child: InkWell(
+          onTap: _onTap,
+          splashColor: Colors.white,
+          child: Row(
+            children: <Widget>[
+              AspectRatio(
+                aspectRatio: 4 / 3,
+                child: widget.imageURL != null
+                  ? Image.network(widget.imageURL,
+                      fit: BoxFit.cover,
+                    )
+                  : Image.asset("assets/images/no-image.jpg",
+                      fit: BoxFit.cover,
+                    )
+              ),
+              SizedBox(
+                width: 10.0,
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    SizedBox(height: 1.0,),
+                    Text(widget.title, 
+                      style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold), maxLines: 2, overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                  SizedBox(
-                    // width: 50.0,
-                    child: IconButton(
-                      onPressed: () {
-                        if (this.mounted) {
-                          setState(() {
-                            _isInterested = !_isInterested;
-
-                            if(_queryTimer == null) {
-                              _queryTimer = Timer(Duration(seconds: 1), _handleTimer);
-                            }
-                          });
-                        }
-                      },
-                      icon: _isInterested 
-                      ? Icon(Icons.favorite,
-                          color: _favoriteColor,
-                        )
-                      : Icon(Icons.favorite_border,
-                          color: Colors.black,
-                        ),
+                    SizedBox(height: 1.0,),
+                    Text(_time,
+                      overflow: TextOverflow.clip,
                     ),
-                  ),
-                ],
+                    SizedBox(height: 1.0,),
+                    Text(widget.place,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
                 ),
               ),
+              SizedBox(
+                // width: 50.0,
+                child: IconButton(
+                  onPressed: () {
+                    if (this.mounted) {
+                      setState(() {
+                        _isInterested = !_isInterested;
+
+                        if(_queryTimer == null) {
+                          _queryTimer = Timer(Duration(seconds: 1), _handleTimer);
+                        }
+                      });
+                    }
+                  },
+                  icon: _isInterested 
+                  ? Icon(Icons.favorite,
+                      color: _favoriteColor,
+                    )
+                  : Icon(Icons.favorite_border,
+                      color: Colors.black,
+                    ),
+                ),
+              ),
+            ],
             ),
           ),
-      ),
+        ),
     );
   }
 
