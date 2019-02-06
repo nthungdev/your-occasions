@@ -2,7 +2,7 @@
 
 Our app Your Occasions will offer people easy access to events near them, where they are able to see available events in the area.
 
-# DEMO
+# Demo
 
 <img src="https://i.imgur.com/HxmWWvv.png" width=40% height=40%> <img src="https://i.imgur.com/fDju4jL.png" width=40% height=40%>
 <img src="https://i.imgur.com/P4S3P9E.png" width=40% height=40%> <img src="https://i.imgur.com/YkVrWDi.png" width=40% height=40%>
