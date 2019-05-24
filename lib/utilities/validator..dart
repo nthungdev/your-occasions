@@ -1,6 +1,3 @@
-
-
-
 bool isDate(String str) {
   try {
     DateTime.parse(str);

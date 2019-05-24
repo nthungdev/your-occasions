@@ -3,7 +3,6 @@ import 'package:youroccasions/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 
-
 class Data<T> {
   T _value;
   DateTime _lastModified;
